@@ -23,6 +23,7 @@ const fileNames = [
   "inventory.json",
   "accounting.json",
   "quality.json",
+  "database.json",
   "tables.json",
 ];
 
@@ -94,6 +95,16 @@ const elements = {
     sourceModes: document.getElementById("technical-source-modes"),
     detailedFindings: document.getElementById("technical-detailed-findings"),
     priorityMatrix: document.getElementById("technical-priority-matrix"),
+  },
+  database: {
+    summaryMetrics: document.getElementById("database-summary-metrics"),
+    storyCards: document.getElementById("database-story-cards"),
+    schemaTable: document.getElementById("database-schema-table"),
+    tablesTable: document.getElementById("database-tables-table"),
+    columnTypesTable: document.getElementById("database-column-types-table"),
+    relationshipsTable: document.getElementById("database-relationships-table"),
+    assetsTable: document.getElementById("database-assets-table"),
+    frontBackTable: document.getElementById("database-front-back-table"),
   },
   filters: {
     dateFrom: document.getElementById("filter-date-from"),
@@ -809,6 +820,15 @@ function formatDuration(seconds) {
   return parts.join(" ");
 }
 
+function formatBytes(value) {
+  const bytes = Number(value || 0);
+  if (!bytes) return "0 B";
+  const units = ["B", "KB", "MB", "GB", "TB"];
+  const power = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+  const scaled = bytes / 1024 ** power;
+  return `${scaled.toFixed(power === 0 ? 0 : 2)} ${units[power]}`;
+}
+
 function freshnessLabel(seconds) {
   const total = Number(seconds || 0);
   if (!Number.isFinite(total)) return "--";
@@ -1001,6 +1021,131 @@ function renderAreaBadge(area) {
   return `<span class="area-pill">${String(area || "").replaceAll("_", " ")}</span>`;
 }
 
+function renderRelationBadge(value) {
+  return `<span class="area-pill">${value || "--"}</span>`;
+}
+
+function yesNoLabel(value, yes = "Si", no = "No") {
+  return value ? yes : no;
+}
+
+function renderDatabase() {
+  const database = snapshot.database;
+  if (!database) return;
+
+  const summary = database.summary || {};
+  renderMetricCards(elements.database.summaryMetrics, [
+    { label: "Tamano total BD", value: formatBytes(summary.database_total_size_bytes), caption: "Peso consolidado de tablas fisicas en PostgreSQL." },
+    { label: "Snapshot frontend", value: formatBytes(summary.frontend_total_size_bytes), caption: "Peso total de los JSON publicados para la interfaz web." },
+    { label: "Tablas base", value: formatPreciseNumber(summary.table_count || 0), caption: "Tablas fisicas entre meta, raw, core y reporting." },
+    { label: "Relaciones FK", value: formatPreciseNumber(summary.relationship_count || 0), caption: "Enlaces foraneos materializados dentro del modelo." },
+    { label: "Filas backend", value: formatPreciseNumber(summary.backend_total_rows || 0), caption: "Volumen total preservado en PostgreSQL." },
+    { label: "Registros frontend", value: formatPreciseNumber(summary.frontend_total_rows || 0), caption: "Puntos analiticos expuestos por el snapshot web." },
+  ]);
+  renderStoryCards(elements.database.storyCards, database.story_cards || []);
+
+  const schemaRows = (database.schema_storage || []).map((row) => ({
+    label: row.schema_name,
+    value: row.total_size_bytes,
+  }));
+  setOption(
+    "database-size-chart",
+    horizontalBarOption({
+      labels: schemaRows.map((row) => row.label),
+      values: schemaRows.map((row) => row.value),
+      formatter: formatBytes,
+      color: "#126d84",
+    }),
+  );
+  setOption(
+    "database-relationship-chart",
+    donutOption({
+      data: (database.relationship_types || []).map((row) => ({
+        name: row.relation_type,
+        value: row.relation_count,
+      })),
+    }),
+  );
+
+  const densityRows = (database.relationship_density || [])
+    .map((row) => ({
+      ...row,
+      connected: Number(row.incoming_fks || 0) + Number(row.outgoing_fks || 0),
+    }))
+    .sort((a, b) => b.connected - a.connected)
+    .slice(0, 12);
+  setOption(
+    "database-density-chart",
+    horizontalBarOption({
+      labels: densityRows.map((row) => row.table_name.replace("core.", "").replace("meta.", "").replace("raw.", "")),
+      values: densityRows.map((row) => row.connected),
+      formatter: formatNumber,
+      color: "#d79b41",
+    }),
+  );
+
+  const frontBackRows = database.front_back_inventory || [];
+  setOption(
+    "database-front-back-chart",
+    lineComboOption({
+      categories: frontBackRows.map((row) => row.domain),
+      bars: frontBackRows.map((row) => row.backend_rows),
+      line: frontBackRows.map((row) => row.frontend_rows),
+      barName: "Back",
+      lineName: "Front",
+      barFormatter: formatNumber,
+      lineFormatter: formatNumber,
+    }),
+  );
+
+  renderTable("database-schema-table", database.schema_storage || [], [
+    { key: "schema_name", label: "Esquema" },
+    { key: "table_count", label: "Tablas", formatter: formatNumber },
+    { key: "view_count", label: "Vistas", formatter: formatNumber },
+    { key: "total_rows", label: "Filas", formatter: formatNumber },
+    { key: "total_size_bytes", label: "Tamano", formatter: formatBytes },
+  ]);
+  renderTable("database-tables-table", (database.table_inventory || []).slice(0, 20), [
+    { key: "qualified_name", label: "Tabla" },
+    { key: "row_count", label: "Filas", formatter: formatNumber },
+    { key: "column_count", label: "Columnas", formatter: formatNumber },
+    { key: "nullable_columns", label: "Nullable", formatter: formatNumber },
+    { key: "pk_columns", label: "PK" },
+    { key: "total_size_bytes", label: "Tamano total", formatter: formatBytes },
+  ]);
+  renderTable("database-column-types-table", database.column_types || [], [
+    { key: "schema_name", label: "Esquema" },
+    { key: "data_type", label: "Tipo SQL" },
+    { key: "column_count", label: "Columnas", formatter: formatNumber },
+  ]);
+  renderTable("database-relationships-table", database.relationships || [], [
+    { key: "constraint_name", label: "Constraint" },
+    { key: "relation_type", label: "Tipo", formatter: renderRelationBadge },
+    { key: "source_table", label: "Origen" },
+    { key: "source_columns", label: "Cols origen" },
+    { key: "target_table", label: "Destino" },
+    { key: "target_columns", label: "Cols destino" },
+    { key: "nullable_child", label: "Opcional", formatter: (value) => yesNoLabel(value, "Si", "No") },
+    { key: "deferrable", label: "Deferrable", formatter: (value) => yesNoLabel(value, "Si", "No") },
+    { key: "orphan_count", label: "Huerfanos", formatter: formatNumber },
+  ]);
+  renderTable("database-assets-table", database.frontend_assets || [], [
+    { key: "file_name", label: "Archivo" },
+    { key: "rows_exposed", label: "Filas expuestas", formatter: formatNumber },
+    { key: "collection_count", label: "Colecciones", formatter: formatNumber },
+    { key: "largest_collection", label: "Coleccion mayor" },
+    { key: "largest_collection_rows", label: "Filas mayor", formatter: formatNumber },
+    { key: "size_bytes", label: "Tamano", formatter: formatBytes },
+  ]);
+  renderTable("database-front-back-table", database.front_back_inventory || [], [
+    { key: "domain", label: "Dominio" },
+    { key: "backend_scope", label: "Scope backend" },
+    { key: "backend_rows", label: "Filas back", formatter: formatNumber },
+    { key: "frontend_file", label: "Archivo front" },
+    { key: "frontend_rows", label: "Filas front", formatter: formatNumber },
+  ]);
+}
+
 function renderTechnical() {
   if (!technicalState.data) return;
   const technical = technicalState.data;
@@ -1142,6 +1287,7 @@ function renderAll() {
   renderQuality();
   renderTables();
   renderTechnical();
+  renderDatabase();
 }
 
 function populateControls() {
@@ -1342,8 +1488,8 @@ function bindEvents() {
 
 async function loadSnapshot() {
   const responses = await Promise.all(fileNames.map((file) => fetchJson(`./data/${file}`)));
-  const [manifest, overview, commercial, customers, products, inventory, accounting, quality, tables] = responses;
-  return { manifest, overview, commercial, customers, products, inventory, accounting, quality, tables };
+  const [manifest, overview, commercial, customers, products, inventory, accounting, quality, database, tables] = responses;
+  return { manifest, overview, commercial, customers, products, inventory, accounting, quality, database, tables };
 }
 
 async function init() {

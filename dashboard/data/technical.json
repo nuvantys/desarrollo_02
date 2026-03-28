@@ -1,8 +1,8 @@
 {
-  "run_id": null,
-  "coverage_min": null,
-  "coverage_max": null,
-  "generated_at": null,
+  "run_id": "20260328220843",
+  "coverage_min": "2019-01-01",
+  "coverage_max": "2026-12-31",
+  "generated_at": "2026-03-28T17:28:21-05:00",
   "filters_available": {
     "document_types": [
       {
@@ -344,292 +344,681 @@
     ],
     "accounts": [
       {
-        "value": "jZdyPoMppu6KvbJ4",
-        "label": "(-) Amortización Acumulada de Activos Intangibles",
-        "count": 0
+        "value": "MEegJZVqvfPKXdQ5",
+        "label": "INVENTARIO DE REPUESTOS",
+        "count": 46623
       },
       {
-        "value": "O8bYEW004TkmRb7j",
-        "label": "(-) Capital suscrito no pagado, acciones en tesorería",
-        "count": 0
+        "value": "0yelYxVlQIOmJaER",
+        "label": "COSTO DE REPUESTOS",
+        "count": 30599
       },
       {
-        "value": "9jaKr1mABh8Pgek5",
-        "label": "(-) Cuentas Incobrables de Activos Financieros No Corrientes",
-        "count": 0
+        "value": "loejRZVwGclDLeQM",
+        "label": "VENTA DE REPUESTOS",
+        "count": 29370
       },
       {
-        "value": "xgepY8798fQqra1p",
-        "label": "(-) Depreciación Activos Biológicos",
-        "count": 0
+        "value": "RMdR6OwLktno9dl6",
+        "label": "Clientes Comerciales",
+        "count": 24815
       },
       {
-        "value": "kPbkR8Dw9SYAVa5Y",
-        "label": "(-) Depreciación Acumulada de Propiedades de Inversión",
-        "count": 0
+        "value": "pZeVOAlJDU0mraGW",
+        "label": "Proveedores",
+        "count": 22058
       },
       {
-        "value": "xgepY87RxiQqra1p",
-        "label": "(-) Depreciación Acumulada Propiedades, Planta y Equipo",
-        "count": 0
+        "value": "EMaxkn98mtmD6e5G",
+        "label": "Rebaja y/o Descuentos sobre Ventas",
+        "count": 16481
       },
       {
-        "value": "Yjbqx7DAQSLnAaLN",
-        "label": "(-) Deterioro Activos Biológicos",
-        "count": 0
+        "value": "YWb4xQDrPsYENbZ1",
+        "label": "BANCO PICHINCHA",
+        "count": 12032
       },
       {
-        "value": "Pnazpv9qxf8EldO2",
-        "label": "(-) Deterioro Acumulado de Activos Intangibles",
-        "count": 0
+        "value": "5wboY3RwMhl5NexE",
+        "label": "BANCO DE GUAYAQUIL",
+        "count": 7717
       },
       {
-        "value": "0yelYxD8QSOmJaER",
-        "label": "(-) Deterioro Acumulado de Propiedades de Inversión",
-        "count": 0
+        "value": "rRbDk1PYRIjw2a6L",
+        "label": "IVA sobre Compras",
+        "count": 6166
       },
       {
-        "value": "Yjbqx7DVKULnAaLN",
-        "label": "(-) Deterioro Acumulado Propiedades, Planta y Equipo",
-        "count": 0
+        "value": "5wbo2V9Bxil5NaxE",
+        "label": "VENTA DE CONSUMIBLES",
+        "count": 5827
       },
       {
-        "value": "1qdG6vgwXcWExbN8",
-        "label": "(-) Deterioro de Activos Financieros hasta el Vencimiento No Corrientes",
-        "count": 0
+        "value": "1qdG6vgQXsWExbN8",
+        "label": "IVA sobre Ventas",
+        "count": 5429
       },
       {
-        "value": "Y4erk8XYjhw7Ka2L",
-        "label": "(-) Provisión de Inventarios por deterioro",
-        "count": 0
+        "value": "MEegJZ6QvSPKXdQ5",
+        "label": "Cuenta por Pagar Funcionarios y/o Empleados",
+        "count": 4729
       },
       {
-        "value": "Yjbqx7D2KSLnAaLN",
-        "label": "(-) Provisión de Inventarios por valor neto de realización",
-        "count": 0
+        "value": "Yjbqx7XEKtLnAaLN",
+        "label": "INVENTARIO DE CONSUMIBLES",
+        "count": 4529
       },
       {
-        "value": "LqdPN7rY5tv9Yal4",
-        "label": "(-) Provisión por Deterioro",
-        "count": 0
+        "value": "Lmav2l7MWCOqma3N",
+        "label": "COSTO DE CONSUMIBLES",
+        "count": 3694
       },
       {
-        "value": "P9aQWnvNvUBgGdDM",
-        "label": "1% Bienes Muebles de Naturaleza Corporal",
-        "count": 0
+        "value": "wKe5yQEv4Fg3me31",
+        "label": "CAJA PRINCIPAL",
+        "count": 3334
       },
       {
-        "value": "0yelYxDMQFOmJaER",
-        "label": "1% Bienes Muebles de Naturaleza Corporal",
-        "count": 0
+        "value": "Arb68X2VxhV72eyR",
+        "label": "Combustible Vtas.",
+        "count": 2580
       },
       {
-        "value": "RBe3l2AM1C7o1aLJ",
-        "label": "1% Compra de bienes de origen agrícola, avícola, pecuario, apícola, cunícula, bioacuático, y forestal",
-        "count": 0
-      },
-      {
-        "value": "O8bYEW0lPSkmRb7j",
-        "label": "1% Secap - Iece",
-        "count": 0
-      },
-      {
-        "value": "Lmav2jvkGtOqma3N",
-        "label": "1% Transporte",
-        "count": 0
-      },
-      {
-        "value": "MEegJMxEwCPKXdQ5",
-        "label": "1.75% Bienes Muebles de Naturaleza Corporal",
-        "count": 0
+        "value": "gQbW6zYY0HzZ7a6w",
+        "label": "Tarjeta de Crédito ( Diners Club )",
+        "count": 2554
       },
       {
         "value": "loejR6vKXslDLeQM",
         "label": "1.75% Bienes Muebles de Naturaleza Corporal",
-        "count": 0
+        "count": 2427
       },
       {
-        "value": "wKe5yBzm0Hg3me31",
-        "label": "1.75% Régimen Microempresas",
-        "count": 0
+        "value": "Lmav2lDR7tOqma3N",
+        "label": "Prestación de Servicios",
+        "count": 2293
       },
       {
-        "value": "Arb68DAnxuV72eyR",
-        "label": "1.75% Régimen Microempresas",
-        "count": 0
+        "value": "EMaxkn9LDtmD6e5G",
+        "label": "Suministros, Materiales y Repuestos Costos",
+        "count": 2100
       },
       {
-        "value": "JvaM8woE9IxDKepz",
-        "label": "10% Bienes (Contribuyentes Especiales)",
-        "count": 0
+        "value": "XKdwpVZ59u0kMegW",
+        "label": "Otros Gastos Financieros",
+        "count": 1955
       },
       {
-        "value": "y7aADNA9AcrByegZ",
-        "label": "10% Bienes (Contribuyentes Especiales)",
-        "count": 0
+        "value": "RBe31j3vmC7o1bLJ",
+        "label": "Anticipo a Empleados",
+        "count": 1593
       },
       {
-        "value": "BleXDLn7XTBjverN",
-        "label": "10% Honorarios Profesionales y Dietas",
-        "count": 0
+        "value": "YWb4xQ4YXuYENbZ1",
+        "label": "Sueldos por Pagar",
+        "count": 1560
       },
       {
-        "value": "xgepY87X8TQqra1p",
-        "label": "10% Honorarios Profesionales y Dietas",
-        "count": 0
+        "value": "mBdJ6ylWLUplGd0J",
+        "label": "Alimentación Vtas.",
+        "count": 1499
       },
       {
-        "value": "Arb68X2zPcV72eyR",
-        "label": "10% Trabajadores en General",
-        "count": 0
+        "value": "wKe5yQ3w0hg3me31",
+        "label": "Miscelaneos Vtas.",
+        "count": 1496
       },
       {
-        "value": "xmbmQvVlZu18wboK",
-        "label": "100% Contribuyentes Especiales",
-        "count": 0
+        "value": "Y4erk8XMmHw7Ka2L",
+        "label": "Otras Retenciones Aplicables al Cód. 343",
+        "count": 1363
       },
       {
-        "value": "0yel5rVjQHOmJaER",
-        "label": "100% Contribuyentes Especiales",
-        "count": 0
+        "value": "MEegJMxEwCPKXdQ5",
+        "label": "1.75% Bienes Muebles de Naturaleza Corporal",
+        "count": 1325
       },
       {
-        "value": "YWb48XBLZcYENbZ1",
-        "label": "100% Empresas Públicas",
-        "count": 0
+        "value": "xmbmZOGEoH18wdoK",
+        "label": "Mercaderías en Transito",
+        "count": 1293
       },
       {
-        "value": "RBe3lWAwDU7o1aLJ",
-        "label": "100% Empresas Públicas",
-        "count": 0
+        "value": "XKdwpVZRkc0kMegW",
+        "label": "30% Bienes",
+        "count": 1288
       },
       {
-        "value": "Pnazpv9xxi8EldO2",
-        "label": "100% Exportadores",
-        "count": 0
+        "value": "RBe31rRL1t7o1bLJ",
+        "label": "Materiales de Ferretería",
+        "count": 1048
       },
       {
-        "value": "BXdL97nYJiNVxeJZ",
-        "label": "100% Exportadores",
-        "count": 0
+        "value": "jZdyPoMm1h6KvbJ4",
+        "label": "Anticipo a Proveedores",
+        "count": 971
       },
       {
-        "value": "jZdyPoMJpF6KvbJ4",
-        "label": "100% Honorarios, Arrendamientos",
-        "count": 0
-      },
-      {
-        "value": "9jaKr1mYLh8Pgek5",
-        "label": "100% Honorarios, Arrendamientos, Personas Naturales",
-        "count": 0
-      },
-      {
-        "value": "YjbqYR8N4ILnAbLN",
-        "label": "100% Liquidación de Compra de Bienes y Servicios",
-        "count": 0
-      },
-      {
-        "value": "Y4erRZ7ODsw7Ke2L",
-        "label": "100% Liquidación de Compra de Bienes y Servicios",
-        "count": 0
-      },
-      {
-        "value": "y7aAP0mjYurByegZ",
-        "label": "100% Operadores de turismo",
-        "count": 0
-      },
-      {
-        "value": "9pdBLknlGHP0Qa8K",
-        "label": "100% Operadores de turismo",
-        "count": 0
+        "value": "Gge0RYOA1IJQObAD",
+        "label": "9.45% Aportes Individuales",
+        "count": 942
       },
       {
         "value": "BleXDLnkzsBjverN",
         "label": "11.15% Aportes Patronales I.E.S.S.",
-        "count": 0
+        "count": 941
       },
       {
-        "value": "Yjbqx7DMQtLnAaLN",
-        "label": "15% Loterías, Rifas y Similares",
-        "count": 0
+        "value": "O8bYEW0lPSkmRb7j",
+        "label": "1% Secap - Iece",
+        "count": 931
       },
       {
-        "value": "O8bYEW0QZFkmRb7j",
-        "label": "15% Loterías, Rifas y Similares",
-        "count": 0
+        "value": "xgepY8778cQqra1p",
+        "label": "Anticipos de Clientes",
+        "count": 918
       },
       {
-        "value": "Ejb2kxOgocKWqdVN",
-        "label": "1era. Cuota Julio",
-        "count": 0
+        "value": "LqdPNKm43tv9Yal4",
+        "label": "Mantenimiento Vehículo",
+        "count": 843
       },
       {
-        "value": "xmbmZOGMZt18wdoK",
-        "label": "2% Servicios",
-        "count": 0
+        "value": "9jaKr1mzqh8Pgek5",
+        "label": "Fletes",
+        "count": 836
       },
       {
-        "value": "RMdR6OwMkCno9dl6",
-        "label": "2% Servicios",
-        "count": 0
+        "value": "gQbW6LmjrfzZ7a6w",
+        "label": "Vacaciones",
+        "count": 788
+      },
+      {
+        "value": "RBe31KLK3I7o1bLJ",
+        "label": "Tarjeta de Crédito (Datafast)",
+        "count": 785
+      },
+      {
+        "value": "RMdR6Ow5vUno9dl6",
+        "label": "Décimo Tercer Sueldo",
+        "count": 717
+      },
+      {
+        "value": "pZeVOAl0Df0mraGW",
+        "label": "Décimo Cuarto Sueldo",
+        "count": 714
+      },
+      {
+        "value": "9jaKr7X4qF8Pgek5",
+        "label": "Peajes",
+        "count": 713
       },
       {
         "value": "xgepY7mnoiQqra1p",
         "label": "2.75% Servicios",
-        "count": 0
+        "count": 692
       },
       {
-        "value": "5wbo27lmJil5NaxE",
-        "label": "2.75% Servicios",
-        "count": 0
+        "value": "0yelYxDMQFOmJaER",
+        "label": "1% Bienes Muebles de Naturaleza Corporal",
+        "count": 691
       },
       {
-        "value": "01dNkLpEEiVJKeX7",
-        "label": "20% Servicios (Contribuyentes Especiales)",
-        "count": 0
+        "value": "Gge0RYO3muJQObAD",
+        "label": "Guías de Transportes Vtas.",
+        "count": 636
       },
       {
-        "value": "9pdBBNQROCP0Qd8K",
-        "label": "20% Servicios (Contribuyentes Especiales)",
-        "count": 0
+        "value": "rRbDk1PWXIjw2a6L",
+        "label": "Sueldos Unificados Vtas.",
+        "count": 570
+      },
+      {
+        "value": "01dNkLp1kiVJKeX7",
+        "label": "Décimo Tercer Sueldo Vtas.",
+        "count": 569
+      },
+      {
+        "value": "QzaOYMq97F5lVdp4",
+        "label": "Décimo Cuarto Sueldo Vtas.",
+        "count": 567
+      },
+      {
+        "value": "9jaKr1m9Wh8Pgek5",
+        "label": "Aportes Patronales al IESS Vtas.",
+        "count": 566
+      },
+      {
+        "value": "EMaxkn97VTmD6e5G",
+        "label": "70% Servicios",
+        "count": 565
       }
     ],
     "cost_centers": [
       {
-        "value": "N5wboQjmxil5NexE",
-        "label": "Bodega Machachi",
-        "count": 0
-      },
-      {
         "value": "9pgenrglKFlg0eNQ",
         "label": "Bodega Principal",
-        "count": 0
+        "count": 57352
+      },
+      {
+        "value": "N5wboQjmxil5NexE",
+        "label": "Bodega Machachi",
+        "count": 17602
       }
     ]
   },
-  "last_refresh_started_at": "2026-03-28T16:36:11-05:00",
-  "last_refresh_finished_at": "2026-03-28T16:41:50-05:00",
-  "last_refresh_duration_seconds": 339,
-  "freshness_seconds": null,
+  "last_refresh_started_at": "2026-03-28T17:08:43-05:00",
+  "last_refresh_finished_at": "2026-03-28T17:28:21-05:00",
+  "last_refresh_duration_seconds": 1178,
+  "freshness_seconds": 657,
   "summary": {
     "status": "success",
-    "resources_processed": 11,
-    "resources_success": 0,
+    "resources_processed": 13,
+    "resources_success": 13,
     "resources_failed": 0,
-    "tables_updated": 0,
-    "core_rows_updated": 0,
-    "source_rows_processed": 41970,
+    "tables_updated": 18,
+    "core_rows_updated": 623615,
+    "source_rows_processed": 133283,
     "raw_rows_processed": 0
   },
-  "resource_metrics": [],
-  "load_metrics": [],
-  "watermarks": [],
+  "resource_metrics": [
+    {
+      "resource": "bodega",
+      "status": "success",
+      "pages_fetched": 1,
+      "source_count": 21,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:08:43-05:00",
+      "finished_at": "2026-03-28T17:08:43-05:00",
+      "duration_seconds": 0,
+      "core_rows_loaded": 21,
+      "table_counts_jsonb": {
+        "bodegas": 21
+      }
+    },
+    {
+      "resource": "categoria",
+      "status": "success",
+      "pages_fetched": 1,
+      "source_count": 22,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:08:43-05:00",
+      "finished_at": "2026-03-28T17:08:43-05:00",
+      "duration_seconds": 0,
+      "core_rows_loaded": 22,
+      "table_counts_jsonb": {
+        "categorias": 22
+      }
+    },
+    {
+      "resource": "centro-costo",
+      "status": "success",
+      "pages_fetched": 1,
+      "source_count": 2,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:08:44-05:00",
+      "finished_at": "2026-03-28T17:08:44-05:00",
+      "duration_seconds": 0,
+      "core_rows_loaded": 2,
+      "table_counts_jsonb": {
+        "centros_costo": 2
+      }
+    },
+    {
+      "resource": "contabilidad/asiento",
+      "status": "success",
+      "pages_fetched": 675,
+      "source_count": 67402,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:25:22-05:00",
+      "finished_at": "2026-03-28T17:28:21-05:00",
+      "duration_seconds": 179,
+      "core_rows_loaded": 346756,
+      "table_counts_jsonb": {
+        "asientos": 67402,
+        "asiento_detalles": 279354
+      }
+    },
+    {
+      "resource": "contabilidad/periodo",
+      "status": "success",
+      "pages_fetched": 1,
+      "source_count": 8,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:08:44-05:00",
+      "finished_at": "2026-03-28T17:08:44-05:00",
+      "duration_seconds": 0,
+      "core_rows_loaded": 8,
+      "table_counts_jsonb": {
+        "periodos": 8
+      }
+    },
+    {
+      "resource": "cuenta-contable",
+      "status": "success",
+      "pages_fetched": 1,
+      "source_count": 572,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:08:43-05:00",
+      "finished_at": "2026-03-28T17:08:43-05:00",
+      "duration_seconds": 0,
+      "core_rows_loaded": 572,
+      "table_counts_jsonb": {
+        "cuentas_contables": 572
+      }
+    },
+    {
+      "resource": "documento",
+      "status": "success",
+      "pages_fetched": 240,
+      "source_count": 23911,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:10:04-05:00",
+      "finished_at": "2026-03-28T17:14:03-05:00",
+      "duration_seconds": 239,
+      "core_rows_loaded": 125397,
+      "table_counts_jsonb": {
+        "documentos": 23911,
+        "documento_cobros": 24039,
+        "documento_detalles": 77447
+      }
+    },
+    {
+      "resource": "documento/tickets",
+      "status": "success",
+      "pages_fetched": 240,
+      "source_count": 23911,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:14:03-05:00",
+      "finished_at": "2026-03-28T17:25:22-05:00",
+      "duration_seconds": 679,
+      "core_rows_loaded": 101358,
+      "table_counts_jsonb": {
+        "tickets_detalles": 77447,
+        "tickets_documentos": 23911
+      }
+    },
+    {
+      "resource": "marca",
+      "status": "success",
+      "pages_fetched": 1,
+      "source_count": 16,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:08:43-05:00",
+      "finished_at": "2026-03-28T17:08:43-05:00",
+      "duration_seconds": 0,
+      "core_rows_loaded": 16,
+      "table_counts_jsonb": {
+        "marcas": 16
+      }
+    },
+    {
+      "resource": "movimiento-inventario",
+      "status": "success",
+      "pages_fetched": 142,
+      "source_count": 14101,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:09:00-05:00",
+      "finished_at": "2026-03-28T17:10:04-05:00",
+      "duration_seconds": 64,
+      "core_rows_loaded": 46146,
+      "table_counts_jsonb": {
+        "movimientos": 9024,
+        "movimiento_detalles": 37122
+      }
+    },
+    {
+      "resource": "persona",
+      "status": "success",
+      "pages_fetched": 21,
+      "source_count": 2060,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:08:44-05:00",
+      "finished_at": "2026-03-28T17:08:47-05:00",
+      "duration_seconds": 3,
+      "core_rows_loaded": 2060,
+      "table_counts_jsonb": {
+        "personas": 2060
+      }
+    },
+    {
+      "resource": "producto",
+      "status": "success",
+      "pages_fetched": 13,
+      "source_count": 1237,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:08:47-05:00",
+      "finished_at": "2026-03-28T17:09:00-05:00",
+      "duration_seconds": 13,
+      "core_rows_loaded": 1237,
+      "table_counts_jsonb": {
+        "productos": 1237
+      }
+    },
+    {
+      "resource": "unidad",
+      "status": "success",
+      "pages_fetched": 1,
+      "source_count": 20,
+      "raw_row_count": 0,
+      "started_at": "2026-03-28T17:08:43-05:00",
+      "finished_at": "2026-03-28T17:08:44-05:00",
+      "duration_seconds": 1,
+      "core_rows_loaded": 20,
+      "table_counts_jsonb": {
+        "unidades": 20
+      }
+    }
+  ],
+  "load_metrics": [
+    {
+      "stage": "core",
+      "table_name": "asiento_detalles",
+      "row_count": 279354,
+      "measured_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "documento_detalles",
+      "row_count": 77447,
+      "measured_at": "2026-03-28T17:14:03-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "tickets_detalles",
+      "row_count": 77447,
+      "measured_at": "2026-03-28T17:25:22-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "asientos",
+      "row_count": 67402,
+      "measured_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "movimiento_detalles",
+      "row_count": 37122,
+      "measured_at": "2026-03-28T17:10:04-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "documento_cobros",
+      "row_count": 24039,
+      "measured_at": "2026-03-28T17:14:03-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "documentos",
+      "row_count": 23911,
+      "measured_at": "2026-03-28T17:14:03-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "tickets_documentos",
+      "row_count": 23911,
+      "measured_at": "2026-03-28T17:25:22-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "movimientos",
+      "row_count": 9024,
+      "measured_at": "2026-03-28T17:10:04-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "personas",
+      "row_count": 2060,
+      "measured_at": "2026-03-28T17:08:47-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "productos",
+      "row_count": 1237,
+      "measured_at": "2026-03-28T17:09:00-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "cuentas_contables",
+      "row_count": 572,
+      "measured_at": "2026-03-28T17:08:43-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "categorias",
+      "row_count": 22,
+      "measured_at": "2026-03-28T17:08:43-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "bodegas",
+      "row_count": 21,
+      "measured_at": "2026-03-28T17:08:43-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "unidades",
+      "row_count": 20,
+      "measured_at": "2026-03-28T17:08:44-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "marcas",
+      "row_count": 16,
+      "measured_at": "2026-03-28T17:08:43-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "periodos",
+      "row_count": 8,
+      "measured_at": "2026-03-28T17:08:44-05:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "centros_costo",
+      "row_count": 2,
+      "measured_at": "2026-03-28T17:08:44-05:00"
+    }
+  ],
+  "watermarks": [
+    {
+      "resource": "bodega",
+      "last_run_id": "20260328220843",
+      "min_record_date": null,
+      "max_record_date": null,
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "categoria",
+      "last_run_id": "20260328220843",
+      "min_record_date": null,
+      "max_record_date": null,
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "centro-costo",
+      "last_run_id": "20260328220843",
+      "min_record_date": null,
+      "max_record_date": null,
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "contabilidad/asiento",
+      "last_run_id": "20260328220843",
+      "min_record_date": "2019-03-12",
+      "max_record_date": "2026-07-08",
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "contabilidad/periodo",
+      "last_run_id": "20260328220843",
+      "min_record_date": "2019-01-01",
+      "max_record_date": "2026-12-31",
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "cuenta-contable",
+      "last_run_id": "20260328220843",
+      "min_record_date": null,
+      "max_record_date": null,
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "documento",
+      "last_run_id": "20260328220843",
+      "min_record_date": "2019-03-12",
+      "max_record_date": "2026-03-28",
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "documento/tickets",
+      "last_run_id": "20260328220843",
+      "min_record_date": "2019-03-12",
+      "max_record_date": "2026-03-28",
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "marca",
+      "last_run_id": "20260328220843",
+      "min_record_date": null,
+      "max_record_date": null,
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "movimiento-inventario",
+      "last_run_id": "20260328220843",
+      "min_record_date": "2022-05-16",
+      "max_record_date": "2026-03-28",
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "persona",
+      "last_run_id": "20260328220843",
+      "min_record_date": "2019-11-20",
+      "max_record_date": "2026-03-27",
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "producto",
+      "last_run_id": "20260328220843",
+      "min_record_date": "2019-11-14",
+      "max_record_date": "2026-03-25",
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    },
+    {
+      "resource": "unidad",
+      "last_run_id": "20260328220843",
+      "min_record_date": null,
+      "max_record_date": null,
+      "updated_at": "2026-03-28T17:28:21-05:00"
+    }
+  ],
   "temporal_coverage": [
     {
       "resource": "asientos",
-      "row_count": 0,
-      "min_date": null,
-      "max_date": null
+      "row_count": 67402,
+      "min_date": "2019-03-12",
+      "max_date": "2026-07-08"
     },
     {
       "resource": "documentos",
@@ -663,9 +1052,9 @@
     },
     {
       "resource": "tickets_documentos",
-      "row_count": 0,
-      "min_date": null,
-      "max_date": null
+      "row_count": 23911,
+      "min_date": "2019-03-12",
+      "max_date": "2026-03-28"
     }
   ],
   "alerts": [
@@ -852,18 +1241,6 @@
   ],
   "source_vs_core": [
     {
-      "resource": "contabilidad/asiento",
-      "source_count": 67402,
-      "core_count": 0,
-      "difference": 67402
-    },
-    {
-      "resource": "documento/tickets",
-      "source_count": 23911,
-      "core_count": 0,
-      "difference": 23911
-    },
-    {
       "resource": "movimiento-inventario",
       "source_count": 14101,
       "core_count": 9024,
@@ -882,6 +1259,12 @@
       "difference": 0
     },
     {
+      "resource": "contabilidad/asiento",
+      "source_count": 67402,
+      "core_count": 67402,
+      "difference": 0
+    },
+    {
       "resource": "contabilidad/periodo",
       "source_count": 8,
       "core_count": 8,
@@ -895,6 +1278,12 @@
     },
     {
       "resource": "documento",
+      "source_count": 23911,
+      "core_count": 23911,
+      "difference": 0
+    },
+    {
+      "resource": "documento/tickets",
       "source_count": 23911,
       "core_count": 23911,
       "difference": 0
@@ -950,12 +1339,12 @@
   ],
   "nulls_allowed": [
     {
-      "metric": "tickets_detalles_producto_id_null",
+      "metric": "documentos_sin_persona_id",
       "value": 0
     },
     {
-      "metric": "documentos_sin_persona_id",
-      "value": 0
+      "metric": "tickets_detalles_producto_id_null",
+      "value": 17555
     },
     {
       "metric": "documento_detalles_producto_id_null",
@@ -1356,7 +1745,7 @@
         "area": "cuenta_contable",
         "severity": "low",
         "title": "Cuentas contables sin uso historico",
-        "metric": 572,
+        "metric": 360,
         "issue": "El plan contable contiene cuentas sin movimiento dentro del historico cargado.",
         "impact": "No rompe integridad, pero complica revision manual y puede ocultar catalogo obsoleto.",
         "analysis_risk": "Amplia el ruido del catalogo contable y dificulta distinguir cuentas realmente operativas de cuentas residuales.",
@@ -1397,7 +1786,7 @@
     "senior_summary": [
       {
         "title": "Lectura senior del estado actual",
-        "body": "La base publicada al dashboard sigue siendo local y materializada, pero su fuente de origen real es Contifico API. Hoy el snapshot vigente parte del run None y refleja 11 recursos procesados con 0 tablas impactadas."
+        "body": "La base publicada al dashboard sigue siendo local y materializada, pero su fuente de origen real es Contifico API. Hoy el snapshot vigente parte del run 20260328220843 y refleja 13 recursos procesados con 18 tablas impactadas."
       },
       {
         "title": "Cadena de origen de los datos",
@@ -1409,7 +1798,7 @@
       },
       {
         "title": "Historial reciente del pipeline",
-        "body": "El historial acumulado registra 4 corridas, de las cuales 3 fueron exitosas y 1 cerraron con error. La ultima corrida exitosa es 20260328213611 y la ultima corrida con error es 20260328175849."
+        "body": "El historial acumulado registra 5 corridas, de las cuales 4 fueron exitosas y 1 cerraron con error. La ultima corrida exitosa es 20260328220843 y la ultima corrida con error es 20260328175849."
       }
     ],
     "source_chain": [
@@ -1451,25 +1840,179 @@
       }
     ],
     "history_summary": {
-      "total_runs": 4,
-      "successful_runs": 3,
+      "total_runs": 5,
+      "successful_runs": 4,
       "failed_runs": 1,
-      "latest_success_run": "20260328213611",
-      "latest_success_finished_at": "2026-03-28T16:41:50-05:00",
+      "latest_success_run": "20260328220843",
+      "latest_success_finished_at": "2026-03-28T17:28:21-05:00",
       "latest_error_run": "20260328175849",
       "latest_error_finished_at": "2026-03-28T12:58:54-05:00"
     }
   },
+  "priority_matrix": [
+    {
+      "priority_rank": 1,
+      "correction_order": 1,
+      "priority_code": "P1",
+      "priority_level": "alto",
+      "severity": "high",
+      "title": "Categorias con mapeo contable incompleto",
+      "area": "cuenta_contable",
+      "metric": 14,
+      "recommended_owner": "Contabilidad + Maestro de catalogo",
+      "workstream": "Gobernanza contable base",
+      "why_now": "Corrige la capa de herencia antes de seguir ajustando productos y transacciones.",
+      "success_criteria": "Toda categoria inventariable queda con cuenta de venta, compra e inventario completas."
+    },
+    {
+      "priority_rank": 2,
+      "correction_order": 2,
+      "priority_code": "P1",
+      "priority_level": "alto",
+      "severity": "high",
+      "title": "Productos sin cuenta de costo",
+      "area": "cuenta_contable",
+      "metric": 136,
+      "recommended_owner": "Contabilidad + Responsable de productos",
+      "workstream": "Rentabilidad y costo",
+      "why_now": "Sin cuenta de costo no hay margen confiable por producto ni salida contable consistente.",
+      "success_criteria": "Todo producto activo queda con cuenta de costo valida o heredada con regla explicita."
+    },
+    {
+      "priority_rank": 3,
+      "correction_order": 3,
+      "priority_code": "P1",
+      "priority_level": "alto",
+      "severity": "high",
+      "title": "Productos sin cuenta de compra",
+      "area": "cuenta_contable",
+      "metric": 21,
+      "recommended_owner": "Compras + Contabilidad",
+      "workstream": "Clasificacion de adquisiciones",
+      "why_now": "Evita que nuevas compras sigan entrando sin una imputacion consistente.",
+      "success_criteria": "Todo producto comprable queda vinculado a cuenta de compra o regla de herencia controlada."
+    },
+    {
+      "priority_rank": 4,
+      "correction_order": 4,
+      "priority_code": "P1",
+      "priority_level": "alto",
+      "severity": "high",
+      "title": "Movimientos sin cuenta contable",
+      "area": "inventario",
+      "metric": 8274,
+      "recommended_owner": "Inventario + Contabilidad",
+      "workstream": "Conciliacion operacion-contabilidad",
+      "why_now": "Cierra el puente entre movimiento fisico y lectura contable antes de profundizar analisis de costo.",
+      "success_criteria": "Todo movimiento relevante queda trazable a una cuenta contable o justificado como excepcion controlada."
+    },
+    {
+      "priority_rank": 5,
+      "correction_order": 5,
+      "priority_code": "P1",
+      "priority_level": "alto",
+      "severity": "high",
+      "title": "Movimientos sin detalle",
+      "area": "inventario",
+      "metric": 132,
+      "recommended_owner": "Operaciones + Inventario",
+      "workstream": "Calidad transaccional",
+      "why_now": "El evento sin detalle degrada kardex, rotacion y auditoria operativa.",
+      "success_criteria": "Toda cabecera valida queda con detalle asociado o es marcada como anulada/no analizable."
+    },
+    {
+      "priority_rank": 6,
+      "correction_order": 6,
+      "priority_code": "P1",
+      "priority_level": "alto",
+      "severity": "high",
+      "title": "Productos con stock negativo",
+      "area": "inventario",
+      "metric": 3,
+      "recommended_owner": "Inventario + Bodega",
+      "workstream": "Regularizacion de saldos",
+      "why_now": "El stock negativo rompe disponibilidad, reposicion y control fisico.",
+      "success_criteria": "Los productos con saldo negativo quedan regularizados y monitoreados."
+    },
+    {
+      "priority_rank": 7,
+      "correction_order": 7,
+      "priority_code": "P2",
+      "priority_level": "medio",
+      "severity": "medium",
+      "title": "Movimientos con cantidad y total cero",
+      "area": "inventario",
+      "metric": 48,
+      "recommended_owner": "Inventario + Costos",
+      "workstream": "Valorizacion de movimientos",
+      "why_now": "Impacta la lectura economica del inventario aun cuando el movimiento fisico ya exista.",
+      "success_criteria": "Todo movimiento con cantidad relevante tiene una valorizacion consistente o una excepcion documentada."
+    },
+    {
+      "priority_rank": 8,
+      "correction_order": 8,
+      "priority_code": "P2",
+      "priority_level": "medio",
+      "severity": "medium",
+      "title": "Lineas directas sin producto y con cuenta",
+      "area": "cuenta_contable",
+      "metric": 17555,
+      "recommended_owner": "Comercial + Contabilidad",
+      "workstream": "Separacion producto-servicio",
+      "why_now": "Necesita limpiarse antes de interpretar mix comercial y top productos.",
+      "success_criteria": "Las lineas directas quedan clasificadas como servicio/cargo o migradas a producto cuando aplique."
+    },
+    {
+      "priority_rank": 9,
+      "correction_order": 9,
+      "priority_code": "P3",
+      "priority_level": "bajo",
+      "severity": "low",
+      "title": "Productos sin marca",
+      "area": "inventario",
+      "metric": 1112,
+      "recommended_owner": "Maestro de productos + Compras",
+      "workstream": "Enriquecimiento del catalogo",
+      "why_now": "No rompe integridad, pero limita segmentacion y lectura de portafolio.",
+      "success_criteria": "Los productos que usan marca quedan clasificados y los que no, marcados como excepcion valida."
+    },
+    {
+      "priority_rank": 10,
+      "correction_order": 10,
+      "priority_code": "P3",
+      "priority_level": "bajo",
+      "severity": "low",
+      "title": "Cuentas contables sin uso historico",
+      "area": "cuenta_contable",
+      "metric": 360,
+      "recommended_owner": "Contabilidad",
+      "workstream": "Depuracion del plan contable",
+      "why_now": "Es limpieza de catalogo, util despues de estabilizar las capas transaccionales.",
+      "success_criteria": "El plan contable distingue cuentas operativas, historicas y obsoletas con criterio explicito."
+    }
+  ],
   "recent_runs": [
+    {
+      "run_id": "20260328220843",
+      "started_at": "2026-03-28T17:08:43-05:00",
+      "finished_at": "2026-03-28T17:28:21-05:00",
+      "duration_seconds": 1178,
+      "resources_processed": 13,
+      "resources_success": 13,
+      "resources_failed": 0,
+      "source_rows": 133283,
+      "raw_rows": 0,
+      "status": "success"
+    },
     {
       "run_id": "20260328213611",
       "started_at": "2026-03-28T16:36:11-05:00",
-      "finished_at": "2026-03-28T16:41:50-05:00",
-      "duration_seconds": 339,
-      "resources_processed": 11,
-      "resources_success": 11,
+      "finished_at": "2026-03-28T16:56:10-05:00",
+      "duration_seconds": 1199,
+      "resources_processed": 13,
+      "resources_success": 13,
       "resources_failed": 0,
-      "source_rows": 41970,
+      "source_rows": 133283,
       "raw_rows": 0,
       "status": "success"
     },
@@ -1511,8 +2054,8 @@
     }
   ],
   "narrative": [
-    "El snapshot tecnico vigente corresponde al run_id sin_corrida y cubre desde None hasta None.",
-    "La ultima corrida proceso 11 recursos, actualizo 0 tablas y materializo 0 filas core.",
+    "El snapshot tecnico vigente corresponde al run_id 20260328220843 y cubre desde 2019-01-01 hasta 2026-12-31.",
+    "La ultima corrida proceso 13 recursos, actualizo 18 tablas y materializo 623615 filas core.",
     "La diferencia fuente vs core mas visible sigue en movimiento-inventario con 5077 filas de brecha despues de deduplicacion.",
     "La salud referencial consolidada registra 0 huerfanos y 1 placeholders controlados."
   ]

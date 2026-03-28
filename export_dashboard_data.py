@@ -7,6 +7,8 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
+from psycopg2 import sql
+
 from contifico_pg_backfill import DEFAULT_DB_NAME, open_connection, pg_config_from_env
 
 
@@ -38,6 +40,14 @@ def query_value(conn, statement: str, params: tuple[Any, ...] | None = None, def
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, default=json_default), encoding="utf-8")
+
+
+def payload_size_bytes(payload: dict[str, Any]) -> int:
+    return len(json.dumps(payload, ensure_ascii=False, default=json_default).encode("utf-8"))
+
+
+def payload_top_level_rows(payload: dict[str, Any]) -> int:
+    return sum(len(value) for value in payload.values() if isinstance(value, list))
 
 
 def base_metadata(conn) -> dict[str, Any]:
@@ -175,6 +185,7 @@ def build_manifest(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict[
             "accounting.json",
             "quality.json",
             "technical.json",
+            "database.json",
             "tables.json",
         ],
     }
@@ -1400,6 +1411,394 @@ def build_tables(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict[st
     }
 
 
+def build_database(
+    conn,
+    meta: dict[str, Any],
+    filters: dict[str, Any],
+    db_name: str,
+    exported_payloads: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    table_catalog = query_rows(
+        conn,
+        """
+        SELECT
+            t.table_schema,
+            t.table_name,
+            COALESCE(col.column_count, 0)::integer AS column_count,
+            COALESCE(col.nullable_columns, 0)::integer AS nullable_columns,
+            COALESCE(pk.pk_columns, '') AS pk_columns
+        FROM information_schema.tables t
+        LEFT JOIN (
+            SELECT
+                table_schema,
+                table_name,
+                COUNT(*) AS column_count,
+                SUM(CASE WHEN is_nullable = 'YES' THEN 1 ELSE 0 END) AS nullable_columns
+            FROM information_schema.columns
+            WHERE table_schema IN ('meta', 'raw', 'core', 'reporting')
+            GROUP BY table_schema, table_name
+        ) col
+            ON col.table_schema = t.table_schema
+           AND col.table_name = t.table_name
+        LEFT JOIN (
+            SELECT
+                tc.table_schema,
+                tc.table_name,
+                string_agg(kcu.column_name, ', ' ORDER BY kcu.ordinal_position) AS pk_columns
+            FROM information_schema.table_constraints tc
+            JOIN information_schema.key_column_usage kcu
+              ON tc.constraint_name = kcu.constraint_name
+             AND tc.table_schema = kcu.table_schema
+            WHERE tc.constraint_type = 'PRIMARY KEY'
+              AND tc.table_schema IN ('meta', 'raw', 'core', 'reporting')
+            GROUP BY tc.table_schema, tc.table_name
+        ) pk
+            ON pk.table_schema = t.table_schema
+           AND pk.table_name = t.table_name
+        WHERE t.table_schema IN ('meta', 'raw', 'core', 'reporting')
+          AND t.table_type = 'BASE TABLE'
+        ORDER BY t.table_schema, t.table_name
+        """,
+    )
+    view_inventory = query_rows(
+        conn,
+        """
+        SELECT table_schema AS schema_name, table_name AS view_name
+        FROM information_schema.views
+        WHERE table_schema IN ('meta', 'raw', 'core', 'reporting')
+        ORDER BY table_schema, table_name
+        """,
+    )
+    schema_names = ["meta", "raw", "core", "reporting"]
+    schema_rollup = {
+        schema_name: {
+            "schema_name": schema_name,
+            "table_count": 0,
+            "view_count": 0,
+            "total_rows": 0,
+            "total_size_bytes": 0,
+        }
+        for schema_name in schema_names
+    }
+    for view in view_inventory:
+        schema_rollup[view["schema_name"]]["view_count"] += 1
+
+    table_inventory: list[dict[str, Any]] = []
+    table_row_map: dict[str, int] = {}
+    with conn.cursor() as cur:
+        for table in table_catalog:
+            schema_name = table["table_schema"]
+            table_name = table["table_name"]
+            qualified_name = f"{schema_name}.{table_name}"
+            cur.execute(
+                sql.SQL("SELECT COUNT(*)::bigint FROM {}.{}").format(
+                    sql.Identifier(schema_name),
+                    sql.Identifier(table_name),
+                )
+            )
+            row_count = int(cur.fetchone()[0] or 0)
+            cur.execute(
+                """
+                SELECT
+                    COALESCE(pg_total_relation_size(to_regclass(%s)), 0)::bigint AS total_size_bytes,
+                    COALESCE(pg_relation_size(to_regclass(%s)), 0)::bigint AS data_size_bytes,
+                    COALESCE(pg_indexes_size(to_regclass(%s)), 0)::bigint AS index_size_bytes
+                """,
+                (qualified_name, qualified_name, qualified_name),
+            )
+            size_row = cur.fetchone()
+            total_size_bytes = int(size_row[0] or 0)
+            data_size_bytes = int(size_row[1] or 0)
+            index_size_bytes = int(size_row[2] or 0)
+            row = {
+                "schema_name": schema_name,
+                "table_name": table_name,
+                "qualified_name": qualified_name,
+                "row_count": row_count,
+                "column_count": int(table["column_count"] or 0),
+                "nullable_columns": int(table["nullable_columns"] or 0),
+                "pk_columns": table["pk_columns"],
+                "total_size_bytes": total_size_bytes,
+                "data_size_bytes": data_size_bytes,
+                "index_size_bytes": index_size_bytes,
+            }
+            table_inventory.append(row)
+            table_row_map[qualified_name] = row_count
+            schema_rollup[schema_name]["table_count"] += 1
+            schema_rollup[schema_name]["total_rows"] += row_count
+            schema_rollup[schema_name]["total_size_bytes"] += total_size_bytes
+
+    fk_catalog = query_rows(
+        conn,
+        """
+        WITH fk_catalog AS (
+            SELECT
+                con.conname,
+                src_ns.nspname AS source_schema,
+                src.relname AS source_table,
+                dst_ns.nspname AS target_schema,
+                dst.relname AS target_table,
+                con.condeferrable,
+                con.condeferred,
+                array_agg(src_att.attname ORDER BY ord.ordinality) AS source_columns,
+                array_agg(dst_att.attname ORDER BY ord.ordinality) AS target_columns,
+                bool_or(NOT src_att.attnotnull) AS has_nullable_child,
+                COUNT(*)::integer AS column_count
+            FROM pg_constraint con
+            JOIN pg_class src ON src.oid = con.conrelid
+            JOIN pg_namespace src_ns ON src_ns.oid = src.relnamespace
+            JOIN pg_class dst ON dst.oid = con.confrelid
+            JOIN pg_namespace dst_ns ON dst_ns.oid = dst.relnamespace
+            JOIN unnest(con.conkey, con.confkey) WITH ORDINALITY AS ord(src_attnum, dst_attnum, ordinality) ON TRUE
+            JOIN pg_attribute src_att
+              ON src_att.attrelid = src.oid
+             AND src_att.attnum = ord.src_attnum
+            JOIN pg_attribute dst_att
+              ON dst_att.attrelid = dst.oid
+             AND dst_att.attnum = ord.dst_attnum
+            WHERE con.contype = 'f'
+              AND src_ns.nspname IN ('meta', 'raw', 'core')
+              AND dst_ns.nspname IN ('meta', 'raw', 'core')
+            GROUP BY
+                con.oid,
+                con.conname,
+                src_ns.nspname,
+                src.relname,
+                dst_ns.nspname,
+                dst.relname,
+                con.condeferrable,
+                con.condeferred
+        )
+        SELECT *
+        FROM fk_catalog
+        ORDER BY source_schema, source_table, conname
+        """,
+    )
+
+    relationships: list[dict[str, Any]] = []
+    relationship_types: dict[str, int] = {}
+    density_map: dict[str, dict[str, Any]] = {}
+    with conn.cursor() as cur:
+        for fk in fk_catalog:
+            source_columns = fk["source_columns"] or []
+            target_columns = fk["target_columns"] or []
+            if fk["source_schema"] == fk["target_schema"] and fk["source_table"] == fk["target_table"]:
+                relation_type = "Autorrelacion 1:N"
+            elif int(fk["column_count"] or 0) > 1:
+                relation_type = "Relacion compuesta 1:N"
+            elif fk["has_nullable_child"]:
+                relation_type = "1:0..N"
+            else:
+                relation_type = "1:N"
+
+            join_clauses = [
+                sql.SQL("dst.{} = src.{}").format(sql.Identifier(dst_col), sql.Identifier(src_col))
+                for src_col, dst_col in zip(source_columns, target_columns)
+            ]
+            not_null_clauses = [sql.SQL("src.{} IS NOT NULL").format(sql.Identifier(src_col)) for src_col in source_columns]
+            orphan_query = sql.SQL(
+                """
+                SELECT COUNT(*)::bigint
+                FROM {}.{} src
+                LEFT JOIN {}.{} dst
+                  ON {}
+                WHERE {}
+                  AND dst.{} IS NULL
+                """
+            ).format(
+                sql.Identifier(fk["source_schema"]),
+                sql.Identifier(fk["source_table"]),
+                sql.Identifier(fk["target_schema"]),
+                sql.Identifier(fk["target_table"]),
+                sql.SQL(" AND ").join(join_clauses),
+                sql.SQL(" AND ").join(not_null_clauses),
+                sql.Identifier(target_columns[0]),
+            )
+            cur.execute(orphan_query)
+            orphan_count = int(cur.fetchone()[0] or 0)
+
+            source_name = f"{fk['source_schema']}.{fk['source_table']}"
+            target_name = f"{fk['target_schema']}.{fk['target_table']}"
+            relationships.append(
+                {
+                    "constraint_name": fk["conname"],
+                    "source_table": source_name,
+                    "source_columns": ", ".join(source_columns),
+                    "target_table": target_name,
+                    "target_columns": ", ".join(target_columns),
+                    "relation_type": relation_type,
+                    "nullable_child": bool(fk["has_nullable_child"]),
+                    "deferrable": bool(fk["condeferrable"]),
+                    "initially_deferred": bool(fk["condeferred"]),
+                    "orphan_count": orphan_count,
+                }
+            )
+            relationship_types[relation_type] = relationship_types.get(relation_type, 0) + 1
+
+            source_density = density_map.setdefault(
+                source_name,
+                {
+                    "table_name": source_name,
+                    "outgoing_fks": 0,
+                    "incoming_fks": 0,
+                    "row_count": table_row_map.get(source_name, 0),
+                },
+            )
+            source_density["outgoing_fks"] += 1
+
+            target_density = density_map.setdefault(
+                target_name,
+                {
+                    "table_name": target_name,
+                    "outgoing_fks": 0,
+                    "incoming_fks": 0,
+                    "row_count": table_row_map.get(target_name, 0),
+                },
+            )
+            target_density["incoming_fks"] += 1
+
+    relationship_density = sorted(
+        density_map.values(),
+        key=lambda row: (row["incoming_fks"] + row["outgoing_fks"], row["row_count"]),
+        reverse=True,
+    )
+    relationship_type_rows = [
+        {"relation_type": relation_type, "relation_count": relation_count}
+        for relation_type, relation_count in sorted(relationship_types.items(), key=lambda item: (-item[1], item[0]))
+    ]
+
+    column_types = query_rows(
+        conn,
+        """
+        SELECT
+            table_schema AS schema_name,
+            data_type,
+            COUNT(*)::bigint AS column_count
+        FROM information_schema.columns
+        WHERE table_schema IN ('meta', 'raw', 'core', 'reporting')
+        GROUP BY table_schema, data_type
+        ORDER BY column_count DESC, table_schema, data_type
+        """
+    )
+
+    frontend_assets: list[dict[str, Any]] = []
+    frontend_total_bytes = 0
+    frontend_total_rows = 0
+    for filename, payload in exported_payloads.items():
+        collections = [
+            {"collection_name": key, "row_count": len(value)}
+            for key, value in payload.items()
+            if isinstance(value, list)
+        ]
+        rows_exposed = sum(item["row_count"] for item in collections)
+        size_bytes = payload_size_bytes(payload)
+        largest_collection = max(collections, key=lambda row: row["row_count"], default=None)
+        frontend_assets.append(
+            {
+                "file_name": filename,
+                "rows_exposed": rows_exposed,
+                "size_bytes": size_bytes,
+                "collection_count": len(collections),
+                "largest_collection": largest_collection["collection_name"] if largest_collection else None,
+                "largest_collection_rows": largest_collection["row_count"] if largest_collection else 0,
+            }
+        )
+        frontend_total_bytes += size_bytes
+        frontend_total_rows += rows_exposed
+    frontend_assets.sort(key=lambda row: row["size_bytes"], reverse=True)
+
+    front_back_inventory_rules = [
+        ("Comercial", ["core.documentos", "core.documento_detalles", "core.documento_cobros"], "commercial.json"),
+        ("Clientes", ["core.personas"], "customers.json"),
+        ("Productos", ["core.productos"], "products.json"),
+        ("Inventario", ["core.movimientos", "core.movimiento_detalles"], "inventory.json"),
+        ("Contabilidad", ["core.asientos", "core.asiento_detalles"], "accounting.json"),
+        ("Calidad", ["meta.extract_runs", "meta.watermarks", "meta.load_metrics"], "quality.json"),
+        ("Tecnica", ["meta.extract_runs", "meta.watermarks", "meta.load_metrics"], "technical.json"),
+        ("Tablas analiticas", ["core.documentos", "core.productos", "core.movimientos", "core.asientos"], "tables.json"),
+    ]
+    frontend_asset_map = {row["file_name"]: row for row in frontend_assets}
+    front_back_inventory = []
+    for domain, backend_tables, file_name in front_back_inventory_rules:
+        backend_rows = sum(table_row_map.get(table_name, 0) for table_name in backend_tables)
+        frontend_rows = int(frontend_asset_map.get(file_name, {}).get("rows_exposed", 0))
+        front_back_inventory.append(
+            {
+                "domain": domain,
+                "backend_rows": backend_rows,
+                "frontend_rows": frontend_rows,
+                "frontend_file": file_name,
+                "backend_scope": ", ".join(table_name.replace("core.", "").replace("meta.", "") for table_name in backend_tables),
+            }
+        )
+
+    schema_storage = sorted(schema_rollup.values(), key=lambda row: row["total_size_bytes"], reverse=True)
+    table_inventory.sort(key=lambda row: row["total_size_bytes"], reverse=True)
+    total_backend_rows = sum(row["row_count"] for row in table_inventory)
+    core_rows = sum(row["row_count"] for row in table_inventory if row["schema_name"] == "core")
+    raw_rows = sum(row["row_count"] for row in table_inventory if row["schema_name"] == "raw")
+    meta_rows = sum(row["row_count"] for row in table_inventory if row["schema_name"] == "meta")
+    total_database_size = sum(row["total_size_bytes"] for row in table_inventory)
+    relationship_total = len(relationships)
+    optional_relationships = sum(1 for row in relationships if row["nullable_child"])
+    self_relationships = sum(1 for row in relationships if row["relation_type"] == "Autorrelacion 1:N")
+    composite_relationships = sum(1 for row in relationships if row["relation_type"] == "Relacion compuesta 1:N")
+    total_orphans = sum(int(row["orphan_count"] or 0) for row in relationships)
+    most_referenced = max(relationship_density, key=lambda row: row["incoming_fks"], default=None)
+    most_dependent = max(relationship_density, key=lambda row: row["outgoing_fks"], default=None)
+    largest_table = max(table_inventory, key=lambda row: row["total_size_bytes"], default=None)
+
+    story_cards = [
+        {
+            "title": "Base maestra relacional",
+            "body": f"La base {db_name} concentra {len(table_inventory)} tablas base, {len(view_inventory)} vistas y {relationship_total} relaciones FK materializadas. El esquema core domina el volumen con {core_rows} filas y soporta toda la capa analitica.",
+        },
+        {
+            "title": "Enfoque en relaciones",
+            "body": f"El modelo privilegia relaciones 1:N normalizadas. Hay {optional_relationships} relaciones opcionales, {self_relationships} autorrelaciones y {composite_relationships} relaciones compuestas. El conteo de huerfanos observado hoy es {total_orphans}.",
+        },
+        {
+            "title": "Back versus front",
+            "body": f"El backend conserva {total_backend_rows} filas entre meta, raw y core, mientras el snapshot web expone {frontend_total_rows} registros agregados en {len(frontend_assets)} archivos JSON para exploracion rapida sin abrir la base al navegador.",
+        },
+        {
+            "title": "Puntos de mayor acoplamiento",
+            "body": f"La tabla mas referenciada es {most_referenced['table_name'] if most_referenced else '--'} y la mas dependiente es {most_dependent['table_name'] if most_dependent else '--'}. El mayor volumen fisico hoy esta en {largest_table['qualified_name'] if largest_table else '--'}.",
+        },
+    ]
+
+    return {
+        **meta,
+        "filters_available": filters,
+        "summary": {
+            "database_name": db_name,
+            "schema_count": len(schema_names),
+            "table_count": len(table_inventory),
+            "view_count": len(view_inventory),
+            "relationship_count": relationship_total,
+            "backend_total_rows": total_backend_rows,
+            "core_rows": core_rows,
+            "raw_rows": raw_rows,
+            "meta_rows": meta_rows,
+            "frontend_total_rows": frontend_total_rows,
+            "database_total_size_bytes": total_database_size,
+            "frontend_total_size_bytes": frontend_total_bytes,
+            "optional_relationships": optional_relationships,
+            "total_orphans": total_orphans,
+        },
+        "story_cards": story_cards,
+        "schema_storage": schema_storage,
+        "table_inventory": table_inventory,
+        "view_inventory": view_inventory,
+        "relationship_types": relationship_type_rows,
+        "relationships": relationships,
+        "relationship_density": relationship_density,
+        "column_types": column_types,
+        "frontend_assets": frontend_assets,
+        "front_back_inventory": front_back_inventory,
+    }
+
+
 def export_dashboard_data(args: argparse.Namespace) -> int:
     config = pg_config_from_env(args.db_name)
     out_dir = Path(args.out_dir).resolve()
@@ -1419,6 +1818,7 @@ def export_dashboard_data(args: argparse.Namespace) -> int:
             "technical.json": build_technical(conn, meta, filters),
             "tables.json": build_tables(conn, meta, filters),
         }
+        payloads["database.json"] = build_database(conn, meta, filters, args.db_name, payloads)
     for filename, payload in payloads.items():
         write_json(out_dir / filename, payload)
     return 0

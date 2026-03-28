@@ -1,0 +1,1860 @@
+{
+  "run_id": "20260328220843",
+  "coverage_min": "2019-01-01",
+  "coverage_max": "2026-12-31",
+  "generated_at": "2026-03-28T17:28:21-05:00",
+  "filters_available": {
+    "document_types": [
+      {
+        "value": "FAC",
+        "label": "FAC",
+        "count": 19342
+      },
+      {
+        "value": "COT",
+        "label": "COT",
+        "count": 1971
+      },
+      {
+        "value": "DAC",
+        "label": "DAC",
+        "count": 957
+      },
+      {
+        "value": "NCT",
+        "label": "NCT",
+        "count": 438
+      },
+      {
+        "value": "NAI",
+        "label": "NAI",
+        "count": 355
+      },
+      {
+        "value": "DNA",
+        "label": "DNA",
+        "count": 348
+      },
+      {
+        "value": "NVE",
+        "label": "NVE",
+        "count": 228
+      },
+      {
+        "value": "CVE",
+        "label": "CVE",
+        "count": 163
+      },
+      {
+        "value": "LQC",
+        "label": "LQC",
+        "count": 51
+      },
+      {
+        "value": "REE",
+        "label": "REE",
+        "count": 30
+      },
+      {
+        "value": "EXP",
+        "label": "EXP",
+        "count": 22
+      },
+      {
+        "value": "NCL",
+        "label": "NCL",
+        "count": 2
+      },
+      {
+        "value": "PRE",
+        "label": "PRE",
+        "count": 2
+      },
+      {
+        "value": "OCV",
+        "label": "OCV",
+        "count": 1
+      },
+      {
+        "value": "PEA",
+        "label": "PEA",
+        "count": 1
+      }
+    ],
+    "document_states": [
+      {
+        "value": "G",
+        "label": "G",
+        "count": 10812
+      },
+      {
+        "value": "C",
+        "label": "C",
+        "count": 10653
+      },
+      {
+        "value": "P",
+        "label": "P",
+        "count": 1255
+      },
+      {
+        "value": "E",
+        "label": "E",
+        "count": 1124
+      },
+      {
+        "value": "A",
+        "label": "A",
+        "count": 65
+      },
+      {
+        "value": "F",
+        "label": "F",
+        "count": 1
+      },
+      {
+        "value": "R",
+        "label": "R",
+        "count": 1
+      }
+    ],
+    "bodegas": [
+      {
+        "value": "NO8bYrxZfkmRd7j4",
+        "label": "BODEGA PRINCIPAL",
+        "count": 5267
+      },
+      {
+        "value": "5xmbm8PZS18waoKM",
+        "label": "ALMACEN MACHACHI",
+        "count": 2456
+      },
+      {
+        "value": "GEjb2rJmTKWqbVNW",
+        "label": "BODEGA LUIS CONDOR",
+        "count": 930
+      },
+      {
+        "value": "wJvaMN3KuxDKbpzg",
+        "label": "CESAR CUAMACAS",
+        "count": 93
+      },
+      {
+        "value": "3RBe311q3s7o1bLJ",
+        "label": "JOSELYN MEJIA",
+        "count": 54
+      },
+      {
+        "value": "1mBdJz3ziplGd0J6",
+        "label": "JUAN CARLOS INSUASTI",
+        "count": 43
+      },
+      {
+        "value": "NO8bYYOZikmRb7j4",
+        "label": "MARGIT CEVALLOS",
+        "count": 42
+      },
+      {
+        "value": "4pzb8Kg4tOWVaEwN",
+        "label": "MIGUEL MEJIA",
+        "count": 34
+      },
+      {
+        "value": "RYWb4G2ZFYENaZ1m",
+        "label": "JUAN JOSUE GALLARDO",
+        "count": 23
+      },
+      {
+        "value": "4LmavrqZCOqma3Nr",
+        "label": "CONSIGNACION (A. FLORES, MARGIT CEVALLOS, M. FREIRE)",
+        "count": 19
+      },
+      {
+        "value": "yBXdL03BCNVxdJZY",
+        "label": "SANDRO CHAMORRO",
+        "count": 17
+      },
+      {
+        "value": "rQzaOYY81h5lVdp4",
+        "label": "EMERGENCIAS STOCK TÉCNICOS",
+        "count": 12
+      },
+      {
+        "value": "91qdGEPXhWExaN8j",
+        "label": "BODEGA PORTATIL LOCAL MACHACHI",
+        "count": 11
+      },
+      {
+        "value": "xBleXDDnzIBjverN",
+        "label": "CARLOS MUYOBISÑA",
+        "count": 6
+      },
+      {
+        "value": "Q9jaKz39s8Pgek5K",
+        "label": "JUAN CARLOS MOLINA",
+        "count": 6
+      },
+      {
+        "value": "gDGe7VM5CE25dn2x",
+        "label": "MARCELO ZAPATA",
+        "count": 4
+      },
+      {
+        "value": "J0yelEBkhOmJaER7",
+        "label": "BODEGA 2019",
+        "count": 0
+      },
+      {
+        "value": "4Lmav7L9SOqmb3Nr",
+        "label": "BODEGA JUAN CABASCANGO",
+        "count": 0
+      },
+      {
+        "value": "3RBe3vJDt7o1dLJr",
+        "label": "BODEGA PORTATILES OFICINA",
+        "count": 0
+      },
+      {
+        "value": "DKVeZvyysPAZe8Py",
+        "label": "MERCADERIA EN TRANSITO",
+        "count": 0
+      },
+      {
+        "value": "DKVeZDZZIPAZb8Py",
+        "label": "SANTA ISABEL DE ZULETA",
+        "count": 0
+      }
+    ],
+    "categories": [
+      {
+        "value": "pXKdwpoKOh0kMegW",
+        "label": "REPUESTOS VARIOS",
+        "count": 667
+      },
+      {
+        "value": "RYWb4xoNzsYENbZ1",
+        "label": "REPUESTOS",
+        "count": 314
+      },
+      {
+        "value": "4pzb82vRXFOWVeEw",
+        "label": "PEZONERAS",
+        "count": 40
+      },
+      {
+        "value": "vj6e9rwVLURAyaWB",
+        "label": "BOMBAS DE VACIO",
+        "count": 34
+      },
+      {
+        "value": "GEjb2kmLxtKWqdVN",
+        "label": "CONSUMIBLES",
+        "count": 34
+      },
+      {
+        "value": "gArb68qP0sV72eyR",
+        "label": "MANGUERAS",
+        "count": 33
+      },
+      {
+        "value": "91qdG61ZVFWExbN8",
+        "label": "TANQUES DE ENFRIAMIENTO",
+        "count": 24
+      },
+      {
+        "value": "jMEegJjl8tPKXdQ5",
+        "label": "MOTORES A GASOLINA",
+        "count": 14
+      },
+      {
+        "value": "oLqdPN07QCv9Yal4",
+        "label": "MANO DE OBRA",
+        "count": 12
+      },
+      {
+        "value": "pXKdwr3xqF0kMbgW",
+        "label": "PANELES SOLARES",
+        "count": 11
+      },
+      {
+        "value": "DKVeZzXkyuPAZe8P",
+        "label": "MOTORES ELECTRICOS",
+        "count": 9
+      },
+      {
+        "value": "mloej8WorulDLbQM",
+        "label": "POLEAS",
+        "count": 8
+      },
+      {
+        "value": "GP9aQ6xnvcBgGbDM",
+        "label": "SILENCIADORES",
+        "count": 8
+      },
+      {
+        "value": "rQzaOP9QzF5lVbp4",
+        "label": "DETERGENTES",
+        "count": 7
+      },
+      {
+        "value": "DKVeZ6BP4IPAZe8P",
+        "label": "EQUIPOS DE ORDEÑO",
+        "count": 7
+      },
+      {
+        "value": "1mBdJN17RiplGd0J",
+        "label": "General",
+        "count": 6
+      },
+      {
+        "value": "3RBe3yJ75F7o1bLJ",
+        "label": "REPUESTOS DE GOMA",
+        "count": 4
+      },
+      {
+        "value": "Zxgep2WxjsQqrb1p",
+        "label": "COMPONENTE DE GOMA",
+        "count": 3
+      },
+      {
+        "value": "yBXdLg6ABCNVxbJZ",
+        "label": "PRODUCTOS 2019",
+        "count": 2
+      },
+      {
+        "value": "xGge0g7oiJQOdADR",
+        "label": "__missing__:xGge0g7oiJQOdADR",
+        "count": 0
+      },
+      {
+        "value": "xBleXDzNxTBjverN",
+        "label": "PRODUCTOS TERMINADOS",
+        "count": 0
+      },
+      {
+        "value": "GEjb27J60IKWqdVN",
+        "label": "REPUESTOS PVC",
+        "count": 0
+      },
+      {
+        "value": "DkPbk7Wp1SYAVb5Y",
+        "label": null,
+        "count": 0
+      }
+    ],
+    "accounts": [
+      {
+        "value": "MEegJZVqvfPKXdQ5",
+        "label": "INVENTARIO DE REPUESTOS",
+        "count": 46623
+      },
+      {
+        "value": "0yelYxVlQIOmJaER",
+        "label": "COSTO DE REPUESTOS",
+        "count": 30599
+      },
+      {
+        "value": "loejRZVwGclDLeQM",
+        "label": "VENTA DE REPUESTOS",
+        "count": 29370
+      },
+      {
+        "value": "RMdR6OwLktno9dl6",
+        "label": "Clientes Comerciales",
+        "count": 24815
+      },
+      {
+        "value": "pZeVOAlJDU0mraGW",
+        "label": "Proveedores",
+        "count": 22058
+      },
+      {
+        "value": "EMaxkn98mtmD6e5G",
+        "label": "Rebaja y/o Descuentos sobre Ventas",
+        "count": 16481
+      },
+      {
+        "value": "YWb4xQDrPsYENbZ1",
+        "label": "BANCO PICHINCHA",
+        "count": 12032
+      },
+      {
+        "value": "5wboY3RwMhl5NexE",
+        "label": "BANCO DE GUAYAQUIL",
+        "count": 7717
+      },
+      {
+        "value": "rRbDk1PYRIjw2a6L",
+        "label": "IVA sobre Compras",
+        "count": 6166
+      },
+      {
+        "value": "5wbo2V9Bxil5NaxE",
+        "label": "VENTA DE CONSUMIBLES",
+        "count": 5827
+      },
+      {
+        "value": "1qdG6vgQXsWExbN8",
+        "label": "IVA sobre Ventas",
+        "count": 5429
+      },
+      {
+        "value": "MEegJZ6QvSPKXdQ5",
+        "label": "Cuenta por Pagar Funcionarios y/o Empleados",
+        "count": 4729
+      },
+      {
+        "value": "Yjbqx7XEKtLnAaLN",
+        "label": "INVENTARIO DE CONSUMIBLES",
+        "count": 4529
+      },
+      {
+        "value": "Lmav2l7MWCOqma3N",
+        "label": "COSTO DE CONSUMIBLES",
+        "count": 3694
+      },
+      {
+        "value": "wKe5yQEv4Fg3me31",
+        "label": "CAJA PRINCIPAL",
+        "count": 3334
+      },
+      {
+        "value": "Arb68X2VxhV72eyR",
+        "label": "Combustible Vtas.",
+        "count": 2580
+      },
+      {
+        "value": "gQbW6zYY0HzZ7a6w",
+        "label": "Tarjeta de Crédito ( Diners Club )",
+        "count": 2554
+      },
+      {
+        "value": "loejR6vKXslDLeQM",
+        "label": "1.75% Bienes Muebles de Naturaleza Corporal",
+        "count": 2427
+      },
+      {
+        "value": "Lmav2lDR7tOqma3N",
+        "label": "Prestación de Servicios",
+        "count": 2293
+      },
+      {
+        "value": "EMaxkn9LDtmD6e5G",
+        "label": "Suministros, Materiales y Repuestos Costos",
+        "count": 2100
+      },
+      {
+        "value": "XKdwpVZ59u0kMegW",
+        "label": "Otros Gastos Financieros",
+        "count": 1955
+      },
+      {
+        "value": "RBe31j3vmC7o1bLJ",
+        "label": "Anticipo a Empleados",
+        "count": 1593
+      },
+      {
+        "value": "YWb4xQ4YXuYENbZ1",
+        "label": "Sueldos por Pagar",
+        "count": 1560
+      },
+      {
+        "value": "mBdJ6ylWLUplGd0J",
+        "label": "Alimentación Vtas.",
+        "count": 1499
+      },
+      {
+        "value": "wKe5yQ3w0hg3me31",
+        "label": "Miscelaneos Vtas.",
+        "count": 1496
+      },
+      {
+        "value": "Y4erk8XMmHw7Ka2L",
+        "label": "Otras Retenciones Aplicables al Cód. 343",
+        "count": 1363
+      },
+      {
+        "value": "MEegJMxEwCPKXdQ5",
+        "label": "1.75% Bienes Muebles de Naturaleza Corporal",
+        "count": 1325
+      },
+      {
+        "value": "xmbmZOGEoH18wdoK",
+        "label": "Mercaderías en Transito",
+        "count": 1293
+      },
+      {
+        "value": "XKdwpVZRkc0kMegW",
+        "label": "30% Bienes",
+        "count": 1288
+      },
+      {
+        "value": "RBe31rRL1t7o1bLJ",
+        "label": "Materiales de Ferretería",
+        "count": 1048
+      },
+      {
+        "value": "jZdyPoMm1h6KvbJ4",
+        "label": "Anticipo a Proveedores",
+        "count": 971
+      },
+      {
+        "value": "Gge0RYOA1IJQObAD",
+        "label": "9.45% Aportes Individuales",
+        "count": 942
+      },
+      {
+        "value": "BleXDLnkzsBjverN",
+        "label": "11.15% Aportes Patronales I.E.S.S.",
+        "count": 941
+      },
+      {
+        "value": "O8bYEW0lPSkmRb7j",
+        "label": "1% Secap - Iece",
+        "count": 931
+      },
+      {
+        "value": "xgepY8778cQqra1p",
+        "label": "Anticipos de Clientes",
+        "count": 918
+      },
+      {
+        "value": "LqdPNKm43tv9Yal4",
+        "label": "Mantenimiento Vehículo",
+        "count": 843
+      },
+      {
+        "value": "9jaKr1mzqh8Pgek5",
+        "label": "Fletes",
+        "count": 836
+      },
+      {
+        "value": "gQbW6LmjrfzZ7a6w",
+        "label": "Vacaciones",
+        "count": 788
+      },
+      {
+        "value": "RBe31KLK3I7o1bLJ",
+        "label": "Tarjeta de Crédito (Datafast)",
+        "count": 785
+      },
+      {
+        "value": "RMdR6Ow5vUno9dl6",
+        "label": "Décimo Tercer Sueldo",
+        "count": 717
+      },
+      {
+        "value": "pZeVOAl0Df0mraGW",
+        "label": "Décimo Cuarto Sueldo",
+        "count": 714
+      },
+      {
+        "value": "9jaKr7X4qF8Pgek5",
+        "label": "Peajes",
+        "count": 713
+      },
+      {
+        "value": "xgepY7mnoiQqra1p",
+        "label": "2.75% Servicios",
+        "count": 692
+      },
+      {
+        "value": "0yelYxDMQFOmJaER",
+        "label": "1% Bienes Muebles de Naturaleza Corporal",
+        "count": 691
+      },
+      {
+        "value": "Gge0RYO3muJQObAD",
+        "label": "Guías de Transportes Vtas.",
+        "count": 636
+      },
+      {
+        "value": "rRbDk1PWXIjw2a6L",
+        "label": "Sueldos Unificados Vtas.",
+        "count": 570
+      },
+      {
+        "value": "01dNkLp1kiVJKeX7",
+        "label": "Décimo Tercer Sueldo Vtas.",
+        "count": 569
+      },
+      {
+        "value": "QzaOYMq97F5lVdp4",
+        "label": "Décimo Cuarto Sueldo Vtas.",
+        "count": 567
+      },
+      {
+        "value": "9jaKr1m9Wh8Pgek5",
+        "label": "Aportes Patronales al IESS Vtas.",
+        "count": 566
+      },
+      {
+        "value": "EMaxkn97VTmD6e5G",
+        "label": "70% Servicios",
+        "count": 565
+      }
+    ],
+    "cost_centers": [
+      {
+        "value": "9pgenrglKFlg0eNQ",
+        "label": "Bodega Principal",
+        "count": 57352
+      },
+      {
+        "value": "N5wboQjmxil5NexE",
+        "label": "Bodega Machachi",
+        "count": 17602
+      }
+    ]
+  },
+  "summary": {
+    "database_name": "contifico_backfill",
+    "schema_count": 4,
+    "table_count": 23,
+    "view_count": 8,
+    "relationship_count": 41,
+    "backend_total_rows": 623788,
+    "core_rows": 623616,
+    "raw_rows": 0,
+    "meta_rows": 172,
+    "frontend_total_rows": 160837,
+    "database_total_size_bytes": 139182080,
+    "frontend_total_size_bytes": 41961081,
+    "optional_relationships": 34,
+    "total_orphans": 0
+  },
+  "story_cards": [
+    {
+      "title": "Base maestra relacional",
+      "body": "La base contifico_backfill concentra 23 tablas base, 8 vistas y 41 relaciones FK materializadas. El esquema core domina el volumen con 623616 filas y soporta toda la capa analitica."
+    },
+    {
+      "title": "Enfoque en relaciones",
+      "body": "El modelo privilegia relaciones 1:N normalizadas. Hay 34 relaciones opcionales, 6 autorrelaciones y 1 relaciones compuestas. El conteo de huerfanos observado hoy es 0."
+    },
+    {
+      "title": "Back versus front",
+      "body": "El backend conserva 623788 filas entre meta, raw y core, mientras el snapshot web expone 160837 registros agregados en 10 archivos JSON para exploracion rapida sin abrir la base al navegador."
+    },
+    {
+      "title": "Puntos de mayor acoplamiento",
+      "body": "La tabla mas referenciada es core.cuentas_contables y la mas dependiente es core.productos. El mayor volumen fisico hoy esta en core.asiento_detalles."
+    }
+  ],
+  "schema_storage": [
+    {
+      "schema_name": "core",
+      "table_count": 19,
+      "view_count": 0,
+      "total_rows": 623616,
+      "total_size_bytes": 138985472
+    },
+    {
+      "schema_name": "meta",
+      "table_count": 3,
+      "view_count": 0,
+      "total_rows": 172,
+      "total_size_bytes": 163840
+    },
+    {
+      "schema_name": "raw",
+      "table_count": 1,
+      "view_count": 0,
+      "total_rows": 0,
+      "total_size_bytes": 32768
+    },
+    {
+      "schema_name": "reporting",
+      "table_count": 0,
+      "view_count": 8,
+      "total_rows": 0,
+      "total_size_bytes": 0
+    }
+  ],
+  "table_inventory": [
+    {
+      "schema_name": "core",
+      "table_name": "asiento_detalles",
+      "qualified_name": "core.asiento_detalles",
+      "row_count": 279354,
+      "column_count": 8,
+      "nullable_columns": 4,
+      "pk_columns": "asiento_id, detalle_index",
+      "total_size_bytes": 47071232,
+      "data_size_bytes": 31170560,
+      "index_size_bytes": 15859712
+    },
+    {
+      "schema_name": "core",
+      "table_name": "asientos",
+      "qualified_name": "core.asientos",
+      "row_count": 67402,
+      "column_count": 5,
+      "nullable_columns": 2,
+      "pk_columns": "id",
+      "total_size_bytes": 20676608,
+      "data_size_bytes": 14729216,
+      "index_size_bytes": 5906432
+    },
+    {
+      "schema_name": "core",
+      "table_name": "documento_detalles",
+      "qualified_name": "core.documento_detalles",
+      "row_count": 77447,
+      "column_count": 30,
+      "nullable_columns": 26,
+      "pk_columns": "documento_id, detalle_index",
+      "total_size_bytes": 19480576,
+      "data_size_bytes": 15056896,
+      "index_size_bytes": 4382720
+    },
+    {
+      "schema_name": "core",
+      "table_name": "tickets_detalles",
+      "qualified_name": "core.tickets_detalles",
+      "row_count": 77447,
+      "column_count": 10,
+      "nullable_columns": 6,
+      "pk_columns": "documento_id, detalle_index",
+      "total_size_bytes": 14761984,
+      "data_size_bytes": 10338304,
+      "index_size_bytes": 4382720
+    },
+    {
+      "schema_name": "core",
+      "table_name": "documentos",
+      "qualified_name": "core.documentos",
+      "row_count": 23911,
+      "column_count": 58,
+      "nullable_columns": 55,
+      "pk_columns": "id",
+      "total_size_bytes": 14041088,
+      "data_size_bytes": 11771904,
+      "index_size_bytes": 2228224
+    },
+    {
+      "schema_name": "core",
+      "table_name": "movimiento_detalles",
+      "qualified_name": "core.movimiento_detalles",
+      "row_count": 37122,
+      "column_count": 11,
+      "nullable_columns": 7,
+      "pk_columns": "movimiento_id, detalle_index",
+      "total_size_bytes": 7356416,
+      "data_size_bytes": 5128192,
+      "index_size_bytes": 2187264
+    },
+    {
+      "schema_name": "core",
+      "table_name": "tickets_documentos",
+      "qualified_name": "core.tickets_documentos",
+      "row_count": 23911,
+      "column_count": 4,
+      "nullable_columns": 1,
+      "pk_columns": "id",
+      "total_size_bytes": 5554176,
+      "data_size_bytes": 3473408,
+      "index_size_bytes": 2039808
+    },
+    {
+      "schema_name": "core",
+      "table_name": "documento_cobros",
+      "qualified_name": "core.documento_cobros",
+      "row_count": 24039,
+      "column_count": 20,
+      "nullable_columns": 16,
+      "pk_columns": "documento_id, cobro_index",
+      "total_size_bytes": 4931584,
+      "data_size_bytes": 3547136,
+      "index_size_bytes": 1343488
+    },
+    {
+      "schema_name": "core",
+      "table_name": "movimientos",
+      "qualified_name": "core.movimientos",
+      "row_count": 9024,
+      "column_count": 17,
+      "nullable_columns": 14,
+      "pk_columns": "id",
+      "total_size_bytes": 3571712,
+      "data_size_bytes": 2711552,
+      "index_size_bytes": 819200
+    },
+    {
+      "schema_name": "core",
+      "table_name": "personas",
+      "qualified_name": "core.personas",
+      "row_count": 2060,
+      "column_count": 43,
+      "nullable_columns": 40,
+      "pk_columns": "id",
+      "total_size_bytes": 696320,
+      "data_size_bytes": 524288,
+      "index_size_bytes": 131072
+    },
+    {
+      "schema_name": "core",
+      "table_name": "productos",
+      "qualified_name": "core.productos",
+      "row_count": 1237,
+      "column_count": 60,
+      "nullable_columns": 57,
+      "pk_columns": "id",
+      "total_size_bytes": 475136,
+      "data_size_bytes": 344064,
+      "index_size_bytes": 90112
+    },
+    {
+      "schema_name": "core",
+      "table_name": "cuentas_contables",
+      "qualified_name": "core.cuentas_contables",
+      "row_count": 572,
+      "column_count": 6,
+      "nullable_columns": 3,
+      "pk_columns": "id",
+      "total_size_bytes": 155648,
+      "data_size_bytes": 65536,
+      "index_size_bytes": 57344
+    },
+    {
+      "schema_name": "meta",
+      "table_name": "extract_runs",
+      "qualified_name": "meta.extract_runs",
+      "row_count": 60,
+      "column_count": 12,
+      "nullable_columns": 2,
+      "pk_columns": "run_id, resource",
+      "total_size_bytes": 65536,
+      "data_size_bytes": 16384,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "meta",
+      "table_name": "load_metrics",
+      "qualified_name": "meta.load_metrics",
+      "row_count": 99,
+      "column_count": 6,
+      "nullable_columns": 0,
+      "pk_columns": "run_id, resource, stage, table_name",
+      "total_size_bytes": 65536,
+      "data_size_bytes": 16384,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "core",
+      "table_name": "bodegas",
+      "qualified_name": "core.bodegas",
+      "row_count": 21,
+      "column_count": 8,
+      "nullable_columns": 5,
+      "pk_columns": "id",
+      "total_size_bytes": 32768,
+      "data_size_bytes": 8192,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "core",
+      "table_name": "categorias",
+      "qualified_name": "core.categorias",
+      "row_count": 23,
+      "column_count": 10,
+      "nullable_columns": 7,
+      "pk_columns": "id",
+      "total_size_bytes": 32768,
+      "data_size_bytes": 8192,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "core",
+      "table_name": "centros_costo",
+      "qualified_name": "core.centros_costo",
+      "row_count": 2,
+      "column_count": 8,
+      "nullable_columns": 5,
+      "pk_columns": "id",
+      "total_size_bytes": 32768,
+      "data_size_bytes": 8192,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "core",
+      "table_name": "marcas",
+      "qualified_name": "core.marcas",
+      "row_count": 16,
+      "column_count": 4,
+      "nullable_columns": 1,
+      "pk_columns": "id",
+      "total_size_bytes": 32768,
+      "data_size_bytes": 8192,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "core",
+      "table_name": "periodos",
+      "qualified_name": "core.periodos",
+      "row_count": 8,
+      "column_count": 7,
+      "nullable_columns": 4,
+      "pk_columns": "id",
+      "total_size_bytes": 32768,
+      "data_size_bytes": 8192,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "core",
+      "table_name": "unidades",
+      "qualified_name": "core.unidades",
+      "row_count": 20,
+      "column_count": 4,
+      "nullable_columns": 1,
+      "pk_columns": "id",
+      "total_size_bytes": 32768,
+      "data_size_bytes": 8192,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "meta",
+      "table_name": "watermarks",
+      "qualified_name": "meta.watermarks",
+      "row_count": 13,
+      "column_count": 5,
+      "nullable_columns": 2,
+      "pk_columns": "resource",
+      "total_size_bytes": 32768,
+      "data_size_bytes": 8192,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "raw",
+      "table_name": "resource_rows",
+      "qualified_name": "raw.resource_rows",
+      "row_count": 0,
+      "column_count": 8,
+      "nullable_columns": 1,
+      "pk_columns": "run_id, resource, entity_id",
+      "total_size_bytes": 32768,
+      "data_size_bytes": 0,
+      "index_size_bytes": 24576
+    },
+    {
+      "schema_name": "core",
+      "table_name": "tickets_items",
+      "qualified_name": "core.tickets_items",
+      "row_count": 0,
+      "column_count": 6,
+      "nullable_columns": 0,
+      "pk_columns": "documento_id, detalle_index, ticket_index",
+      "total_size_bytes": 16384,
+      "data_size_bytes": 0,
+      "index_size_bytes": 8192
+    }
+  ],
+  "view_inventory": [
+    {
+      "schema_name": "reporting",
+      "view_name": "v_asientos_resumen"
+    },
+    {
+      "schema_name": "reporting",
+      "view_name": "v_documentos_resumen"
+    },
+    {
+      "schema_name": "reporting",
+      "view_name": "v_fk_health"
+    },
+    {
+      "schema_name": "reporting",
+      "view_name": "v_load_summary"
+    },
+    {
+      "schema_name": "reporting",
+      "view_name": "v_movimientos_resumen"
+    },
+    {
+      "schema_name": "reporting",
+      "view_name": "v_personas_resumen"
+    },
+    {
+      "schema_name": "reporting",
+      "view_name": "v_productos_resumen"
+    },
+    {
+      "schema_name": "reporting",
+      "view_name": "v_temporal_coverage"
+    }
+  ],
+  "relationship_types": [
+    {
+      "relation_type": "1:0..N",
+      "relation_count": 28
+    },
+    {
+      "relation_type": "1:N",
+      "relation_count": 6
+    },
+    {
+      "relation_type": "Autorrelacion 1:N",
+      "relation_count": 6
+    },
+    {
+      "relation_type": "Relacion compuesta 1:N",
+      "relation_count": 1
+    }
+  ],
+  "relationships": [
+    {
+      "constraint_name": "asiento_detalles_asiento_id_fkey",
+      "source_table": "core.asiento_detalles",
+      "source_columns": "asiento_id",
+      "target_table": "core.asientos",
+      "target_columns": "id",
+      "relation_type": "1:N",
+      "nullable_child": false,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "asiento_detalles_centro_costo_id_fkey",
+      "source_table": "core.asiento_detalles",
+      "source_columns": "centro_costo_id",
+      "target_table": "core.centros_costo",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "asiento_detalles_cuenta_id_fkey",
+      "source_table": "core.asiento_detalles",
+      "source_columns": "cuenta_id",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "categorias_cuenta_compra_fkey",
+      "source_table": "core.categorias",
+      "source_columns": "cuenta_compra",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "categorias_cuenta_inventario_fkey",
+      "source_table": "core.categorias",
+      "source_columns": "cuenta_inventario",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "categorias_cuenta_venta_fkey",
+      "source_table": "core.categorias",
+      "source_columns": "cuenta_venta",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "categorias_padre_id_fkey",
+      "source_table": "core.categorias",
+      "source_columns": "padre_id",
+      "target_table": "core.categorias",
+      "target_columns": "id",
+      "relation_type": "Autorrelacion 1:N",
+      "nullable_child": true,
+      "deferrable": true,
+      "initially_deferred": true,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "centros_costo_padre_id_fkey",
+      "source_table": "core.centros_costo",
+      "source_columns": "padre_id",
+      "target_table": "core.centros_costo",
+      "target_columns": "id",
+      "relation_type": "Autorrelacion 1:N",
+      "nullable_child": true,
+      "deferrable": true,
+      "initially_deferred": true,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "documento_cobros_documento_id_fkey",
+      "source_table": "core.documento_cobros",
+      "source_columns": "documento_id",
+      "target_table": "core.documentos",
+      "target_columns": "id",
+      "relation_type": "1:N",
+      "nullable_child": false,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "documento_detalles_centro_costo_id_fkey",
+      "source_table": "core.documento_detalles",
+      "source_columns": "centro_costo_id",
+      "target_table": "core.centros_costo",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "documento_detalles_cuenta_id_fkey",
+      "source_table": "core.documento_detalles",
+      "source_columns": "cuenta_id",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "documento_detalles_documento_id_fkey",
+      "source_table": "core.documento_detalles",
+      "source_columns": "documento_id",
+      "target_table": "core.documentos",
+      "target_columns": "id",
+      "relation_type": "1:N",
+      "nullable_child": false,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "documento_detalles_producto_id_fkey",
+      "source_table": "core.documento_detalles",
+      "source_columns": "producto_id",
+      "target_table": "core.productos",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "documentos_cliente_id_fkey",
+      "source_table": "core.documentos",
+      "source_columns": "cliente_id",
+      "target_table": "core.personas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "documentos_documento_relacionado_id_fkey",
+      "source_table": "core.documentos",
+      "source_columns": "documento_relacionado_id",
+      "target_table": "core.documentos",
+      "target_columns": "id",
+      "relation_type": "Autorrelacion 1:N",
+      "nullable_child": true,
+      "deferrable": true,
+      "initially_deferred": true,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "documentos_persona_id_fkey",
+      "source_table": "core.documentos",
+      "source_columns": "persona_id",
+      "target_table": "core.personas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "documentos_proveedor_id_fkey",
+      "source_table": "core.documentos",
+      "source_columns": "proveedor_id",
+      "target_table": "core.personas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "documentos_vendedor_id_fkey",
+      "source_table": "core.documentos",
+      "source_columns": "vendedor_id",
+      "target_table": "core.personas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "movimiento_detalles_movimiento_id_fkey",
+      "source_table": "core.movimiento_detalles",
+      "source_columns": "movimiento_id",
+      "target_table": "core.movimientos",
+      "target_columns": "id",
+      "relation_type": "1:N",
+      "nullable_child": false,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "movimiento_detalles_producto_id_fkey",
+      "source_table": "core.movimiento_detalles",
+      "source_columns": "producto_id",
+      "target_table": "core.productos",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "movimiento_detalles_unidad_id_fkey",
+      "source_table": "core.movimiento_detalles",
+      "source_columns": "unidad_id",
+      "target_table": "core.unidades",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "movimientos_bodega_destino_id_fkey",
+      "source_table": "core.movimientos",
+      "source_columns": "bodega_destino_id",
+      "target_table": "core.bodegas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "movimientos_bodega_id_fkey",
+      "source_table": "core.movimientos",
+      "source_columns": "bodega_id",
+      "target_table": "core.bodegas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "movimientos_cuenta_id_fkey",
+      "source_table": "core.movimientos",
+      "source_columns": "cuenta_id",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "personas_categoria_id_fkey",
+      "source_table": "core.personas",
+      "source_columns": "categoria_id",
+      "target_table": "core.categorias",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "personas_cuenta_por_cobrar_id_fkey",
+      "source_table": "core.personas",
+      "source_columns": "cuenta_por_cobrar_id",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "personas_cuenta_por_pagar_id_fkey",
+      "source_table": "core.personas",
+      "source_columns": "cuenta_por_pagar_id",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "personas_personaasociada_id_fkey",
+      "source_table": "core.personas",
+      "source_columns": "personaasociada_id",
+      "target_table": "core.personas",
+      "target_columns": "id",
+      "relation_type": "Autorrelacion 1:N",
+      "nullable_child": true,
+      "deferrable": true,
+      "initially_deferred": true,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "personas_vendedor_asignado_id_fkey",
+      "source_table": "core.personas",
+      "source_columns": "vendedor_asignado_id",
+      "target_table": "core.personas",
+      "target_columns": "id",
+      "relation_type": "Autorrelacion 1:N",
+      "nullable_child": true,
+      "deferrable": true,
+      "initially_deferred": true,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "productos_categoria_id_fkey",
+      "source_table": "core.productos",
+      "source_columns": "categoria_id",
+      "target_table": "core.categorias",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "productos_cuenta_compra_id_fkey",
+      "source_table": "core.productos",
+      "source_columns": "cuenta_compra_id",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "productos_cuenta_costo_id_fkey",
+      "source_table": "core.productos",
+      "source_columns": "cuenta_costo_id",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "productos_cuenta_venta_id_fkey",
+      "source_table": "core.productos",
+      "source_columns": "cuenta_venta_id",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "productos_marca_id_fkey",
+      "source_table": "core.productos",
+      "source_columns": "marca_id",
+      "target_table": "core.marcas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "productos_producto_base_id_fkey",
+      "source_table": "core.productos",
+      "source_columns": "producto_base_id",
+      "target_table": "core.productos",
+      "target_columns": "id",
+      "relation_type": "Autorrelacion 1:N",
+      "nullable_child": true,
+      "deferrable": true,
+      "initially_deferred": true,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "productos_unidad_id_fkey",
+      "source_table": "core.productos",
+      "source_columns": "unidad_id",
+      "target_table": "core.unidades",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "tickets_detalles_centro_costo_id_fkey",
+      "source_table": "core.tickets_detalles",
+      "source_columns": "centro_costo_id",
+      "target_table": "core.centros_costo",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "tickets_detalles_documento_id_fkey",
+      "source_table": "core.tickets_detalles",
+      "source_columns": "documento_id",
+      "target_table": "core.tickets_documentos",
+      "target_columns": "id",
+      "relation_type": "1:N",
+      "nullable_child": false,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "tickets_detalles_producto_id_fkey",
+      "source_table": "core.tickets_detalles",
+      "source_columns": "producto_id",
+      "target_table": "core.productos",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "tickets_documentos_id_fkey",
+      "source_table": "core.tickets_documentos",
+      "source_columns": "id",
+      "target_table": "core.documentos",
+      "target_columns": "id",
+      "relation_type": "1:N",
+      "nullable_child": false,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "tickets_items_documento_id_detalle_index_fkey",
+      "source_table": "core.tickets_items",
+      "source_columns": "documento_id, detalle_index",
+      "target_table": "core.tickets_detalles",
+      "target_columns": "documento_id, detalle_index",
+      "relation_type": "Relacion compuesta 1:N",
+      "nullable_child": false,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    }
+  ],
+  "relationship_density": [
+    {
+      "table_name": "core.personas",
+      "outgoing_fks": 5,
+      "incoming_fks": 6,
+      "row_count": 2060
+    },
+    {
+      "table_name": "core.productos",
+      "outgoing_fks": 7,
+      "incoming_fks": 4,
+      "row_count": 1237
+    },
+    {
+      "table_name": "core.cuentas_contables",
+      "outgoing_fks": 0,
+      "incoming_fks": 11,
+      "row_count": 572
+    },
+    {
+      "table_name": "core.documentos",
+      "outgoing_fks": 5,
+      "incoming_fks": 4,
+      "row_count": 23911
+    },
+    {
+      "table_name": "core.categorias",
+      "outgoing_fks": 4,
+      "incoming_fks": 3,
+      "row_count": 23
+    },
+    {
+      "table_name": "core.centros_costo",
+      "outgoing_fks": 1,
+      "incoming_fks": 4,
+      "row_count": 2
+    },
+    {
+      "table_name": "core.documento_detalles",
+      "outgoing_fks": 4,
+      "incoming_fks": 0,
+      "row_count": 77447
+    },
+    {
+      "table_name": "core.tickets_detalles",
+      "outgoing_fks": 3,
+      "incoming_fks": 1,
+      "row_count": 77447
+    },
+    {
+      "table_name": "core.movimientos",
+      "outgoing_fks": 3,
+      "incoming_fks": 1,
+      "row_count": 9024
+    },
+    {
+      "table_name": "core.asiento_detalles",
+      "outgoing_fks": 3,
+      "incoming_fks": 0,
+      "row_count": 279354
+    },
+    {
+      "table_name": "core.movimiento_detalles",
+      "outgoing_fks": 3,
+      "incoming_fks": 0,
+      "row_count": 37122
+    },
+    {
+      "table_name": "core.tickets_documentos",
+      "outgoing_fks": 1,
+      "incoming_fks": 1,
+      "row_count": 23911
+    },
+    {
+      "table_name": "core.bodegas",
+      "outgoing_fks": 0,
+      "incoming_fks": 2,
+      "row_count": 21
+    },
+    {
+      "table_name": "core.unidades",
+      "outgoing_fks": 0,
+      "incoming_fks": 2,
+      "row_count": 20
+    },
+    {
+      "table_name": "core.asientos",
+      "outgoing_fks": 0,
+      "incoming_fks": 1,
+      "row_count": 67402
+    },
+    {
+      "table_name": "core.documento_cobros",
+      "outgoing_fks": 1,
+      "incoming_fks": 0,
+      "row_count": 24039
+    },
+    {
+      "table_name": "core.marcas",
+      "outgoing_fks": 0,
+      "incoming_fks": 1,
+      "row_count": 16
+    },
+    {
+      "table_name": "core.tickets_items",
+      "outgoing_fks": 1,
+      "incoming_fks": 0,
+      "row_count": 0
+    }
+  ],
+  "column_types": [
+    {
+      "schema_name": "core",
+      "data_type": "text",
+      "column_count": 191
+    },
+    {
+      "schema_name": "core",
+      "data_type": "numeric",
+      "column_count": 46
+    },
+    {
+      "schema_name": "core",
+      "data_type": "boolean",
+      "column_count": 31
+    },
+    {
+      "schema_name": "core",
+      "data_type": "timestamp with time zone",
+      "column_count": 22
+    },
+    {
+      "schema_name": "reporting",
+      "data_type": "text",
+      "column_count": 15
+    },
+    {
+      "schema_name": "core",
+      "data_type": "integer",
+      "column_count": 13
+    },
+    {
+      "schema_name": "core",
+      "data_type": "date",
+      "column_count": 12
+    },
+    {
+      "schema_name": "meta",
+      "data_type": "text",
+      "column_count": 11
+    },
+    {
+      "schema_name": "reporting",
+      "data_type": "bigint",
+      "column_count": 8
+    },
+    {
+      "schema_name": "meta",
+      "data_type": "timestamp with time zone",
+      "column_count": 5
+    },
+    {
+      "schema_name": "core",
+      "data_type": "jsonb",
+      "column_count": 4
+    },
+    {
+      "schema_name": "raw",
+      "data_type": "text",
+      "column_count": 4
+    },
+    {
+      "schema_name": "meta",
+      "data_type": "bigint",
+      "column_count": 3
+    },
+    {
+      "schema_name": "reporting",
+      "data_type": "date",
+      "column_count": 3
+    },
+    {
+      "schema_name": "reporting",
+      "data_type": "numeric",
+      "column_count": 3
+    },
+    {
+      "schema_name": "meta",
+      "data_type": "date",
+      "column_count": 2
+    },
+    {
+      "schema_name": "raw",
+      "data_type": "jsonb",
+      "column_count": 2
+    },
+    {
+      "schema_name": "meta",
+      "data_type": "integer",
+      "column_count": 1
+    },
+    {
+      "schema_name": "meta",
+      "data_type": "jsonb",
+      "column_count": 1
+    },
+    {
+      "schema_name": "raw",
+      "data_type": "integer",
+      "column_count": 1
+    },
+    {
+      "schema_name": "raw",
+      "data_type": "timestamp with time zone",
+      "column_count": 1
+    },
+    {
+      "schema_name": "reporting",
+      "data_type": "timestamp with time zone",
+      "column_count": 1
+    }
+  ],
+  "frontend_assets": [
+    {
+      "file_name": "products.json",
+      "rows_exposed": 77481,
+      "size_bytes": 22932949,
+      "collection_count": 3,
+      "largest_collection": "line_facts",
+      "largest_collection_rows": 77447
+    },
+    {
+      "file_name": "inventory.json",
+      "rows_exposed": 46163,
+      "size_bytes": 10321788,
+      "collection_count": 3,
+      "largest_collection": "movement_line_facts",
+      "largest_collection_rows": 37122
+    },
+    {
+      "file_name": "commercial.json",
+      "rows_exposed": 24041,
+      "size_bytes": 5770880,
+      "collection_count": 4,
+      "largest_collection": "document_facts",
+      "largest_collection_rows": 23911
+    },
+    {
+      "file_name": "accounting.json",
+      "rows_exposed": 12348,
+      "size_bytes": 2768226,
+      "collection_count": 4,
+      "largest_collection": "monthly_facts",
+      "largest_collection_rows": 12231
+    },
+    {
+      "file_name": "customers.json",
+      "rows_exposed": 314,
+      "size_bytes": 49616,
+      "collection_count": 4,
+      "largest_collection": "customer_stats",
+      "largest_collection_rows": 200
+    },
+    {
+      "file_name": "technical.json",
+      "rows_exposed": 133,
+      "size_bytes": 47055,
+      "collection_count": 12,
+      "largest_collection": "fk_health",
+      "largest_collection_rows": 40
+    },
+    {
+      "file_name": "tables.json",
+      "rows_exposed": 167,
+      "size_bytes": 28465,
+      "collection_count": 4,
+      "largest_collection": "top_customers",
+      "largest_collection_rows": 50
+    },
+    {
+      "file_name": "overview.json",
+      "rows_exposed": 102,
+      "size_bytes": 17609,
+      "collection_count": 4,
+      "largest_collection": "monthly_story",
+      "largest_collection_rows": 85
+    },
+    {
+      "file_name": "quality.json",
+      "rows_exposed": 68,
+      "size_bytes": 14714,
+      "collection_count": 5,
+      "largest_collection": "fk_health",
+      "largest_collection_rows": 40
+    },
+    {
+      "file_name": "manifest.json",
+      "rows_exposed": 20,
+      "size_bytes": 9779,
+      "collection_count": 3,
+      "largest_collection": "data_files",
+      "largest_collection_rows": 10
+    }
+  ],
+  "front_back_inventory": [
+    {
+      "domain": "Comercial",
+      "backend_rows": 125397,
+      "frontend_rows": 24041,
+      "frontend_file": "commercial.json",
+      "backend_scope": "documentos, documento_detalles, documento_cobros"
+    },
+    {
+      "domain": "Clientes",
+      "backend_rows": 2060,
+      "frontend_rows": 314,
+      "frontend_file": "customers.json",
+      "backend_scope": "personas"
+    },
+    {
+      "domain": "Productos",
+      "backend_rows": 1237,
+      "frontend_rows": 77481,
+      "frontend_file": "products.json",
+      "backend_scope": "productos"
+    },
+    {
+      "domain": "Inventario",
+      "backend_rows": 46146,
+      "frontend_rows": 46163,
+      "frontend_file": "inventory.json",
+      "backend_scope": "movimientos, movimiento_detalles"
+    },
+    {
+      "domain": "Contabilidad",
+      "backend_rows": 346756,
+      "frontend_rows": 12348,
+      "frontend_file": "accounting.json",
+      "backend_scope": "asientos, asiento_detalles"
+    },
+    {
+      "domain": "Calidad",
+      "backend_rows": 172,
+      "frontend_rows": 68,
+      "frontend_file": "quality.json",
+      "backend_scope": "extract_runs, watermarks, load_metrics"
+    },
+    {
+      "domain": "Tecnica",
+      "backend_rows": 172,
+      "frontend_rows": 133,
+      "frontend_file": "technical.json",
+      "backend_scope": "extract_runs, watermarks, load_metrics"
+    },
+    {
+      "domain": "Tablas analiticas",
+      "backend_rows": 101574,
+      "frontend_rows": 167,
+      "frontend_file": "tables.json",
+      "backend_scope": "documentos, productos, movimientos, asientos"
+    }
+  ]
+}

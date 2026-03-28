@@ -11,14 +11,15 @@
       <section class="top-nav-panel">
         <div class="top-nav-copy">
           <p class="eyebrow">Control del dataset</p>
-          <h2>Dos vistas sobre la misma base Contifico</h2>
+          <h2>Tres vistas sobre la misma base Contifico</h2>
           <p>
-            Revision tecnica para operar el pipeline y vista analitica para explorar el snapshot sin alterar la lectura actual.
+            Revision tecnica para operar el pipeline, vista analitica para explorar el snapshot y DataBase para inspeccionar estructura, volumen y relaciones.
           </p>
         </div>
         <div class="tab-switcher" role="tablist" aria-label="Vistas del dashboard">
           <button class="tab-button active" id="tab-technical" data-tab-target="technical-view" type="button">Revision tecnica</button>
           <button class="tab-button" id="tab-analytics" data-tab-target="analytic-view" type="button">Vista analitica</button>
+          <button class="tab-button" id="tab-database" data-tab-target="database-view" type="button">DataBase</button>
         </div>
       </section>
 
@@ -230,6 +231,144 @@
               </div>
             </div>
             <div id="technical-priority-matrix" class="table-wrap"></div>
+          </article>
+        </section>
+      </section>
+
+      <section class="tab-view" id="database-view">
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">DataBase</p>
+              <h2>Informe estructural completo de la base</h2>
+              <p>Vista dedicada a tamano, tablas, vistas, volumen, relaciones, tipos relacionales y contraste entre backend PostgreSQL y snapshot web.</p>
+            </div>
+          </div>
+          <div class="metric-grid database-summary-grid" id="database-summary-metrics"></div>
+          <div id="database-story-cards" class="story-grid"></div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Arquitectura fisica</p>
+              <h2>Esquemas, tablas y peso de almacenamiento</h2>
+            </div>
+          </div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Tamano por esquema</h3>
+                  <p>Distribucion de almacenamiento entre meta, raw, core y reporting.</p>
+                </div>
+              </div>
+              <div id="database-size-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Inventario de esquemas</h3>
+                  <p>Tablas, vistas, filas y peso total por esquema.</p>
+                </div>
+              </div>
+              <div id="database-schema-table" class="table-wrap"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Tablas con mayor peso</h3>
+                  <p>Volumen, columnas, claves primarias y tamano fisico por tabla.</p>
+                </div>
+              </div>
+              <div id="database-tables-table" class="table-wrap"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Tipos de datos</h3>
+                  <p>Distribucion de columnas por tipo SQL a traves de la base.</p>
+                </div>
+              </div>
+              <div id="database-column-types-table" class="table-wrap"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Relaciones</p>
+              <h2>Lectura relacional y densidad del modelo</h2>
+              <p>Enfoque completo sobre cardinalidad, opcionalidad, autorrelaciones, FK compuestas y salud de cada enlace.</p>
+            </div>
+          </div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Tipos de relacion</h3>
+                  <p>Conteo de relaciones 1:N, opcionales, autorrelaciones y compuestas.</p>
+                </div>
+              </div>
+              <div id="database-relationship-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Densidad relacional por tabla</h3>
+                  <p>Mesas mas conectadas por entradas y salidas de claves foraneas.</p>
+                </div>
+              </div>
+              <div id="database-density-chart" class="chart"></div>
+            </article>
+          </div>
+          <article class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Catalogo de relaciones</h3>
+                <p>Detalle de cada FK con origen, destino, columnas, tipo relacional, opcionalidad, deferibilidad y huerfanos.</p>
+              </div>
+            </div>
+            <div id="database-relationships-table" class="table-wrap"></div>
+          </article>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Front y back</p>
+              <h2>Cuanto vive en PostgreSQL y cuanto se expone en web</h2>
+            </div>
+          </div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Back contra front por dominio</h3>
+                  <p>Comparacion entre filas backend asociadas y registros analiticos expuestos en frontend.</p>
+                </div>
+              </div>
+              <div id="database-front-back-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Assets del snapshot web</h3>
+                  <p>JSON publicados, peso en bytes, filas expuestas y colecciones mas grandes.</p>
+                </div>
+              </div>
+              <div id="database-assets-table" class="table-wrap"></div>
+            </article>
+          </div>
+          <article class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Mapa de exposicion backend vs frontend</h3>
+                <p>Relacion entre dominios de negocio, alcance backend y archivo del snapshot utilizado por la interfaz.</p>
+              </div>
+            </div>
+            <div id="database-front-back-table" class="table-wrap"></div>
           </article>
         </section>
       </section>
