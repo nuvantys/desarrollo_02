@@ -1732,6 +1732,151 @@ def build_database(
             }
         )
 
+    performance_rows = query_rows(
+        conn,
+        """
+        WITH latest_runs AS (
+            SELECT run_id
+            FROM (
+                SELECT
+                    run_id,
+                    MAX(finished_at) AS finished_at
+                FROM meta.extract_runs
+                WHERE status = 'success'
+                GROUP BY run_id
+            ) ranked
+            ORDER BY finished_at DESC
+            LIMIT 5
+        ),
+        core_load AS (
+            SELECT
+                run_id,
+                resource,
+                SUM(row_count)::bigint AS core_rows_loaded
+            FROM meta.load_metrics
+            WHERE stage = 'core'
+            GROUP BY run_id, resource
+        )
+        SELECT
+            er.run_id,
+            er.resource,
+            er.pages_fetched,
+            er.source_count,
+            COALESCE(cl.core_rows_loaded, 0)::bigint AS core_rows_loaded,
+            COALESCE(EXTRACT(EPOCH FROM (er.finished_at - er.started_at))::bigint, 0) AS duration_seconds
+        FROM meta.extract_runs er
+        JOIN latest_runs lr ON lr.run_id = er.run_id
+        LEFT JOIN core_load cl
+          ON cl.run_id = er.run_id
+         AND cl.resource = er.resource
+        WHERE er.status = 'success'
+        ORDER BY er.run_id DESC, er.resource
+        """
+    )
+
+    def performance_reason(row: dict[str, Any]) -> str:
+        pages = int(row.get("latest_pages_fetched") or 0)
+        fanout = float(row.get("fanout_ratio") or 0)
+        source_rows = int(row.get("latest_source_count") or 0)
+        if pages >= 200 and fanout >= 4:
+            return "Paginacion alta desde API y expansion fuerte a tablas hijas durante la normalizacion."
+        if pages >= 500:
+            return "La mayor presion esta en I/O remoto: demasiadas paginas para recorrer en la API."
+        if fanout >= 4:
+            return "Cada entidad base genera multiples filas hijas, lo que amplifica el costo de carga."
+        if source_rows >= 20000:
+            return "El volumen base es alto incluso antes de expandir detalles o cobros."
+        return "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural."
+
+    def performance_hint(row: dict[str, Any]) -> str:
+        pages = int(row.get("latest_pages_fetched") or 0)
+        fanout = float(row.get("fanout_ratio") or 0)
+        if pages >= 200:
+            return "Priorizar estrategia incremental por watermark y fetch concurrente controlado por pagina."
+        if fanout >= 4:
+            return "Separar cabeceras y detalles en lotes dedicados y monitorear fanout esperado por recurso."
+        return "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
+
+    run_groups: dict[str, list[dict[str, Any]]] = {}
+    for row in performance_rows:
+        run_groups.setdefault(row["run_id"], []).append(row)
+    latest_performance_run_id = next(iter(run_groups.keys()), None)
+    latest_run_rows = run_groups.get(latest_performance_run_id, [])
+    latest_total_duration = sum(int(row.get("duration_seconds") or 0) for row in latest_run_rows)
+    latest_total_pages = sum(int(row.get("pages_fetched") or 0) for row in latest_run_rows)
+    latest_total_source_rows = sum(int(row.get("source_count") or 0) for row in latest_run_rows)
+    latest_total_core_rows = sum(int(row.get("core_rows_loaded") or 0) for row in latest_run_rows)
+
+    resource_history: dict[str, list[dict[str, Any]]] = {}
+    for row in performance_rows:
+        resource_history.setdefault(row["resource"], []).append(row)
+
+    performance_resources = []
+    for resource, rows in resource_history.items():
+        latest_row = next((row for row in rows if row["run_id"] == latest_performance_run_id), rows[0])
+        duration_values = [int(row.get("duration_seconds") or 0) for row in rows]
+        latest_duration = int(latest_row.get("duration_seconds") or 0)
+        latest_source_count = int(latest_row.get("source_count") or 0)
+        latest_core_rows_loaded = int(latest_row.get("core_rows_loaded") or 0)
+        latest_pages_fetched = int(latest_row.get("pages_fetched") or 0)
+        source_rows_per_second = round(latest_source_count / latest_duration, 2) if latest_duration else 0
+        core_rows_per_second = round(latest_core_rows_loaded / latest_duration, 2) if latest_duration else 0
+        fanout_ratio = round(latest_core_rows_loaded / latest_source_count, 2) if latest_source_count else 0
+        duration_share_pct = round((latest_duration / latest_total_duration) * 100, 2) if latest_total_duration else 0
+        row = {
+            "resource": resource,
+            "latest_run_id": latest_performance_run_id,
+            "latest_duration_seconds": latest_duration,
+            "avg_duration_seconds": round(sum(duration_values) / len(duration_values), 2),
+            "max_duration_seconds": max(duration_values),
+            "latest_pages_fetched": latest_pages_fetched,
+            "latest_source_count": latest_source_count,
+            "latest_core_rows_loaded": latest_core_rows_loaded,
+            "source_rows_per_second": source_rows_per_second,
+            "core_rows_per_second": core_rows_per_second,
+            "fanout_ratio": fanout_ratio,
+            "duration_share_pct": duration_share_pct,
+        }
+        row["reason"] = performance_reason(row)
+        row["optimization_hint"] = performance_hint(row)
+        performance_resources.append(row)
+    performance_resources.sort(key=lambda row: row["latest_duration_seconds"], reverse=True)
+
+    performance_runs = []
+    for run_id, rows in sorted(run_groups.items(), key=lambda item: item[0], reverse=True):
+        total_duration = sum(int(row.get("duration_seconds") or 0) for row in rows)
+        slowest = max(rows, key=lambda row: int(row.get("duration_seconds") or 0), default=None)
+        performance_runs.append(
+            {
+                "run_id": run_id,
+                "resources_processed": len(rows),
+                "total_duration_seconds": total_duration,
+                "total_pages_fetched": sum(int(row.get("pages_fetched") or 0) for row in rows),
+                "total_source_rows": sum(int(row.get("source_count") or 0) for row in rows),
+                "total_core_rows": sum(int(row.get("core_rows_loaded") or 0) for row in rows),
+                "slowest_resource": slowest.get("resource") if slowest else None,
+                "slowest_duration_seconds": int(slowest.get("duration_seconds") or 0) if slowest else 0,
+            }
+        )
+
+    slowest_resource = performance_resources[0] if performance_resources else None
+    highest_fanout = max(performance_resources, key=lambda row: row["fanout_ratio"], default=None)
+    highest_pages = max(performance_resources, key=lambda row: row["latest_pages_fetched"], default=None)
+    performance_story_cards = [
+        {
+            "title": "Recurso mas costoso del refresh",
+            "body": f"El recurso mas lento hoy es {slowest_resource['resource'] if slowest_resource else '--'} con {slowest_resource['latest_duration_seconds'] if slowest_resource else 0} segundos. Consume {round(slowest_resource['duration_share_pct'], 2) if slowest_resource else 0}% del tiempo de extraccion y carga del ultimo run.",
+        },
+        {
+            "title": "Principal driver tecnico",
+            "body": f"El mayor recorrido por paginas esta en {highest_pages['resource'] if highest_pages else '--'} con {highest_pages['latest_pages_fetched'] if highest_pages else 0} paginas. El mayor fanout lo presenta {highest_fanout['resource'] if highest_fanout else '--'} con una expansion de {highest_fanout['fanout_ratio'] if highest_fanout else 0} filas core por fila fuente.",
+        },
+        {
+            "title": "Lectura operativa",
+            "body": f"En el ultimo run se recorrieron {latest_total_pages} paginas, se recuperaron {latest_total_source_rows} filas fuente y se materializaron {latest_total_core_rows} filas core. El punto critico no es solo el volumen, sino la combinacion entre paginacion remota y expansion a detalles.",
+        },
+    ]
+
     schema_storage = sorted(schema_rollup.values(), key=lambda row: row["total_size_bytes"], reverse=True)
     table_inventory.sort(key=lambda row: row["total_size_bytes"], reverse=True)
     total_backend_rows = sum(row["row_count"] for row in table_inventory)
@@ -1796,6 +1941,22 @@ def build_database(
         "column_types": column_types,
         "frontend_assets": frontend_assets,
         "front_back_inventory": front_back_inventory,
+        "performance_summary": {
+            "latest_run_id": latest_performance_run_id,
+            "latest_total_duration_seconds": latest_total_duration,
+            "latest_total_pages": latest_total_pages,
+            "latest_total_source_rows": latest_total_source_rows,
+            "latest_total_core_rows": latest_total_core_rows,
+            "slowest_resource": slowest_resource["resource"] if slowest_resource else None,
+            "slowest_duration_seconds": slowest_resource["latest_duration_seconds"] if slowest_resource else 0,
+            "highest_fanout_resource": highest_fanout["resource"] if highest_fanout else None,
+            "highest_fanout_ratio": highest_fanout["fanout_ratio"] if highest_fanout else 0,
+            "highest_pages_resource": highest_pages["resource"] if highest_pages else None,
+            "highest_pages_fetched": highest_pages["latest_pages_fetched"] if highest_pages else 0,
+        },
+        "performance_story_cards": performance_story_cards,
+        "performance_resources": performance_resources,
+        "performance_runs": performance_runs,
     }
 
 

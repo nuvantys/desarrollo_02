@@ -371,6 +371,56 @@
             <div id="database-front-back-table" class="table-wrap"></div>
           </article>
         </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Rendimiento de recuperacion</p>
+              <h2>Que datos tardan mas en recuperarse y por que</h2>
+              <p>Lectura tecnica del costo de actualizacion por recurso usando tiempo, paginas, volumen fuente, expansion a filas core y recomendaciones de optimizacion.</p>
+            </div>
+          </div>
+          <div class="metric-grid database-summary-grid" id="database-performance-metrics"></div>
+          <div id="database-performance-story" class="story-grid"></div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Recursos mas lentos</h3>
+                  <p>Duracion por recurso dentro del ultimo refresh exitoso.</p>
+                </div>
+              </div>
+              <div id="database-recovery-duration-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Drivers del costo tecnico</h3>
+                  <p>Relación entre paginacion recorrida y fanout generado hacia tablas core.</p>
+                </div>
+              </div>
+              <div id="database-recovery-driver-chart" class="chart"></div>
+            </article>
+          </div>
+          <article class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Detalle tecnico por recurso</h3>
+                <p>Tiempo, throughput, expansion, causa probable del costo y recomendacion de optimizacion.</p>
+              </div>
+            </div>
+            <div id="database-performance-table" class="table-wrap"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Historial de rendimiento por corrida</h3>
+                <p>Comparativo de corridas recientes con duracion total, paginas, filas fuente y recurso mas lento.</p>
+              </div>
+            </div>
+            <div id="database-performance-runs-table" class="table-wrap"></div>
+          </article>
+        </section>
       </section>
 
       <section class="tab-view" id="analytic-view">

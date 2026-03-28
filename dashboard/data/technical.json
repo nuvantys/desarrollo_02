@@ -610,7 +610,7 @@
   "last_refresh_started_at": "2026-03-28T17:08:43-05:00",
   "last_refresh_finished_at": "2026-03-28T17:28:21-05:00",
   "last_refresh_duration_seconds": 1178,
-  "freshness_seconds": 657,
+  "freshness_seconds": 2489,
   "summary": {
     "status": "success",
     "resources_processed": 13,

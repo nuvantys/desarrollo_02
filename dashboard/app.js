@@ -105,6 +105,10 @@ const elements = {
     relationshipsTable: document.getElementById("database-relationships-table"),
     assetsTable: document.getElementById("database-assets-table"),
     frontBackTable: document.getElementById("database-front-back-table"),
+    performanceMetrics: document.getElementById("database-performance-metrics"),
+    performanceStory: document.getElementById("database-performance-story"),
+    performanceTable: document.getElementById("database-performance-table"),
+    performanceRunsTable: document.getElementById("database-performance-runs-table"),
   },
   filters: {
     dateFrom: document.getElementById("filter-date-from"),
@@ -1029,6 +1033,10 @@ function yesNoLabel(value, yes = "Si", no = "No") {
   return value ? yes : no;
 }
 
+function formatSeconds(value) {
+  return `${formatNumber(value)} s`;
+}
+
 function renderDatabase() {
   const database = snapshot.database;
   if (!database) return;
@@ -1143,6 +1151,64 @@ function renderDatabase() {
     { key: "backend_rows", label: "Filas back", formatter: formatNumber },
     { key: "frontend_file", label: "Archivo front" },
     { key: "frontend_rows", label: "Filas front", formatter: formatNumber },
+  ]);
+
+  const performanceSummary = database.performance_summary || {};
+  renderMetricCards(elements.database.performanceMetrics, [
+    { label: "Duracion ultimo refresh", value: formatDuration(performanceSummary.latest_total_duration_seconds), caption: "Tiempo total del ultimo refresh exitoso analizado." },
+    { label: "Recurso mas lento", value: performanceSummary.slowest_resource || "--", caption: `Con ${formatSeconds(performanceSummary.slowest_duration_seconds || 0)} de costo total.` },
+    { label: "Mayor paginacion", value: performanceSummary.highest_pages_resource || "--", caption: `${formatNumber(performanceSummary.highest_pages_fetched || 0)} paginas recorridas.` },
+    { label: "Mayor fanout", value: performanceSummary.highest_fanout_resource || "--", caption: `${formatPreciseNumber(performanceSummary.highest_fanout_ratio || 0)} filas core por fila fuente.` },
+    { label: "Filas fuente", value: formatPreciseNumber(performanceSummary.latest_total_source_rows || 0), caption: "Volumen fuente recuperado en el ultimo run." },
+    { label: "Filas core", value: formatPreciseNumber(performanceSummary.latest_total_core_rows || 0), caption: "Filas materializadas tras normalizacion y carga." },
+  ]);
+  renderStoryCards(elements.database.performanceStory, database.performance_story_cards || []);
+
+  const slowResources = (database.performance_resources || []).slice(0, 10);
+  setOption(
+    "database-recovery-duration-chart",
+    horizontalBarOption({
+      labels: slowResources.map((row) => row.resource),
+      values: slowResources.map((row) => row.latest_duration_seconds),
+      formatter: formatSeconds,
+      color: "#b94f44",
+    }),
+  );
+  setOption(
+    "database-recovery-driver-chart",
+    lineComboOption({
+      categories: slowResources.map((row) => row.resource),
+      bars: slowResources.map((row) => row.latest_pages_fetched),
+      line: slowResources.map((row) => row.fanout_ratio),
+      barName: "Paginas",
+      lineName: "Fanout",
+      barFormatter: formatNumber,
+      lineFormatter: formatPreciseNumber,
+    }),
+  );
+
+  renderTable("database-performance-table", database.performance_resources || [], [
+    { key: "resource", label: "Recurso" },
+    { key: "latest_duration_seconds", label: "Ultimo tiempo", formatter: formatDuration },
+    { key: "avg_duration_seconds", label: "Promedio", formatter: formatSeconds },
+    { key: "latest_pages_fetched", label: "Paginas", formatter: formatNumber },
+    { key: "latest_source_count", label: "Filas fuente", formatter: formatNumber },
+    { key: "latest_core_rows_loaded", label: "Filas core", formatter: formatNumber },
+    { key: "fanout_ratio", label: "Fanout", formatter: formatPreciseNumber },
+    { key: "source_rows_per_second", label: "Fuente/s", formatter: formatPreciseNumber },
+    { key: "core_rows_per_second", label: "Core/s", formatter: formatPreciseNumber },
+    { key: "reason", label: "Por que tarda" },
+    { key: "optimization_hint", label: "Enfoque tecnico" },
+  ]);
+  renderTable("database-performance-runs-table", database.performance_runs || [], [
+    { key: "run_id", label: "Run ID" },
+    { key: "resources_processed", label: "Recursos", formatter: formatNumber },
+    { key: "total_duration_seconds", label: "Duracion total", formatter: formatDuration },
+    { key: "total_pages_fetched", label: "Paginas", formatter: formatNumber },
+    { key: "total_source_rows", label: "Filas fuente", formatter: formatNumber },
+    { key: "total_core_rows", label: "Filas core", formatter: formatNumber },
+    { key: "slowest_resource", label: "Mas lento" },
+    { key: "slowest_duration_seconds", label: "Tiempo mas lento", formatter: formatDuration },
   ]);
 }
 
