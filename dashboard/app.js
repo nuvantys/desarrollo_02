@@ -5,6 +5,7 @@ import {
   formatCurrency,
   formatDate,
   formatNumber,
+  formatPreciseNumber,
   horizontalBarOption,
   lineComboOption,
   paretoOption,
@@ -302,12 +303,12 @@ function renderOverview() {
   const totalAsientos = accountingSummary.reduce((sum, row) => sum + toNumber(row.asientos), 0);
 
   renderMetricCards(elements.overviewMetrics, [
-    { label: "Documentos filtrados", value: formatCompact(docs.length), caption: "Volumen documental dentro de la vista activa." },
+    { label: "Documentos filtrados", value: formatPreciseNumber(docs.length), caption: "Volumen documental dentro de la vista activa." },
     { label: "Monto comercial", value: formatCurrency(revenue), caption: "Total acumulado de documentos en el filtro actual." },
-    { label: "Clientes activos", value: formatCompact(activeCustomers), caption: "Clientes con movimiento en documentos filtrados." },
-    { label: "Productos activos", value: formatCompact(activeProducts), caption: "Productos detectados en líneas comerciales filtradas." },
-    { label: "Movimientos únicos", value: formatCompact(movements.length), caption: "Movimientos de inventario dentro de la ventana activa." },
-    { label: "Asientos del periodo", value: formatCompact(totalAsientos), caption: "Asientos contables consolidados por rango temporal." },
+    { label: "Clientes activos", value: formatPreciseNumber(activeCustomers), caption: "Clientes con movimiento en documentos filtrados." },
+    { label: "Productos activos", value: formatPreciseNumber(activeProducts), caption: "Productos detectados en líneas comerciales filtradas." },
+    { label: "Movimientos únicos", value: formatPreciseNumber(movements.length), caption: "Movimientos de inventario dentro de la ventana activa." },
+    { label: "Asientos del periodo", value: formatPreciseNumber(totalAsientos), caption: "Asientos contables consolidados por rango temporal." },
   ]);
 
   const docsByMonth = aggregateBy(

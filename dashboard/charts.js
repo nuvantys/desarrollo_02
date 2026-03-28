@@ -3,10 +3,16 @@ const charts = new Map();
 const currency = new Intl.NumberFormat("es-EC", {
   style: "currency",
   currency: "USD",
-  maximumFractionDigits: 0,
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
 });
 
 const decimal = new Intl.NumberFormat("es-EC", {
+  maximumFractionDigits: 2,
+});
+
+const preciseDecimal = new Intl.NumberFormat("es-EC", {
+  minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
 
@@ -16,6 +22,10 @@ export function formatCurrency(value) {
 
 export function formatNumber(value) {
   return decimal.format(Number(value || 0));
+}
+
+export function formatPreciseNumber(value) {
+  return preciseDecimal.format(Number(value || 0));
 }
 
 export function formatCompact(value) {
@@ -59,13 +69,31 @@ export function disposeCharts() {
   charts.clear();
 }
 
-export function lineComboOption({ categories, bars, line, barName, lineName, lineFormatter = formatCurrency }) {
+export function lineComboOption({
+  categories,
+  bars,
+  line,
+  barName,
+  lineName,
+  barFormatter = formatNumber,
+  lineFormatter = formatCurrency,
+}) {
   return {
     color: ["#8cbeb3", "#0d6c5f"],
     tooltip: {
       trigger: "axis",
       axisPointer: { type: "cross" },
-      valueFormatter: (value) => lineFormatter(value),
+      formatter: (params) => {
+        const items = Array.isArray(params) ? params : [params];
+        const title = items[0]?.axisValueLabel || "";
+        const body = items
+          .map((item) => {
+            const formatter = item.seriesIndex === 0 ? barFormatter : lineFormatter;
+            return `${item.marker}${item.seriesName}: ${formatter(item.value)}`;
+          })
+          .join("<br/>");
+        return `${title}<br/>${body}`;
+      },
     },
     grid: { left: 42, right: 48, top: 24, bottom: 34 },
     legend: { top: 0, textStyle: { color: "#5d6e66" } },
