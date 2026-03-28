@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contifico Analytics</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Contifico Analytics Snapshot</p>
+          <h1>Lectura analítica integral del histórico comercial, operativo y contable</h1>
+          <p class="hero-text" id="hero-text">
+            Cargando snapshot y preparando narrativa de datos...
+          </p>
+          <div class="hero-meta">
+            <span id="hero-generated-at">Actualización: --</span>
+            <span id="hero-coverage">Cobertura: --</span>
+          </div>
+        </div>
+        <aside class="hero-alerts" id="hero-alerts"></aside>
+      </header>
+
+      <section class="filters-panel">
+        <div class="filters-header">
+          <div>
+            <p class="eyebrow">Controles globales</p>
+            <h2>Exploración guiada</h2>
+          </div>
+          <button id="reset-filters" class="ghost-button" type="button">Reset filtros</button>
+        </div>
+        <div class="filters-grid">
+          <label>
+            <span>Desde</span>
+            <input id="filter-date-from" type="date" />
+          </label>
+          <label>
+            <span>Hasta</span>
+            <input id="filter-date-to" type="date" />
+          </label>
+          <label>
+            <span>Tipo documento</span>
+            <select id="filter-document-type"></select>
+          </label>
+          <label>
+            <span>Estado documento</span>
+            <select id="filter-document-state"></select>
+          </label>
+          <label>
+            <span>Bodega</span>
+            <select id="filter-bodega"></select>
+          </label>
+          <label>
+            <span>Categoría</span>
+            <select id="filter-category"></select>
+          </label>
+        </div>
+        <div class="active-filters" id="active-filters"></div>
+      </section>
+
+      <main class="content-grid">
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Panorama general</p>
+              <h2>Hero analítico</h2>
+            </div>
+          </div>
+          <div class="metric-grid" id="overview-metrics"></div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Trayectoria mensual</h3>
+                  <p>Documentos, monto y actividad contable a lo largo del tiempo.</p>
+                </div>
+              </div>
+              <div id="overview-timeline-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Storytelling del snapshot</h3>
+                  <p>Hallazgos clave y lectura narrativa para orientar el análisis.</p>
+                </div>
+              </div>
+              <div id="story-cards" class="story-grid"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Comercial</p>
+              <h2>Documentos, mix y performance</h2>
+            </div>
+            <label class="inline-filter">
+              <span>Vendedor</span>
+              <select id="commercial-vendor-filter"></select>
+            </label>
+          </div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Ingreso mensual por documentos</h3>
+                  <p>Evolución del volumen y del monto acumulado.</p>
+                </div>
+              </div>
+              <div id="commercial-revenue-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Mix por tipo y estado</h3>
+                  <p>Distribución operativa de documentos emitidos.</p>
+                </div>
+              </div>
+              <div id="commercial-type-state-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Top clientes por facturación</h3>
+                  <p>Clientes con mayor tracción económica dentro de la ventana activa.</p>
+                </div>
+              </div>
+              <div id="commercial-top-customers-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Top productos por ingreso</h3>
+                  <p>Productos con mayor aporte económico en documentos.</p>
+                </div>
+              </div>
+              <div id="commercial-top-products-chart" class="chart"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Clientes y productos</p>
+              <h2>Concentración, recurrencia y mix de catálogo</h2>
+            </div>
+          </div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Mix de roles</h3>
+                  <p>Distribución estructural de personas en el ecosistema.</p>
+                </div>
+              </div>
+              <div id="customers-role-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Concentración de clientes</h3>
+                  <p>Pareto de facturación sobre los principales clientes.</p>
+                </div>
+              </div>
+              <div id="customers-concentration-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Stock por categoría</h3>
+                  <p>Profundidad del catálogo y capacidad disponible por línea.</p>
+                </div>
+              </div>
+              <div id="products-category-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Mix por marca</h3>
+                  <p>Participación de marcas en el catálogo y el stock.</p>
+                </div>
+              </div>
+              <div id="products-brand-chart" class="chart"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Inventario</p>
+              <h2>Presión operativa y rotación</h2>
+            </div>
+            <label class="inline-filter">
+              <span>Tipo movimiento</span>
+              <select id="inventory-type-filter"></select>
+            </label>
+          </div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Flujo mensual de inventario</h3>
+                  <p>Entradas, egresos y transferencias a lo largo del tiempo.</p>
+                </div>
+              </div>
+              <div id="inventory-flow-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Bodegas con mayor actividad</h3>
+                  <p>Concentración operativa por bodega.</p>
+                </div>
+              </div>
+              <div id="inventory-bodega-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Productos con mayor rotación</h3>
+                  <p>Productos más movidos por cantidad dentro del histórico filtrado.</p>
+                </div>
+              </div>
+              <div id="inventory-rotation-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Impacto económico por categoría</h3>
+                  <p>Costo movilizado por categoría para detectar presión operativa.</p>
+                </div>
+              </div>
+              <div id="inventory-category-chart" class="chart"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Contabilidad</p>
+              <h2>Intensidad del asiento y focos de imputación</h2>
+            </div>
+            <div class="inline-filters">
+              <label class="inline-filter">
+                <span>Cuenta</span>
+                <select id="accounting-account-filter"></select>
+              </label>
+              <label class="inline-filter">
+                <span>Centro costo</span>
+                <select id="accounting-center-filter"></select>
+              </label>
+            </div>
+          </div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Actividad mensual contable</h3>
+                  <p>Asientos, debe y haber consolidados por mes.</p>
+                </div>
+              </div>
+              <div id="accounting-monthly-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Cuentas más activas</h3>
+                  <p>Mayor peso económico y volumen contable por cuenta.</p>
+                </div>
+              </div>
+              <div id="accounting-accounts-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Centros de costo</h3>
+                  <p>Distribución de impacto económico por centro.</p>
+                </div>
+              </div>
+              <div id="accounting-centers-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Balance por tipo</h3>
+                  <p>Comparativa de debe y haber dentro del periodo activo.</p>
+                </div>
+              </div>
+              <div id="accounting-balance-chart" class="chart"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Calidad de datos</p>
+              <h2>Integridad, brechas y hallazgos</h2>
+            </div>
+          </div>
+          <div class="quality-grid">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Fuente vs tabla principal</h3>
+                  <p>Diferencias entre conteos origen y materialización analítica.</p>
+                </div>
+              </div>
+              <div id="quality-difference-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Integridad relacional</h3>
+                  <p>Estado de huérfanos y control de referencias.</p>
+                </div>
+              </div>
+              <div id="quality-fk-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Indicadores críticos</h3>
+                  <p>Placeholders, nulos permitidos y cobertura temporal.</p>
+                </div>
+              </div>
+              <div class="metric-grid compact" id="quality-metrics"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Tablas analíticas</p>
+              <h2>Lectura detallada y exportación</h2>
+            </div>
+          </div>
+          <div class="table-grid">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Top clientes</h3>
+                  <p>Clientes líderes por monto consolidado.</p>
+                </div>
+                <button class="ghost-button" data-export-table="top-customers" type="button">Exportar CSV</button>
+              </div>
+              <div id="top-customers-table" class="table-wrap"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Top productos</h3>
+                  <p>Productos líderes por ingreso y cantidad.</p>
+                </div>
+                <button class="ghost-button" data-export-table="top-products" type="button">Exportar CSV</button>
+              </div>
+              <div id="top-products-table" class="table-wrap"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Top bodegas</h3>
+                  <p>Bodegas con mayor intensidad operativa.</p>
+                </div>
+                <button class="ghost-button" data-export-table="top-bodegas" type="button">Exportar CSV</button>
+              </div>
+              <div id="top-bodegas-table" class="table-wrap"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Top cuentas contables</h3>
+                  <p>Cuentas con mayor valor acumulado.</p>
+                </div>
+                <button class="ghost-button" data-export-table="top-accounts" type="button">Exportar CSV</button>
+              </div>
+              <div id="top-accounts-table" class="table-wrap"></div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

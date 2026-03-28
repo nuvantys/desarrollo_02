@@ -1,0 +1,1553 @@
+{
+  "run_id": "20260328180214",
+  "coverage_min": "2019-01-01",
+  "coverage_max": "2026-12-31",
+  "generated_at": "2026-03-28T13:35:14-05:00",
+  "filters_available": {
+    "document_types": [
+      {
+        "value": "FAC",
+        "label": "FAC",
+        "count": 19342
+      },
+      {
+        "value": "COT",
+        "label": "COT",
+        "count": 1971
+      },
+      {
+        "value": "DAC",
+        "label": "DAC",
+        "count": 957
+      },
+      {
+        "value": "NCT",
+        "label": "NCT",
+        "count": 438
+      },
+      {
+        "value": "NAI",
+        "label": "NAI",
+        "count": 355
+      },
+      {
+        "value": "DNA",
+        "label": "DNA",
+        "count": 348
+      },
+      {
+        "value": "NVE",
+        "label": "NVE",
+        "count": 228
+      },
+      {
+        "value": "CVE",
+        "label": "CVE",
+        "count": 163
+      },
+      {
+        "value": "LQC",
+        "label": "LQC",
+        "count": 51
+      },
+      {
+        "value": "REE",
+        "label": "REE",
+        "count": 30
+      },
+      {
+        "value": "EXP",
+        "label": "EXP",
+        "count": 22
+      },
+      {
+        "value": "NCL",
+        "label": "NCL",
+        "count": 2
+      },
+      {
+        "value": "PRE",
+        "label": "PRE",
+        "count": 2
+      },
+      {
+        "value": "OCV",
+        "label": "OCV",
+        "count": 1
+      },
+      {
+        "value": "PEA",
+        "label": "PEA",
+        "count": 1
+      }
+    ],
+    "document_states": [
+      {
+        "value": "G",
+        "label": "G",
+        "count": 10812
+      },
+      {
+        "value": "C",
+        "label": "C",
+        "count": 10653
+      },
+      {
+        "value": "P",
+        "label": "P",
+        "count": 1255
+      },
+      {
+        "value": "E",
+        "label": "E",
+        "count": 1124
+      },
+      {
+        "value": "A",
+        "label": "A",
+        "count": 65
+      },
+      {
+        "value": "F",
+        "label": "F",
+        "count": 1
+      },
+      {
+        "value": "R",
+        "label": "R",
+        "count": 1
+      }
+    ],
+    "bodegas": [
+      {
+        "value": "NO8bYrxZfkmRd7j4",
+        "label": "BODEGA PRINCIPAL",
+        "count": 5267
+      },
+      {
+        "value": "5xmbm8PZS18waoKM",
+        "label": "ALMACEN MACHACHI",
+        "count": 2456
+      },
+      {
+        "value": "GEjb2rJmTKWqbVNW",
+        "label": "BODEGA LUIS CONDOR",
+        "count": 930
+      },
+      {
+        "value": "wJvaMN3KuxDKbpzg",
+        "label": "CESAR CUAMACAS",
+        "count": 93
+      },
+      {
+        "value": "3RBe311q3s7o1bLJ",
+        "label": "JOSELYN MEJIA",
+        "count": 54
+      },
+      {
+        "value": "1mBdJz3ziplGd0J6",
+        "label": "JUAN CARLOS INSUASTI",
+        "count": 43
+      },
+      {
+        "value": "NO8bYYOZikmRb7j4",
+        "label": "MARGIT CEVALLOS",
+        "count": 42
+      },
+      {
+        "value": "4pzb8Kg4tOWVaEwN",
+        "label": "MIGUEL MEJIA",
+        "count": 34
+      },
+      {
+        "value": "RYWb4G2ZFYENaZ1m",
+        "label": "JUAN JOSUE GALLARDO",
+        "count": 23
+      },
+      {
+        "value": "4LmavrqZCOqma3Nr",
+        "label": "CONSIGNACION (A. FLORES, MARGIT CEVALLOS, M. FREIRE)",
+        "count": 19
+      },
+      {
+        "value": "yBXdL03BCNVxdJZY",
+        "label": "SANDRO CHAMORRO",
+        "count": 17
+      },
+      {
+        "value": "rQzaOYY81h5lVdp4",
+        "label": "EMERGENCIAS STOCK TÉCNICOS",
+        "count": 12
+      },
+      {
+        "value": "91qdGEPXhWExaN8j",
+        "label": "BODEGA PORTATIL LOCAL MACHACHI",
+        "count": 11
+      },
+      {
+        "value": "xBleXDDnzIBjverN",
+        "label": "CARLOS MUYOBISÑA",
+        "count": 6
+      },
+      {
+        "value": "Q9jaKz39s8Pgek5K",
+        "label": "JUAN CARLOS MOLINA",
+        "count": 6
+      },
+      {
+        "value": "gDGe7VM5CE25dn2x",
+        "label": "MARCELO ZAPATA",
+        "count": 4
+      },
+      {
+        "value": "J0yelEBkhOmJaER7",
+        "label": "BODEGA 2019",
+        "count": 0
+      },
+      {
+        "value": "4Lmav7L9SOqmb3Nr",
+        "label": "BODEGA JUAN CABASCANGO",
+        "count": 0
+      },
+      {
+        "value": "3RBe3vJDt7o1dLJr",
+        "label": "BODEGA PORTATILES OFICINA",
+        "count": 0
+      },
+      {
+        "value": "DKVeZvyysPAZe8Py",
+        "label": "MERCADERIA EN TRANSITO",
+        "count": 0
+      },
+      {
+        "value": "DKVeZDZZIPAZb8Py",
+        "label": "SANTA ISABEL DE ZULETA",
+        "count": 0
+      }
+    ],
+    "categories": [
+      {
+        "value": "pXKdwpoKOh0kMegW",
+        "label": "REPUESTOS VARIOS",
+        "count": 667
+      },
+      {
+        "value": "RYWb4xoNzsYENbZ1",
+        "label": "REPUESTOS",
+        "count": 314
+      },
+      {
+        "value": "4pzb82vRXFOWVeEw",
+        "label": "PEZONERAS",
+        "count": 40
+      },
+      {
+        "value": "vj6e9rwVLURAyaWB",
+        "label": "BOMBAS DE VACIO",
+        "count": 34
+      },
+      {
+        "value": "GEjb2kmLxtKWqdVN",
+        "label": "CONSUMIBLES",
+        "count": 34
+      },
+      {
+        "value": "gArb68qP0sV72eyR",
+        "label": "MANGUERAS",
+        "count": 33
+      },
+      {
+        "value": "91qdG61ZVFWExbN8",
+        "label": "TANQUES DE ENFRIAMIENTO",
+        "count": 24
+      },
+      {
+        "value": "jMEegJjl8tPKXdQ5",
+        "label": "MOTORES A GASOLINA",
+        "count": 14
+      },
+      {
+        "value": "oLqdPN07QCv9Yal4",
+        "label": "MANO DE OBRA",
+        "count": 12
+      },
+      {
+        "value": "pXKdwr3xqF0kMbgW",
+        "label": "PANELES SOLARES",
+        "count": 11
+      },
+      {
+        "value": "DKVeZzXkyuPAZe8P",
+        "label": "MOTORES ELECTRICOS",
+        "count": 9
+      },
+      {
+        "value": "mloej8WorulDLbQM",
+        "label": "POLEAS",
+        "count": 8
+      },
+      {
+        "value": "GP9aQ6xnvcBgGbDM",
+        "label": "SILENCIADORES",
+        "count": 8
+      },
+      {
+        "value": "rQzaOP9QzF5lVbp4",
+        "label": "DETERGENTES",
+        "count": 7
+      },
+      {
+        "value": "DKVeZ6BP4IPAZe8P",
+        "label": "EQUIPOS DE ORDEÑO",
+        "count": 7
+      },
+      {
+        "value": "1mBdJN17RiplGd0J",
+        "label": "General",
+        "count": 6
+      },
+      {
+        "value": "3RBe3yJ75F7o1bLJ",
+        "label": "REPUESTOS DE GOMA",
+        "count": 4
+      },
+      {
+        "value": "Zxgep2WxjsQqrb1p",
+        "label": "COMPONENTE DE GOMA",
+        "count": 3
+      },
+      {
+        "value": "yBXdLg6ABCNVxbJZ",
+        "label": "PRODUCTOS 2019",
+        "count": 2
+      },
+      {
+        "value": "xGge0g7oiJQOdADR",
+        "label": "__missing__:xGge0g7oiJQOdADR",
+        "count": 0
+      },
+      {
+        "value": "xBleXDzNxTBjverN",
+        "label": "PRODUCTOS TERMINADOS",
+        "count": 0
+      },
+      {
+        "value": "GEjb27J60IKWqdVN",
+        "label": "REPUESTOS PVC",
+        "count": 0
+      },
+      {
+        "value": "DkPbk7Wp1SYAVb5Y",
+        "label": null,
+        "count": 0
+      }
+    ],
+    "accounts": [
+      {
+        "value": "MEegJZVqvfPKXdQ5",
+        "label": "INVENTARIO DE REPUESTOS",
+        "count": 46623
+      },
+      {
+        "value": "0yelYxVlQIOmJaER",
+        "label": "COSTO DE REPUESTOS",
+        "count": 30599
+      },
+      {
+        "value": "loejRZVwGclDLeQM",
+        "label": "VENTA DE REPUESTOS",
+        "count": 29370
+      },
+      {
+        "value": "RMdR6OwLktno9dl6",
+        "label": "Clientes Comerciales",
+        "count": 24815
+      },
+      {
+        "value": "pZeVOAlJDU0mraGW",
+        "label": "Proveedores",
+        "count": 22058
+      },
+      {
+        "value": "EMaxkn98mtmD6e5G",
+        "label": "Rebaja y/o Descuentos sobre Ventas",
+        "count": 16481
+      },
+      {
+        "value": "YWb4xQDrPsYENbZ1",
+        "label": "BANCO PICHINCHA",
+        "count": 12032
+      },
+      {
+        "value": "5wboY3RwMhl5NexE",
+        "label": "BANCO DE GUAYAQUIL",
+        "count": 7717
+      },
+      {
+        "value": "rRbDk1PYRIjw2a6L",
+        "label": "IVA sobre Compras",
+        "count": 6166
+      },
+      {
+        "value": "5wbo2V9Bxil5NaxE",
+        "label": "VENTA DE CONSUMIBLES",
+        "count": 5827
+      },
+      {
+        "value": "1qdG6vgQXsWExbN8",
+        "label": "IVA sobre Ventas",
+        "count": 5429
+      },
+      {
+        "value": "MEegJZ6QvSPKXdQ5",
+        "label": "Cuenta por Pagar Funcionarios y/o Empleados",
+        "count": 4729
+      },
+      {
+        "value": "Yjbqx7XEKtLnAaLN",
+        "label": "INVENTARIO DE CONSUMIBLES",
+        "count": 4529
+      },
+      {
+        "value": "Lmav2l7MWCOqma3N",
+        "label": "COSTO DE CONSUMIBLES",
+        "count": 3694
+      },
+      {
+        "value": "wKe5yQEv4Fg3me31",
+        "label": "CAJA PRINCIPAL",
+        "count": 3334
+      },
+      {
+        "value": "Arb68X2VxhV72eyR",
+        "label": "Combustible Vtas.",
+        "count": 2580
+      },
+      {
+        "value": "gQbW6zYY0HzZ7a6w",
+        "label": "Tarjeta de Crédito ( Diners Club )",
+        "count": 2554
+      },
+      {
+        "value": "loejR6vKXslDLeQM",
+        "label": "1.75% Bienes Muebles de Naturaleza Corporal",
+        "count": 2427
+      },
+      {
+        "value": "Lmav2lDR7tOqma3N",
+        "label": "Prestación de Servicios",
+        "count": 2293
+      },
+      {
+        "value": "EMaxkn9LDtmD6e5G",
+        "label": "Suministros, Materiales y Repuestos Costos",
+        "count": 2100
+      },
+      {
+        "value": "XKdwpVZ59u0kMegW",
+        "label": "Otros Gastos Financieros",
+        "count": 1955
+      },
+      {
+        "value": "RBe31j3vmC7o1bLJ",
+        "label": "Anticipo a Empleados",
+        "count": 1593
+      },
+      {
+        "value": "YWb4xQ4YXuYENbZ1",
+        "label": "Sueldos por Pagar",
+        "count": 1560
+      },
+      {
+        "value": "mBdJ6ylWLUplGd0J",
+        "label": "Alimentación Vtas.",
+        "count": 1499
+      },
+      {
+        "value": "wKe5yQ3w0hg3me31",
+        "label": "Miscelaneos Vtas.",
+        "count": 1496
+      },
+      {
+        "value": "Y4erk8XMmHw7Ka2L",
+        "label": "Otras Retenciones Aplicables al Cód. 343",
+        "count": 1363
+      },
+      {
+        "value": "MEegJMxEwCPKXdQ5",
+        "label": "1.75% Bienes Muebles de Naturaleza Corporal",
+        "count": 1325
+      },
+      {
+        "value": "xmbmZOGEoH18wdoK",
+        "label": "Mercaderías en Transito",
+        "count": 1293
+      },
+      {
+        "value": "XKdwpVZRkc0kMegW",
+        "label": "30% Bienes",
+        "count": 1288
+      },
+      {
+        "value": "RBe31rRL1t7o1bLJ",
+        "label": "Materiales de Ferretería",
+        "count": 1048
+      },
+      {
+        "value": "jZdyPoMm1h6KvbJ4",
+        "label": "Anticipo a Proveedores",
+        "count": 971
+      },
+      {
+        "value": "Gge0RYOA1IJQObAD",
+        "label": "9.45% Aportes Individuales",
+        "count": 942
+      },
+      {
+        "value": "BleXDLnkzsBjverN",
+        "label": "11.15% Aportes Patronales I.E.S.S.",
+        "count": 941
+      },
+      {
+        "value": "O8bYEW0lPSkmRb7j",
+        "label": "1% Secap - Iece",
+        "count": 931
+      },
+      {
+        "value": "xgepY8778cQqra1p",
+        "label": "Anticipos de Clientes",
+        "count": 918
+      },
+      {
+        "value": "LqdPNKm43tv9Yal4",
+        "label": "Mantenimiento Vehículo",
+        "count": 843
+      },
+      {
+        "value": "9jaKr1mzqh8Pgek5",
+        "label": "Fletes",
+        "count": 836
+      },
+      {
+        "value": "gQbW6LmjrfzZ7a6w",
+        "label": "Vacaciones",
+        "count": 788
+      },
+      {
+        "value": "RBe31KLK3I7o1bLJ",
+        "label": "Tarjeta de Crédito (Datafast)",
+        "count": 785
+      },
+      {
+        "value": "RMdR6Ow5vUno9dl6",
+        "label": "Décimo Tercer Sueldo",
+        "count": 717
+      },
+      {
+        "value": "pZeVOAl0Df0mraGW",
+        "label": "Décimo Cuarto Sueldo",
+        "count": 714
+      },
+      {
+        "value": "9jaKr7X4qF8Pgek5",
+        "label": "Peajes",
+        "count": 713
+      },
+      {
+        "value": "xgepY7mnoiQqra1p",
+        "label": "2.75% Servicios",
+        "count": 692
+      },
+      {
+        "value": "0yelYxDMQFOmJaER",
+        "label": "1% Bienes Muebles de Naturaleza Corporal",
+        "count": 691
+      },
+      {
+        "value": "Gge0RYO3muJQObAD",
+        "label": "Guías de Transportes Vtas.",
+        "count": 636
+      },
+      {
+        "value": "rRbDk1PWXIjw2a6L",
+        "label": "Sueldos Unificados Vtas.",
+        "count": 570
+      },
+      {
+        "value": "01dNkLp1kiVJKeX7",
+        "label": "Décimo Tercer Sueldo Vtas.",
+        "count": 569
+      },
+      {
+        "value": "QzaOYMq97F5lVdp4",
+        "label": "Décimo Cuarto Sueldo Vtas.",
+        "count": 567
+      },
+      {
+        "value": "9jaKr1m9Wh8Pgek5",
+        "label": "Aportes Patronales al IESS Vtas.",
+        "count": 566
+      },
+      {
+        "value": "EMaxkn97VTmD6e5G",
+        "label": "70% Servicios",
+        "count": 565
+      }
+    ],
+    "cost_centers": [
+      {
+        "value": "9pgenrglKFlg0eNQ",
+        "label": "Bodega Principal",
+        "count": 57352
+      },
+      {
+        "value": "N5wboQjmxil5NexE",
+        "label": "Bodega Machachi",
+        "count": 17602
+      }
+    ]
+  },
+  "top_customers": [
+    {
+      "cliente_nombre": "Consumidor Final",
+      "documentos": 308,
+      "monto_total": 480704.0
+    },
+    {
+      "cliente_nombre": "JUAN JOSUE GALLARDO HERRERA",
+      "documentos": 347,
+      "monto_total": 355063.29
+    },
+    {
+      "cliente_nombre": "NOVAGRITECH S.A.",
+      "documentos": 39,
+      "monto_total": 350818.75
+    },
+    {
+      "cliente_nombre": "ALVACORA DUY MARITZA VERONICA",
+      "documentos": 159,
+      "monto_total": 323934.95
+    },
+    {
+      "cliente_nombre": "MIGUEL ACEVES MEJIA QUIROZ",
+      "documentos": 117,
+      "monto_total": 295937.06
+    },
+    {
+      "cliente_nombre": "SANDRO ALIRIO CHAMORRO HERNANDEZ",
+      "documentos": 99,
+      "monto_total": 250373.19
+    },
+    {
+      "cliente_nombre": "COMERCIALIZADORA DJE S.A.S.",
+      "documentos": 46,
+      "monto_total": 239241.81
+    },
+    {
+      "cliente_nombre": "ANGELICA MICHELLE CHAMORRO CADENA",
+      "documentos": 112,
+      "monto_total": 194217.07
+    },
+    {
+      "cliente_nombre": "MILKMAXFRIO S.A.",
+      "documentos": 137,
+      "monto_total": 168776.72
+    },
+    {
+      "cliente_nombre": "FUNDACION MAQUITA CUSHUNCHIC COMERCIALIZANDO COMO HERMANOS \"MCCH\"",
+      "documentos": 8,
+      "monto_total": 168646.52
+    },
+    {
+      "cliente_nombre": "AGRIGATAPIA",
+      "documentos": 88,
+      "monto_total": 153108.46
+    },
+    {
+      "cliente_nombre": "MAVEVAX CIA LTDA",
+      "documentos": 80,
+      "monto_total": 145699.18
+    },
+    {
+      "cliente_nombre": "EDGAR FELIMON OSORIO MENA",
+      "documentos": 210,
+      "monto_total": 142335.9
+    },
+    {
+      "cliente_nombre": "ECUALACTA CIA. LTDA.",
+      "documentos": 105,
+      "monto_total": 131754.34
+    },
+    {
+      "cliente_nombre": "Industria Agrícola Ganadera KAERI",
+      "documentos": 86,
+      "monto_total": 127591.09
+    },
+    {
+      "cliente_nombre": "ELVIA JANET MADRID GARCIA",
+      "documentos": 198,
+      "monto_total": 125592.52
+    },
+    {
+      "cliente_nombre": "SOSA JARRIN DANIEL ANDRES",
+      "documentos": 89,
+      "monto_total": 119173.73
+    },
+    {
+      "cliente_nombre": "Jorge Luis Cabezas Monteros",
+      "documentos": 146,
+      "monto_total": 116699.67
+    },
+    {
+      "cliente_nombre": "AGROINDUSTRIAL OBRAGRO S.A",
+      "documentos": 61,
+      "monto_total": 108909.82
+    },
+    {
+      "cliente_nombre": "CESAR AUGUSTO CUAMACAS ESCOBAR",
+      "documentos": 79,
+      "monto_total": 107319.82
+    },
+    {
+      "cliente_nombre": "NOBOA TORRES FABIOLA MARGARITA",
+      "documentos": 6,
+      "monto_total": 107300.0
+    },
+    {
+      "cliente_nombre": "Sociedad Comercial Almara S. C.",
+      "documentos": 26,
+      "monto_total": 98238.98
+    },
+    {
+      "cliente_nombre": "AGROSANPATRICIO CIA LTDA",
+      "documentos": 77,
+      "monto_total": 93649.83
+    },
+    {
+      "cliente_nombre": "JHONNY PATRICIO HERRERA TORRES",
+      "documentos": 159,
+      "monto_total": 93568.52
+    },
+    {
+      "cliente_nombre": "LACTALIS DEL ECUADOR S.A.",
+      "documentos": 73,
+      "monto_total": 90073.38
+    },
+    {
+      "cliente_nombre": "JAIME HUMBERTO VELOZ GALVEZ",
+      "documentos": 32,
+      "monto_total": 83790.54
+    },
+    {
+      "cliente_nombre": "MARCOS ISRAEL CABEZAS MONTEROS",
+      "documentos": 92,
+      "monto_total": 78425.6
+    },
+    {
+      "cliente_nombre": "CUASAPAZ HUERA LAURA ALICIA",
+      "documentos": 29,
+      "monto_total": 74780.86
+    },
+    {
+      "cliente_nombre": "JAIME OMAR FIGUEROA REA",
+      "documentos": 80,
+      "monto_total": 74499.5
+    },
+    {
+      "cliente_nombre": "MARTIN EDUARDO CARDENAS PARRA",
+      "documentos": 78,
+      "monto_total": 72838.56
+    },
+    {
+      "cliente_nombre": "ANGEL MESIAS IZA ALDAS",
+      "documentos": 247,
+      "monto_total": 71889.8
+    },
+    {
+      "cliente_nombre": "AREVALO MONTENEGRO IGNACIO",
+      "documentos": 22,
+      "monto_total": 68713.31
+    },
+    {
+      "cliente_nombre": "PONCE GANGOTENA CAMILO",
+      "documentos": 79,
+      "monto_total": 67782.25
+    },
+    {
+      "cliente_nombre": "JOSELYN NICOLE MEJIA CHULDE",
+      "documentos": 23,
+      "monto_total": 67421.45
+    },
+    {
+      "cliente_nombre": "GONZALEZ MERELLO ERMELINDA IMELDA",
+      "documentos": 17,
+      "monto_total": 67097.73
+    },
+    {
+      "cliente_nombre": "HERNAN MAURICIO SALINAS PROAÑO",
+      "documentos": 86,
+      "monto_total": 66680.19
+    },
+    {
+      "cliente_nombre": "CHISA MALDONADO FREDDY EXEQUIEL",
+      "documentos": 105,
+      "monto_total": 66069.5
+    },
+    {
+      "cliente_nombre": "INSUASTI NOBOA ELIANA STEPHANY",
+      "documentos": 34,
+      "monto_total": 64959.55
+    },
+    {
+      "cliente_nombre": "CARMEN HERMENCIA PAREDES GUEVARA",
+      "documentos": 9,
+      "monto_total": 62949.12
+    },
+    {
+      "cliente_nombre": "MARIA CRISTINA PAZMIÑO MOROCHZ",
+      "documentos": 102,
+      "monto_total": 60648.2
+    },
+    {
+      "cliente_nombre": "EDWIN PATRICIO ARIAS LARA",
+      "documentos": 58,
+      "monto_total": 59144.8
+    },
+    {
+      "cliente_nombre": "SUQUISUPA IÑAGUAZO FANNY MARLENE",
+      "documentos": 125,
+      "monto_total": 57807.25
+    },
+    {
+      "cliente_nombre": "INSUGAN",
+      "documentos": 44,
+      "monto_total": 51638.96
+    },
+    {
+      "cliente_nombre": "OCTAVIO JOSE DONOSO CALVO",
+      "documentos": 37,
+      "monto_total": 51576.18
+    },
+    {
+      "cliente_nombre": "CORPORACION DEL CAMPO SAS",
+      "documentos": 19,
+      "monto_total": 49859.67
+    },
+    {
+      "cliente_nombre": "AGROINDUSTRIA FLAMINGO AGROFLAMINGO CIA. LTDA.",
+      "documentos": 15,
+      "monto_total": 48721.49
+    },
+    {
+      "cliente_nombre": "ALARCON CRUZ EDISON FRANCISCO",
+      "documentos": 17,
+      "monto_total": 48115.06
+    },
+    {
+      "cliente_nombre": "FERNANDO VAREA",
+      "documentos": 56,
+      "monto_total": 47732.3
+    },
+    {
+      "cliente_nombre": "CARLOS EDUARDO DEL HIERRO AGUIRRE",
+      "documentos": 122,
+      "monto_total": 46903.11
+    },
+    {
+      "cliente_nombre": "PREDIOS TANDAPUNGO S.A.",
+      "documentos": 57,
+      "monto_total": 46364.85
+    }
+  ],
+  "top_products": [
+    {
+      "producto_nombre": "Sin producto",
+      "categoria_nombre": "Sin categoría",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 21333.13,
+      "importe_total": 6261483.31
+    },
+    {
+      "producto_nombre": "EQUIPO DE ORDEÑO",
+      "categoria_nombre": "EQUIPOS DE ORDEÑO",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 487.0,
+      "importe_total": 1698962.55
+    },
+    {
+      "producto_nombre": "BOMBA DE VACIO CTA 1500 LITROS COMPLETA (INCLUYE SILENCIADOR Y ACEITERA)",
+      "categoria_nombre": "BOMBAS DE VACIO",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 154.0,
+      "importe_total": 336014.99
+    },
+    {
+      "producto_nombre": "MANO DE OBRA",
+      "categoria_nombre": "MANO DE OBRA",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 2909.0,
+      "importe_total": 266111.73
+    },
+    {
+      "producto_nombre": "BVT 1 BOMBA DE VACIO AGROLATTEC ( EL TRIUNFO ) 460LTS",
+      "categoria_nombre": "BOMBAS DE VACIO",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 575.0,
+      "importe_total": 254848.3
+    },
+    {
+      "producto_nombre": "COLECTOR CLASSIC 300 POLISULFONA",
+      "categoria_nombre": "REPUESTOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 2620.0,
+      "importe_total": 249328.86
+    },
+    {
+      "producto_nombre": "BOMBA CTA 750",
+      "categoria_nombre": "BOMBAS DE VACIO",
+      "marca_nombre": "MAYFRA",
+      "cantidad_total": 152.0,
+      "importe_total": 217695.27
+    },
+    {
+      "producto_nombre": "PEZONERAS DL016U ( MILKRITE )",
+      "categoria_nombre": "PEZONERAS",
+      "marca_nombre": "MILKRITE",
+      "cantidad_total": 9938.0,
+      "importe_total": 210601.11
+    },
+    {
+      "producto_nombre": "BOMBA DE VACIO CTA 2200 LITROS COMPLETA (INCLUYE SILENCIADOR Y ACEITERA)",
+      "categoria_nombre": "BOMBAS DE VACIO",
+      "marca_nombre": "MAYFRA",
+      "cantidad_total": 60.0,
+      "importe_total": 180571.34
+    },
+    {
+      "producto_nombre": "COPA DE ORDENO INOX",
+      "categoria_nombre": "REPUESTOS",
+      "marca_nombre": "ZIBO",
+      "cantidad_total": 8615.0,
+      "importe_total": 171931.77
+    },
+    {
+      "producto_nombre": "DETERGENTE ALCALINO - CANECA 20 LTS",
+      "categoria_nombre": "DETERGENTES",
+      "marca_nombre": "DISTRIBUIDORA S Y P",
+      "cantidad_total": 5518.0,
+      "importe_total": 163809.84
+    },
+    {
+      "producto_nombre": "Tanque de enfriamiento de Leche Vertical 2000 LT (02) Mono 220V 60Hz EXP",
+      "categoria_nombre": "TANQUES DE ENFRIAMIENTO",
+      "marca_nombre": "REAFRIO",
+      "cantidad_total": 18.0,
+      "importe_total": 161697.23
+    },
+    {
+      "producto_nombre": "MANGUERA DE LECHE 5/8 - INABOR",
+      "categoria_nombre": "MANGUERAS",
+      "marca_nombre": "INABOR",
+      "cantidad_total": 17323.16,
+      "importe_total": 152372.85
+    },
+    {
+      "producto_nombre": "PULSADOR NEUMATICO L80",
+      "categoria_nombre": "REPUESTOS VARIOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 1452.0,
+      "importe_total": 134468.98
+    },
+    {
+      "producto_nombre": "PRODUCTOS SIN IVA 2019",
+      "categoria_nombre": "PRODUCTOS 2019",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 141.0,
+      "importe_total": 124674.33
+    },
+    {
+      "producto_nombre": "BOMBA CTA 1500",
+      "categoria_nombre": "BOMBAS DE VACIO",
+      "marca_nombre": "MAYFRA",
+      "cantidad_total": 65.0,
+      "importe_total": 119376.64
+    },
+    {
+      "producto_nombre": "MATERIALES VARIOS",
+      "categoria_nombre": "REPUESTOS VARIOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 4449.83,
+      "importe_total": 115663.15
+    },
+    {
+      "producto_nombre": "MANGUERA PULSADO DOBLE - INABOR",
+      "categoria_nombre": "MANGUERAS",
+      "marca_nombre": "INABOR",
+      "cantidad_total": 13624.89,
+      "importe_total": 106099.66
+    },
+    {
+      "producto_nombre": "SELLADOR DE UBRES - CANECA 20 LTS",
+      "categoria_nombre": "DETERGENTES",
+      "marca_nombre": "DISTRIBUIDORA S Y P",
+      "cantidad_total": 2699.2,
+      "importe_total": 103061.59
+    },
+    {
+      "producto_nombre": "REPUESTO PARA EQUIPO DE ORDEÑO",
+      "categoria_nombre": "REPUESTOS VARIOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 3406.51,
+      "importe_total": 101948.61
+    },
+    {
+      "producto_nombre": "MANGUERA DE LECHE 5/8 ( 16X25) MAYFRA",
+      "categoria_nombre": "MANGUERAS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 12801.73,
+      "importe_total": 95767.12
+    },
+    {
+      "producto_nombre": "DETERGENTE ACIDO - CANECA 20 LTS",
+      "categoria_nombre": "DETERGENTES",
+      "marca_nombre": "DISTRIBUIDORA S Y P",
+      "cantidad_total": 2377.0,
+      "importe_total": 94546.46
+    },
+    {
+      "producto_nombre": "BOMBA DE LECHE 220V",
+      "categoria_nombre": "REPUESTOS VARIOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 111.0,
+      "importe_total": 94264.06
+    },
+    {
+      "producto_nombre": "ACEITE BOMBA DE VACIO",
+      "categoria_nombre": "CONSUMIBLES",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 1015.75,
+      "importe_total": 93506.9
+    },
+    {
+      "producto_nombre": "SISTEMA DE MEDICION ELECTRONICA PARA EQUIPO DE ORDEÑO",
+      "categoria_nombre": "REPUESTOS VARIOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 10.0,
+      "importe_total": 92103.12
+    },
+    {
+      "producto_nombre": "BOMBA DE VACIO CTA 750 COMPLETA (INCLUYE SILENCIADOR Y ACEITERA)",
+      "categoria_nombre": "BOMBAS DE VACIO",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 56.0,
+      "importe_total": 88954.95
+    },
+    {
+      "producto_nombre": "TANQUE DE ENFRIAMIENTO MILKPLAN - CAPACIDAD 1000 LTS",
+      "categoria_nombre": "TANQUES DE ENFRIAMIENTO",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 6.0,
+      "importe_total": 80870.0
+    },
+    {
+      "producto_nombre": "PULSADOR NEUMATICO LT80 / 2 SALIDAS",
+      "categoria_nombre": "REPUESTOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 1195.0,
+      "importe_total": 80853.47
+    },
+    {
+      "producto_nombre": "REFORMA SISTEMA DE ORDEÑO",
+      "categoria_nombre": "EQUIPOS DE ORDEÑO",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 18.0,
+      "importe_total": 77971.76
+    },
+    {
+      "producto_nombre": "MEDIDOR DE FLUJO EFM-1",
+      "categoria_nombre": "REPUESTOS VARIOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 222.0,
+      "importe_total": 74724.78
+    },
+    {
+      "producto_nombre": "Tanque de enfriamiento de Leche Vertical 1500 LT (02) Mono 220V 60Hz EXP",
+      "categoria_nombre": "TANQUES DE ENFRIAMIENTO",
+      "marca_nombre": "REAFRIO",
+      "cantidad_total": 10.0,
+      "importe_total": 74700.0
+    },
+    {
+      "producto_nombre": "MEDIDOR MINI PLUS GMZ",
+      "categoria_nombre": "REPUESTOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 116.0,
+      "importe_total": 74046.16
+    },
+    {
+      "producto_nombre": "PEZONERA ULTRA MOD 1 ANILLO 10 MM (AL2U)",
+      "categoria_nombre": "PEZONERAS",
+      "marca_nombre": "INABOR",
+      "cantidad_total": 2718.0,
+      "importe_total": 72940.22
+    },
+    {
+      "producto_nombre": "MANGUERA DE PULSADO DOBLE ( MAYFRA )",
+      "categoria_nombre": "MANGUERAS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 9103.63,
+      "importe_total": 68355.46
+    },
+    {
+      "producto_nombre": "LAVADO PROGRAMABLE L20Z",
+      "categoria_nombre": "REPUESTOS VARIOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 15.0,
+      "importe_total": 67218.18
+    },
+    {
+      "producto_nombre": "RECIBIDOR DE LECHE INOXIDABLE DE 50 LITROS OZT",
+      "categoria_nombre": "REPUESTOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 89.0,
+      "importe_total": 66366.29
+    },
+    {
+      "producto_nombre": "PEZONERAS BOSIO IRLANDA ( MILKRITE )",
+      "categoria_nombre": "PEZONERAS",
+      "marca_nombre": "MILKRITE",
+      "cantidad_total": 2660.0,
+      "importe_total": 61828.87
+    },
+    {
+      "producto_nombre": "TANQUE DE ENFRIAMIENTO MILKPLAN - CAPACIDAD 1250 LTS",
+      "categoria_nombre": "TANQUES DE ENFRIAMIENTO",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 11.0,
+      "importe_total": 58730.0
+    },
+    {
+      "producto_nombre": "ACCIONADOR ELECTROBOMBA POR FLOTADOR",
+      "categoria_nombre": "REPUESTOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 226.0,
+      "importe_total": 58225.77
+    },
+    {
+      "producto_nombre": "TANQUE DE ENFRIAMIENTO MILKPLAN - CAPACIDAD 2000 LTS",
+      "categoria_nombre": "TANQUES DE ENFRIAMIENTO",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 8.0,
+      "importe_total": 57892.0
+    },
+    {
+      "producto_nombre": "MANGUERA DE LECHE 5/8 - TERRAFLEX",
+      "categoria_nombre": "MANGUERAS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 7250.95,
+      "importe_total": 57254.33
+    },
+    {
+      "producto_nombre": "GUARNICION TAPA TACHO GRANDE",
+      "categoria_nombre": "REPUESTOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 1645.0,
+      "importe_total": 56720.68
+    },
+    {
+      "producto_nombre": "MOTOR DE 7.5 HP DUCATI",
+      "categoria_nombre": "MOTORES A GASOLINA",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 187.0,
+      "importe_total": 55559.99
+    },
+    {
+      "producto_nombre": "PEZONERA MILKRITE TRIANGULAR IP15 VENTILADA",
+      "categoria_nombre": "PEZONERAS",
+      "marca_nombre": "MILKRITE",
+      "cantidad_total": 1502.0,
+      "importe_total": 55113.62
+    },
+    {
+      "producto_nombre": "BOMBA DE LECHE TIPO ALFA 10000 LTS X HORA",
+      "categoria_nombre": "REPUESTOS VARIOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 43.0,
+      "importe_total": 50216.69
+    },
+    {
+      "producto_nombre": "PEZONERA DL016U-10 ( MILKRITE )",
+      "categoria_nombre": "PEZONERAS",
+      "marca_nombre": "MILKRITE",
+      "cantidad_total": 1856.0,
+      "importe_total": 47775.72
+    },
+    {
+      "producto_nombre": "COPA DE ORDENO PLASTICA TRIANGULAR",
+      "categoria_nombre": "REPUESTOS",
+      "marca_nombre": "ZIBO",
+      "cantidad_total": 2649.0,
+      "importe_total": 47116.13
+    },
+    {
+      "producto_nombre": "Box Mini Plus GMZ",
+      "categoria_nombre": "REPUESTOS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 103.0,
+      "importe_total": 45830.77
+    },
+    {
+      "producto_nombre": "PULSADOR ELECTRONICO 2 SALIDAS - P501E ( INCLUYE TARJETA DE PULSADO )",
+      "categoria_nombre": "REPUESTOS VARIOS",
+      "marca_nombre": "GIMENEZ",
+      "cantidad_total": 189.0,
+      "importe_total": 44019.99
+    },
+    {
+      "producto_nombre": "MANGUERA PULSADO DOBLE - TERRAFLEX",
+      "categoria_nombre": "MANGUERAS",
+      "marca_nombre": "Sin marca",
+      "cantidad_total": 6290.65,
+      "importe_total": 43160.19
+    }
+  ],
+  "top_bodegas": [
+    {
+      "bodega_nombre": "BODEGA PRINCIPAL",
+      "movimientos": 5267,
+      "valor_total": 3856310.37
+    },
+    {
+      "bodega_nombre": "ALMACEN MACHACHI",
+      "movimientos": 2456,
+      "valor_total": 162096.11
+    },
+    {
+      "bodega_nombre": "BODEGA LUIS CONDOR",
+      "movimientos": 930,
+      "valor_total": 42953.84
+    },
+    {
+      "bodega_nombre": "CESAR CUAMACAS",
+      "movimientos": 93,
+      "valor_total": 43621.79
+    },
+    {
+      "bodega_nombre": "JOSELYN MEJIA",
+      "movimientos": 54,
+      "valor_total": 36441.82
+    },
+    {
+      "bodega_nombre": "JUAN CARLOS INSUASTI",
+      "movimientos": 43,
+      "valor_total": 4665.69
+    },
+    {
+      "bodega_nombre": "MARGIT CEVALLOS",
+      "movimientos": 42,
+      "valor_total": 1603.02
+    },
+    {
+      "bodega_nombre": "MIGUEL MEJIA",
+      "movimientos": 34,
+      "valor_total": 29951.26
+    },
+    {
+      "bodega_nombre": "JUAN JOSUE GALLARDO",
+      "movimientos": 23,
+      "valor_total": 10740.98
+    },
+    {
+      "bodega_nombre": "CONSIGNACION (A. FLORES, MARGIT CEVALLOS, M. FREIRE)",
+      "movimientos": 19,
+      "valor_total": 7776.16
+    },
+    {
+      "bodega_nombre": "SANDRO CHAMORRO",
+      "movimientos": 17,
+      "valor_total": 4932.59
+    },
+    {
+      "bodega_nombre": "EMERGENCIAS STOCK TÉCNICOS",
+      "movimientos": 12,
+      "valor_total": 1151.31
+    },
+    {
+      "bodega_nombre": "BODEGA PORTATIL LOCAL MACHACHI",
+      "movimientos": 11,
+      "valor_total": 4427.13
+    },
+    {
+      "bodega_nombre": "Sin bodega",
+      "movimientos": 7,
+      "valor_total": 0.0
+    },
+    {
+      "bodega_nombre": "CARLOS MUYOBISÑA",
+      "movimientos": 6,
+      "valor_total": 5237.31
+    },
+    {
+      "bodega_nombre": "JUAN CARLOS MOLINA",
+      "movimientos": 6,
+      "valor_total": 154.51
+    },
+    {
+      "bodega_nombre": "MARCELO ZAPATA",
+      "movimientos": 4,
+      "valor_total": 459.82
+    }
+  ],
+  "top_accounts": [
+    {
+      "cuenta_nombre": "Clientes Comerciales",
+      "lineas": 24815,
+      "valor_total": 14793461.89
+    },
+    {
+      "cuenta_nombre": "Proveedores",
+      "lineas": 22058,
+      "valor_total": 10970695.52
+    },
+    {
+      "cuenta_nombre": "BANCO PICHINCHA",
+      "lineas": 12032,
+      "valor_total": 7933130.41
+    },
+    {
+      "cuenta_nombre": "VENTA DE REPUESTOS",
+      "lineas": 29370,
+      "valor_total": 7543469.72
+    },
+    {
+      "cuenta_nombre": "INVENTARIO DE REPUESTOS",
+      "lineas": 46623,
+      "valor_total": 5519386.14
+    },
+    {
+      "cuenta_nombre": "COSTO DE REPUESTOS",
+      "lineas": 30599,
+      "valor_total": 4634935.95
+    },
+    {
+      "cuenta_nombre": "Mercaderías en Transito",
+      "lineas": 1293,
+      "valor_total": 4238090.7
+    },
+    {
+      "cuenta_nombre": "BANCO DE GUAYAQUIL",
+      "lineas": 7717,
+      "valor_total": 3830356.0
+    },
+    {
+      "cuenta_nombre": "Anticipo a Proveedores",
+      "lineas": 971,
+      "valor_total": 3437550.25
+    },
+    {
+      "cuenta_nombre": "VENTA DE EQUIPOS DE ORDEÑO",
+      "lineas": 433,
+      "valor_total": 3142604.16
+    },
+    {
+      "cuenta_nombre": "CAJA PRINCIPAL",
+      "lineas": 3334,
+      "valor_total": 2043616.3
+    },
+    {
+      "cuenta_nombre": "Proveedores Exterior",
+      "lineas": 161,
+      "valor_total": 1855724.61
+    },
+    {
+      "cuenta_nombre": "Anticipos de Clientes",
+      "lineas": 918,
+      "valor_total": 1655230.16
+    },
+    {
+      "cuenta_nombre": "Rebaja y/o Descuentos sobre Ventas",
+      "lineas": 16481,
+      "valor_total": 1488879.14
+    },
+    {
+      "cuenta_nombre": "Suministros, Materiales y Repuestos Costos",
+      "lineas": 2100,
+      "valor_total": 1033966.09
+    },
+    {
+      "cuenta_nombre": "VENTA DE PRODUCTOS 2019",
+      "lineas": 226,
+      "valor_total": 970982.34
+    },
+    {
+      "cuenta_nombre": "VENTA TANQUES DE ENFRIAMIENTO",
+      "lineas": 89,
+      "valor_total": 925099.35
+    },
+    {
+      "cuenta_nombre": "Anticipo a Empleados",
+      "lineas": 1593,
+      "valor_total": 901312.48
+    },
+    {
+      "cuenta_nombre": "Sueldos por Pagar",
+      "lineas": 1560,
+      "valor_total": 899719.0
+    },
+    {
+      "cuenta_nombre": "Materia Prima",
+      "lineas": 135,
+      "valor_total": 844427.56
+    },
+    {
+      "cuenta_nombre": "Cuenta por Pagar Funcionarios y/o Empleados",
+      "lineas": 4729,
+      "valor_total": 745742.6
+    },
+    {
+      "cuenta_nombre": "INVENTARIO TANQUES DE ENFRIAMIENTO",
+      "lineas": 96,
+      "valor_total": 652881.21
+    },
+    {
+      "cuenta_nombre": "VENTA DE CONSUMIBLES",
+      "lineas": 5827,
+      "valor_total": 638199.79
+    },
+    {
+      "cuenta_nombre": "Sueldos Unificados Vtas.",
+      "lineas": 570,
+      "valor_total": 632256.96
+    },
+    {
+      "cuenta_nombre": "COSTO TANQUES DE ENFRIAMIENTO",
+      "lineas": 62,
+      "valor_total": 580458.27
+    },
+    {
+      "cuenta_nombre": "Gratificaciones Vtas.",
+      "lineas": 389,
+      "valor_total": 451113.38
+    },
+    {
+      "cuenta_nombre": "Aportes de Socios o Accionistas para Futura Capitalización",
+      "lineas": 7,
+      "valor_total": 437055.4
+    },
+    {
+      "cuenta_nombre": "Prestación de Servicios",
+      "lineas": 2293,
+      "valor_total": 424148.06
+    },
+    {
+      "cuenta_nombre": "Tarjeta de Crédito (Datafast)",
+      "lineas": 785,
+      "valor_total": 400165.07
+    },
+    {
+      "cuenta_nombre": "Tarjeta de Crédito ( Diners Club )",
+      "lineas": 2554,
+      "valor_total": 393226.36
+    },
+    {
+      "cuenta_nombre": "Obligaciones con Instituciones Financieras Locales",
+      "lineas": 120,
+      "valor_total": 363018.75
+    },
+    {
+      "cuenta_nombre": "Ajustes Saldos Inventario",
+      "lineas": 485,
+      "valor_total": 350420.25
+    },
+    {
+      "cuenta_nombre": "BANCO DINERS CLUB",
+      "lineas": 254,
+      "valor_total": 317341.14
+    },
+    {
+      "cuenta_nombre": "IVA sobre Compras",
+      "lineas": 6166,
+      "valor_total": 303783.66
+    },
+    {
+      "cuenta_nombre": "INVENTARIO DE CONSUMIBLES",
+      "lineas": 4529,
+      "valor_total": 291066.97
+    },
+    {
+      "cuenta_nombre": "Resultados Acumulados",
+      "lineas": 18,
+      "valor_total": 280204.26
+    },
+    {
+      "cuenta_nombre": "COSTO DE CONSUMIBLES",
+      "lineas": 3694,
+      "valor_total": 224197.71
+    },
+    {
+      "cuenta_nombre": "Gratificaciones Adm.",
+      "lineas": 187,
+      "valor_total": 218328.43
+    },
+    {
+      "cuenta_nombre": "Cuenta por Pagar Socios o Accionistas No Corrientes",
+      "lineas": 2,
+      "valor_total": 217753.92
+    },
+    {
+      "cuenta_nombre": "Alimentación Vtas.",
+      "lineas": 1499,
+      "valor_total": 216987.98
+    },
+    {
+      "cuenta_nombre": "BANECUADOR",
+      "lineas": 250,
+      "valor_total": 216888.75
+    },
+    {
+      "cuenta_nombre": "Sueldos Unificados Adm.",
+      "lineas": 229,
+      "valor_total": 196332.92
+    },
+    {
+      "cuenta_nombre": "Mantenimiento Vehículo",
+      "lineas": 843,
+      "valor_total": 193344.26
+    },
+    {
+      "cuenta_nombre": "Movilización y Transporte Vtas.",
+      "lineas": 293,
+      "valor_total": 182595.9
+    },
+    {
+      "cuenta_nombre": "(-) Depreciación Acumulada Propiedades, Planta y Equipo",
+      "lineas": 270,
+      "valor_total": 173584.5
+    },
+    {
+      "cuenta_nombre": "Combustible Vtas.",
+      "lineas": 2580,
+      "valor_total": 173085.6
+    },
+    {
+      "cuenta_nombre": "IVA sobre Ventas",
+      "lineas": 5429,
+      "valor_total": 169490.54
+    },
+    {
+      "cuenta_nombre": "BANCO BOLIVARIANO",
+      "lineas": 31,
+      "valor_total": 160746.58
+    },
+    {
+      "cuenta_nombre": "Arriendos Vtas",
+      "lineas": 127,
+      "valor_total": 153522.96
+    },
+    {
+      "cuenta_nombre": "Depreciaciones Propiedades Planta y Equipos Vtas.",
+      "lineas": 269,
+      "valor_total": 149042.1
+    }
+  ]
+}

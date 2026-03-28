@@ -1,0 +1,1201 @@
+{
+  "run_id": "20260328180214",
+  "coverage_min": "2019-01-01",
+  "coverage_max": "2026-12-31",
+  "generated_at": "2026-03-28T13:35:14-05:00",
+  "filters_available": {
+    "document_types": [
+      {
+        "value": "FAC",
+        "label": "FAC",
+        "count": 19342
+      },
+      {
+        "value": "COT",
+        "label": "COT",
+        "count": 1971
+      },
+      {
+        "value": "DAC",
+        "label": "DAC",
+        "count": 957
+      },
+      {
+        "value": "NCT",
+        "label": "NCT",
+        "count": 438
+      },
+      {
+        "value": "NAI",
+        "label": "NAI",
+        "count": 355
+      },
+      {
+        "value": "DNA",
+        "label": "DNA",
+        "count": 348
+      },
+      {
+        "value": "NVE",
+        "label": "NVE",
+        "count": 228
+      },
+      {
+        "value": "CVE",
+        "label": "CVE",
+        "count": 163
+      },
+      {
+        "value": "LQC",
+        "label": "LQC",
+        "count": 51
+      },
+      {
+        "value": "REE",
+        "label": "REE",
+        "count": 30
+      },
+      {
+        "value": "EXP",
+        "label": "EXP",
+        "count": 22
+      },
+      {
+        "value": "NCL",
+        "label": "NCL",
+        "count": 2
+      },
+      {
+        "value": "PRE",
+        "label": "PRE",
+        "count": 2
+      },
+      {
+        "value": "OCV",
+        "label": "OCV",
+        "count": 1
+      },
+      {
+        "value": "PEA",
+        "label": "PEA",
+        "count": 1
+      }
+    ],
+    "document_states": [
+      {
+        "value": "G",
+        "label": "G",
+        "count": 10812
+      },
+      {
+        "value": "C",
+        "label": "C",
+        "count": 10653
+      },
+      {
+        "value": "P",
+        "label": "P",
+        "count": 1255
+      },
+      {
+        "value": "E",
+        "label": "E",
+        "count": 1124
+      },
+      {
+        "value": "A",
+        "label": "A",
+        "count": 65
+      },
+      {
+        "value": "F",
+        "label": "F",
+        "count": 1
+      },
+      {
+        "value": "R",
+        "label": "R",
+        "count": 1
+      }
+    ],
+    "bodegas": [
+      {
+        "value": "NO8bYrxZfkmRd7j4",
+        "label": "BODEGA PRINCIPAL",
+        "count": 5267
+      },
+      {
+        "value": "5xmbm8PZS18waoKM",
+        "label": "ALMACEN MACHACHI",
+        "count": 2456
+      },
+      {
+        "value": "GEjb2rJmTKWqbVNW",
+        "label": "BODEGA LUIS CONDOR",
+        "count": 930
+      },
+      {
+        "value": "wJvaMN3KuxDKbpzg",
+        "label": "CESAR CUAMACAS",
+        "count": 93
+      },
+      {
+        "value": "3RBe311q3s7o1bLJ",
+        "label": "JOSELYN MEJIA",
+        "count": 54
+      },
+      {
+        "value": "1mBdJz3ziplGd0J6",
+        "label": "JUAN CARLOS INSUASTI",
+        "count": 43
+      },
+      {
+        "value": "NO8bYYOZikmRb7j4",
+        "label": "MARGIT CEVALLOS",
+        "count": 42
+      },
+      {
+        "value": "4pzb8Kg4tOWVaEwN",
+        "label": "MIGUEL MEJIA",
+        "count": 34
+      },
+      {
+        "value": "RYWb4G2ZFYENaZ1m",
+        "label": "JUAN JOSUE GALLARDO",
+        "count": 23
+      },
+      {
+        "value": "4LmavrqZCOqma3Nr",
+        "label": "CONSIGNACION (A. FLORES, MARGIT CEVALLOS, M. FREIRE)",
+        "count": 19
+      },
+      {
+        "value": "yBXdL03BCNVxdJZY",
+        "label": "SANDRO CHAMORRO",
+        "count": 17
+      },
+      {
+        "value": "rQzaOYY81h5lVdp4",
+        "label": "EMERGENCIAS STOCK TÉCNICOS",
+        "count": 12
+      },
+      {
+        "value": "91qdGEPXhWExaN8j",
+        "label": "BODEGA PORTATIL LOCAL MACHACHI",
+        "count": 11
+      },
+      {
+        "value": "xBleXDDnzIBjverN",
+        "label": "CARLOS MUYOBISÑA",
+        "count": 6
+      },
+      {
+        "value": "Q9jaKz39s8Pgek5K",
+        "label": "JUAN CARLOS MOLINA",
+        "count": 6
+      },
+      {
+        "value": "gDGe7VM5CE25dn2x",
+        "label": "MARCELO ZAPATA",
+        "count": 4
+      },
+      {
+        "value": "J0yelEBkhOmJaER7",
+        "label": "BODEGA 2019",
+        "count": 0
+      },
+      {
+        "value": "4Lmav7L9SOqmb3Nr",
+        "label": "BODEGA JUAN CABASCANGO",
+        "count": 0
+      },
+      {
+        "value": "3RBe3vJDt7o1dLJr",
+        "label": "BODEGA PORTATILES OFICINA",
+        "count": 0
+      },
+      {
+        "value": "DKVeZvyysPAZe8Py",
+        "label": "MERCADERIA EN TRANSITO",
+        "count": 0
+      },
+      {
+        "value": "DKVeZDZZIPAZb8Py",
+        "label": "SANTA ISABEL DE ZULETA",
+        "count": 0
+      }
+    ],
+    "categories": [
+      {
+        "value": "pXKdwpoKOh0kMegW",
+        "label": "REPUESTOS VARIOS",
+        "count": 667
+      },
+      {
+        "value": "RYWb4xoNzsYENbZ1",
+        "label": "REPUESTOS",
+        "count": 314
+      },
+      {
+        "value": "4pzb82vRXFOWVeEw",
+        "label": "PEZONERAS",
+        "count": 40
+      },
+      {
+        "value": "vj6e9rwVLURAyaWB",
+        "label": "BOMBAS DE VACIO",
+        "count": 34
+      },
+      {
+        "value": "GEjb2kmLxtKWqdVN",
+        "label": "CONSUMIBLES",
+        "count": 34
+      },
+      {
+        "value": "gArb68qP0sV72eyR",
+        "label": "MANGUERAS",
+        "count": 33
+      },
+      {
+        "value": "91qdG61ZVFWExbN8",
+        "label": "TANQUES DE ENFRIAMIENTO",
+        "count": 24
+      },
+      {
+        "value": "jMEegJjl8tPKXdQ5",
+        "label": "MOTORES A GASOLINA",
+        "count": 14
+      },
+      {
+        "value": "oLqdPN07QCv9Yal4",
+        "label": "MANO DE OBRA",
+        "count": 12
+      },
+      {
+        "value": "pXKdwr3xqF0kMbgW",
+        "label": "PANELES SOLARES",
+        "count": 11
+      },
+      {
+        "value": "DKVeZzXkyuPAZe8P",
+        "label": "MOTORES ELECTRICOS",
+        "count": 9
+      },
+      {
+        "value": "mloej8WorulDLbQM",
+        "label": "POLEAS",
+        "count": 8
+      },
+      {
+        "value": "GP9aQ6xnvcBgGbDM",
+        "label": "SILENCIADORES",
+        "count": 8
+      },
+      {
+        "value": "rQzaOP9QzF5lVbp4",
+        "label": "DETERGENTES",
+        "count": 7
+      },
+      {
+        "value": "DKVeZ6BP4IPAZe8P",
+        "label": "EQUIPOS DE ORDEÑO",
+        "count": 7
+      },
+      {
+        "value": "1mBdJN17RiplGd0J",
+        "label": "General",
+        "count": 6
+      },
+      {
+        "value": "3RBe3yJ75F7o1bLJ",
+        "label": "REPUESTOS DE GOMA",
+        "count": 4
+      },
+      {
+        "value": "Zxgep2WxjsQqrb1p",
+        "label": "COMPONENTE DE GOMA",
+        "count": 3
+      },
+      {
+        "value": "yBXdLg6ABCNVxbJZ",
+        "label": "PRODUCTOS 2019",
+        "count": 2
+      },
+      {
+        "value": "xGge0g7oiJQOdADR",
+        "label": "__missing__:xGge0g7oiJQOdADR",
+        "count": 0
+      },
+      {
+        "value": "xBleXDzNxTBjverN",
+        "label": "PRODUCTOS TERMINADOS",
+        "count": 0
+      },
+      {
+        "value": "GEjb27J60IKWqdVN",
+        "label": "REPUESTOS PVC",
+        "count": 0
+      },
+      {
+        "value": "DkPbk7Wp1SYAVb5Y",
+        "label": null,
+        "count": 0
+      }
+    ],
+    "accounts": [
+      {
+        "value": "MEegJZVqvfPKXdQ5",
+        "label": "INVENTARIO DE REPUESTOS",
+        "count": 46623
+      },
+      {
+        "value": "0yelYxVlQIOmJaER",
+        "label": "COSTO DE REPUESTOS",
+        "count": 30599
+      },
+      {
+        "value": "loejRZVwGclDLeQM",
+        "label": "VENTA DE REPUESTOS",
+        "count": 29370
+      },
+      {
+        "value": "RMdR6OwLktno9dl6",
+        "label": "Clientes Comerciales",
+        "count": 24815
+      },
+      {
+        "value": "pZeVOAlJDU0mraGW",
+        "label": "Proveedores",
+        "count": 22058
+      },
+      {
+        "value": "EMaxkn98mtmD6e5G",
+        "label": "Rebaja y/o Descuentos sobre Ventas",
+        "count": 16481
+      },
+      {
+        "value": "YWb4xQDrPsYENbZ1",
+        "label": "BANCO PICHINCHA",
+        "count": 12032
+      },
+      {
+        "value": "5wboY3RwMhl5NexE",
+        "label": "BANCO DE GUAYAQUIL",
+        "count": 7717
+      },
+      {
+        "value": "rRbDk1PYRIjw2a6L",
+        "label": "IVA sobre Compras",
+        "count": 6166
+      },
+      {
+        "value": "5wbo2V9Bxil5NaxE",
+        "label": "VENTA DE CONSUMIBLES",
+        "count": 5827
+      },
+      {
+        "value": "1qdG6vgQXsWExbN8",
+        "label": "IVA sobre Ventas",
+        "count": 5429
+      },
+      {
+        "value": "MEegJZ6QvSPKXdQ5",
+        "label": "Cuenta por Pagar Funcionarios y/o Empleados",
+        "count": 4729
+      },
+      {
+        "value": "Yjbqx7XEKtLnAaLN",
+        "label": "INVENTARIO DE CONSUMIBLES",
+        "count": 4529
+      },
+      {
+        "value": "Lmav2l7MWCOqma3N",
+        "label": "COSTO DE CONSUMIBLES",
+        "count": 3694
+      },
+      {
+        "value": "wKe5yQEv4Fg3me31",
+        "label": "CAJA PRINCIPAL",
+        "count": 3334
+      },
+      {
+        "value": "Arb68X2VxhV72eyR",
+        "label": "Combustible Vtas.",
+        "count": 2580
+      },
+      {
+        "value": "gQbW6zYY0HzZ7a6w",
+        "label": "Tarjeta de Crédito ( Diners Club )",
+        "count": 2554
+      },
+      {
+        "value": "loejR6vKXslDLeQM",
+        "label": "1.75% Bienes Muebles de Naturaleza Corporal",
+        "count": 2427
+      },
+      {
+        "value": "Lmav2lDR7tOqma3N",
+        "label": "Prestación de Servicios",
+        "count": 2293
+      },
+      {
+        "value": "EMaxkn9LDtmD6e5G",
+        "label": "Suministros, Materiales y Repuestos Costos",
+        "count": 2100
+      },
+      {
+        "value": "XKdwpVZ59u0kMegW",
+        "label": "Otros Gastos Financieros",
+        "count": 1955
+      },
+      {
+        "value": "RBe31j3vmC7o1bLJ",
+        "label": "Anticipo a Empleados",
+        "count": 1593
+      },
+      {
+        "value": "YWb4xQ4YXuYENbZ1",
+        "label": "Sueldos por Pagar",
+        "count": 1560
+      },
+      {
+        "value": "mBdJ6ylWLUplGd0J",
+        "label": "Alimentación Vtas.",
+        "count": 1499
+      },
+      {
+        "value": "wKe5yQ3w0hg3me31",
+        "label": "Miscelaneos Vtas.",
+        "count": 1496
+      },
+      {
+        "value": "Y4erk8XMmHw7Ka2L",
+        "label": "Otras Retenciones Aplicables al Cód. 343",
+        "count": 1363
+      },
+      {
+        "value": "MEegJMxEwCPKXdQ5",
+        "label": "1.75% Bienes Muebles de Naturaleza Corporal",
+        "count": 1325
+      },
+      {
+        "value": "xmbmZOGEoH18wdoK",
+        "label": "Mercaderías en Transito",
+        "count": 1293
+      },
+      {
+        "value": "XKdwpVZRkc0kMegW",
+        "label": "30% Bienes",
+        "count": 1288
+      },
+      {
+        "value": "RBe31rRL1t7o1bLJ",
+        "label": "Materiales de Ferretería",
+        "count": 1048
+      },
+      {
+        "value": "jZdyPoMm1h6KvbJ4",
+        "label": "Anticipo a Proveedores",
+        "count": 971
+      },
+      {
+        "value": "Gge0RYOA1IJQObAD",
+        "label": "9.45% Aportes Individuales",
+        "count": 942
+      },
+      {
+        "value": "BleXDLnkzsBjverN",
+        "label": "11.15% Aportes Patronales I.E.S.S.",
+        "count": 941
+      },
+      {
+        "value": "O8bYEW0lPSkmRb7j",
+        "label": "1% Secap - Iece",
+        "count": 931
+      },
+      {
+        "value": "xgepY8778cQqra1p",
+        "label": "Anticipos de Clientes",
+        "count": 918
+      },
+      {
+        "value": "LqdPNKm43tv9Yal4",
+        "label": "Mantenimiento Vehículo",
+        "count": 843
+      },
+      {
+        "value": "9jaKr1mzqh8Pgek5",
+        "label": "Fletes",
+        "count": 836
+      },
+      {
+        "value": "gQbW6LmjrfzZ7a6w",
+        "label": "Vacaciones",
+        "count": 788
+      },
+      {
+        "value": "RBe31KLK3I7o1bLJ",
+        "label": "Tarjeta de Crédito (Datafast)",
+        "count": 785
+      },
+      {
+        "value": "RMdR6Ow5vUno9dl6",
+        "label": "Décimo Tercer Sueldo",
+        "count": 717
+      },
+      {
+        "value": "pZeVOAl0Df0mraGW",
+        "label": "Décimo Cuarto Sueldo",
+        "count": 714
+      },
+      {
+        "value": "9jaKr7X4qF8Pgek5",
+        "label": "Peajes",
+        "count": 713
+      },
+      {
+        "value": "xgepY7mnoiQqra1p",
+        "label": "2.75% Servicios",
+        "count": 692
+      },
+      {
+        "value": "0yelYxDMQFOmJaER",
+        "label": "1% Bienes Muebles de Naturaleza Corporal",
+        "count": 691
+      },
+      {
+        "value": "Gge0RYO3muJQObAD",
+        "label": "Guías de Transportes Vtas.",
+        "count": 636
+      },
+      {
+        "value": "rRbDk1PWXIjw2a6L",
+        "label": "Sueldos Unificados Vtas.",
+        "count": 570
+      },
+      {
+        "value": "01dNkLp1kiVJKeX7",
+        "label": "Décimo Tercer Sueldo Vtas.",
+        "count": 569
+      },
+      {
+        "value": "QzaOYMq97F5lVdp4",
+        "label": "Décimo Cuarto Sueldo Vtas.",
+        "count": 567
+      },
+      {
+        "value": "9jaKr1m9Wh8Pgek5",
+        "label": "Aportes Patronales al IESS Vtas.",
+        "count": 566
+      },
+      {
+        "value": "EMaxkn97VTmD6e5G",
+        "label": "70% Servicios",
+        "count": 565
+      }
+    ],
+    "cost_centers": [
+      {
+        "value": "9pgenrglKFlg0eNQ",
+        "label": "Bodega Principal",
+        "count": 57352
+      },
+      {
+        "value": "N5wboQjmxil5NexE",
+        "label": "Bodega Machachi",
+        "count": 17602
+      }
+    ]
+  },
+  "hero_metrics": [
+    {
+      "key": "documentos",
+      "value": 23911.0,
+      "label": "Documentos históricos"
+    },
+    {
+      "key": "ventas_total",
+      "value": 16573733.98,
+      "label": "Monto acumulado documentos"
+    },
+    {
+      "key": "clientes_activos",
+      "value": 1260.0,
+      "label": "Clientes con actividad"
+    },
+    {
+      "key": "productos",
+      "value": 1237.0,
+      "label": "Productos"
+    },
+    {
+      "key": "movimientos_unicos",
+      "value": 9024.0,
+      "label": "Movimientos únicos"
+    },
+    {
+      "key": "asientos",
+      "value": 67402.0,
+      "label": "Asientos contables"
+    }
+  ],
+  "yearly_story": [
+    {
+      "period": "2019-01-01",
+      "documentos": 182,
+      "monto_total": 245035.4
+    },
+    {
+      "period": "2020-01-01",
+      "documentos": 2463,
+      "monto_total": 1512787.36
+    },
+    {
+      "period": "2021-01-01",
+      "documentos": 2958,
+      "monto_total": 2338739.46
+    },
+    {
+      "period": "2022-01-01",
+      "documentos": 3191,
+      "monto_total": 2302954.68
+    },
+    {
+      "period": "2023-01-01",
+      "documentos": 4094,
+      "monto_total": 2688681.43
+    },
+    {
+      "period": "2024-01-01",
+      "documentos": 4641,
+      "monto_total": 3072884.23
+    },
+    {
+      "period": "2025-01-01",
+      "documentos": 5030,
+      "monto_total": 3423683.85
+    },
+    {
+      "period": "2026-01-01",
+      "documentos": 1352,
+      "monto_total": 988967.57
+    }
+  ],
+  "monthly_story": [
+    {
+      "period": "2019-03-01",
+      "documentos": 3,
+      "monto_total": 1354.22,
+      "asientos": 3
+    },
+    {
+      "period": "2019-04-01",
+      "documentos": 6,
+      "monto_total": 2392.84,
+      "asientos": 7
+    },
+    {
+      "period": "2019-05-01",
+      "documentos": 3,
+      "monto_total": 1653.51,
+      "asientos": 3
+    },
+    {
+      "period": "2019-06-01",
+      "documentos": 2,
+      "monto_total": 727.18,
+      "asientos": 2
+    },
+    {
+      "period": "2019-07-01",
+      "documentos": 1,
+      "monto_total": 84.89,
+      "asientos": 3
+    },
+    {
+      "period": "2019-08-01",
+      "documentos": 9,
+      "monto_total": 4056.24,
+      "asientos": 13
+    },
+    {
+      "period": "2019-09-01",
+      "documentos": 22,
+      "monto_total": 31026.73,
+      "asientos": 30
+    },
+    {
+      "period": "2019-10-01",
+      "documentos": 33,
+      "monto_total": 28871.9,
+      "asientos": 48
+    },
+    {
+      "period": "2019-11-01",
+      "documentos": 33,
+      "monto_total": 32568.2,
+      "asientos": 55
+    },
+    {
+      "period": "2019-12-01",
+      "documentos": 70,
+      "monto_total": 142299.69,
+      "asientos": 147
+    },
+    {
+      "period": "2020-01-01",
+      "documentos": 201,
+      "monto_total": 116306.29,
+      "asientos": 583
+    },
+    {
+      "period": "2020-02-01",
+      "documentos": 167,
+      "monto_total": 116093.3,
+      "asientos": 512
+    },
+    {
+      "period": "2020-03-01",
+      "documentos": 132,
+      "monto_total": 68700.93,
+      "asientos": 458
+    },
+    {
+      "period": "2020-04-01",
+      "documentos": 107,
+      "monto_total": 53518.73,
+      "asientos": 369
+    },
+    {
+      "period": "2020-05-01",
+      "documentos": 151,
+      "monto_total": 122873.42,
+      "asientos": 470
+    },
+    {
+      "period": "2020-06-01",
+      "documentos": 268,
+      "monto_total": 159502.56,
+      "asientos": 724
+    },
+    {
+      "period": "2020-07-01",
+      "documentos": 263,
+      "monto_total": 111696.43,
+      "asientos": 758
+    },
+    {
+      "period": "2020-08-01",
+      "documentos": 217,
+      "monto_total": 152522.62,
+      "asientos": 656
+    },
+    {
+      "period": "2020-09-01",
+      "documentos": 255,
+      "monto_total": 177661.45,
+      "asientos": 823
+    },
+    {
+      "period": "2020-10-01",
+      "documentos": 233,
+      "monto_total": 124481.31,
+      "asientos": 680
+    },
+    {
+      "period": "2020-11-01",
+      "documentos": 229,
+      "monto_total": 171909.72,
+      "asientos": 696
+    },
+    {
+      "period": "2020-12-01",
+      "documentos": 240,
+      "monto_total": 137520.6,
+      "asientos": 714
+    },
+    {
+      "period": "2021-01-01",
+      "documentos": 213,
+      "monto_total": 164104.45,
+      "asientos": 604
+    },
+    {
+      "period": "2021-02-01",
+      "documentos": 257,
+      "monto_total": 281026.1,
+      "asientos": 713
+    },
+    {
+      "period": "2021-03-01",
+      "documentos": 291,
+      "monto_total": 207617.17,
+      "asientos": 875
+    },
+    {
+      "period": "2021-04-01",
+      "documentos": 219,
+      "monto_total": 181713.69,
+      "asientos": 650
+    },
+    {
+      "period": "2021-05-01",
+      "documentos": 237,
+      "monto_total": 117112.12,
+      "asientos": 745
+    },
+    {
+      "period": "2021-06-01",
+      "documentos": 300,
+      "monto_total": 202838.09,
+      "asientos": 898
+    },
+    {
+      "period": "2021-07-01",
+      "documentos": 232,
+      "monto_total": 232956.48,
+      "asientos": 681
+    },
+    {
+      "period": "2021-08-01",
+      "documentos": 213,
+      "monto_total": 147275.54,
+      "asientos": 716
+    },
+    {
+      "period": "2021-09-01",
+      "documentos": 243,
+      "monto_total": 137812.74,
+      "asientos": 726
+    },
+    {
+      "period": "2021-10-01",
+      "documentos": 223,
+      "monto_total": 234399.6,
+      "asientos": 600
+    },
+    {
+      "period": "2021-11-01",
+      "documentos": 263,
+      "monto_total": 176133.76,
+      "asientos": 756
+    },
+    {
+      "period": "2021-12-01",
+      "documentos": 267,
+      "monto_total": 255749.72,
+      "asientos": 823
+    },
+    {
+      "period": "2022-01-01",
+      "documentos": 271,
+      "monto_total": 140850.52,
+      "asientos": 753
+    },
+    {
+      "period": "2022-02-01",
+      "documentos": 228,
+      "monto_total": 186702.62,
+      "asientos": 666
+    },
+    {
+      "period": "2022-03-01",
+      "documentos": 258,
+      "monto_total": 171634.78,
+      "asientos": 778
+    },
+    {
+      "period": "2022-04-01",
+      "documentos": 214,
+      "monto_total": 153370.35,
+      "asientos": 677
+    },
+    {
+      "period": "2022-05-01",
+      "documentos": 244,
+      "monto_total": 123788.28,
+      "asientos": 712
+    },
+    {
+      "period": "2022-06-01",
+      "documentos": 225,
+      "monto_total": 221530.58,
+      "asientos": 677
+    },
+    {
+      "period": "2022-07-01",
+      "documentos": 250,
+      "monto_total": 178135.43,
+      "asientos": 680
+    },
+    {
+      "period": "2022-08-01",
+      "documentos": 328,
+      "monto_total": 212145.32,
+      "asientos": 897
+    },
+    {
+      "period": "2022-09-01",
+      "documentos": 297,
+      "monto_total": 215191.52,
+      "asientos": 805
+    },
+    {
+      "period": "2022-10-01",
+      "documentos": 312,
+      "monto_total": 231636.07,
+      "asientos": 862
+    },
+    {
+      "period": "2022-11-01",
+      "documentos": 264,
+      "monto_total": 166132.22,
+      "asientos": 793
+    },
+    {
+      "period": "2022-12-01",
+      "documentos": 300,
+      "monto_total": 301836.99,
+      "asientos": 988
+    },
+    {
+      "period": "2023-01-01",
+      "documentos": 333,
+      "monto_total": 216859.77,
+      "asientos": 947
+    },
+    {
+      "period": "2023-02-01",
+      "documentos": 252,
+      "monto_total": 248938.01,
+      "asientos": 766
+    },
+    {
+      "period": "2023-03-01",
+      "documentos": 368,
+      "monto_total": 370077.98,
+      "asientos": 1010
+    },
+    {
+      "period": "2023-04-01",
+      "documentos": 332,
+      "monto_total": 244361.38,
+      "asientos": 938
+    },
+    {
+      "period": "2023-05-01",
+      "documentos": 337,
+      "monto_total": 189036.97,
+      "asientos": 924
+    },
+    {
+      "period": "2023-06-01",
+      "documentos": 366,
+      "monto_total": 220569.57,
+      "asientos": 959
+    },
+    {
+      "period": "2023-07-01",
+      "documentos": 352,
+      "monto_total": 284770.22,
+      "asientos": 1003
+    },
+    {
+      "period": "2023-08-01",
+      "documentos": 305,
+      "monto_total": 169850.86,
+      "asientos": 887
+    },
+    {
+      "period": "2023-09-01",
+      "documentos": 367,
+      "monto_total": 175428.83,
+      "asientos": 987
+    },
+    {
+      "period": "2023-10-01",
+      "documentos": 356,
+      "monto_total": 190403.84,
+      "asientos": 963
+    },
+    {
+      "period": "2023-11-01",
+      "documentos": 394,
+      "monto_total": 184671.7,
+      "asientos": 1019
+    },
+    {
+      "period": "2023-12-01",
+      "documentos": 332,
+      "monto_total": 193712.3,
+      "asientos": 928
+    },
+    {
+      "period": "2024-01-01",
+      "documentos": 345,
+      "monto_total": 256508.36,
+      "asientos": 966
+    },
+    {
+      "period": "2024-02-01",
+      "documentos": 339,
+      "monto_total": 284007.79,
+      "asientos": 991
+    },
+    {
+      "period": "2024-03-01",
+      "documentos": 368,
+      "monto_total": 204516.33,
+      "asientos": 1041
+    },
+    {
+      "period": "2024-04-01",
+      "documentos": 417,
+      "monto_total": 254042.01,
+      "asientos": 1118
+    },
+    {
+      "period": "2024-05-01",
+      "documentos": 405,
+      "monto_total": 233238.1,
+      "asientos": 1129
+    },
+    {
+      "period": "2024-06-01",
+      "documentos": 430,
+      "monto_total": 250523.75,
+      "asientos": 1185
+    },
+    {
+      "period": "2024-07-01",
+      "documentos": 403,
+      "monto_total": 467925.58,
+      "asientos": 1138
+    },
+    {
+      "period": "2024-08-01",
+      "documentos": 373,
+      "monto_total": 286987.14,
+      "asientos": 1055
+    },
+    {
+      "period": "2024-09-01",
+      "documentos": 425,
+      "monto_total": 203535.92,
+      "asientos": 1246
+    },
+    {
+      "period": "2024-10-01",
+      "documentos": 398,
+      "monto_total": 206132.55,
+      "asientos": 1100
+    },
+    {
+      "period": "2024-11-01",
+      "documentos": 391,
+      "monto_total": 174244.72,
+      "asientos": 1113
+    },
+    {
+      "period": "2024-12-01",
+      "documentos": 347,
+      "monto_total": 251221.98,
+      "asientos": 1003
+    },
+    {
+      "period": "2025-01-01",
+      "documentos": 399,
+      "monto_total": 215665.33,
+      "asientos": 1085
+    },
+    {
+      "period": "2025-02-01",
+      "documentos": 407,
+      "monto_total": 241275.3,
+      "asientos": 1120
+    },
+    {
+      "period": "2025-03-01",
+      "documentos": 410,
+      "monto_total": 230077.65,
+      "asientos": 1091
+    },
+    {
+      "period": "2025-04-01",
+      "documentos": 419,
+      "monto_total": 311038.43,
+      "asientos": 1172
+    },
+    {
+      "period": "2025-05-01",
+      "documentos": 385,
+      "monto_total": 217264.84,
+      "asientos": 1043
+    },
+    {
+      "period": "2025-06-01",
+      "documentos": 423,
+      "monto_total": 309620.45,
+      "asientos": 1212
+    },
+    {
+      "period": "2025-07-01",
+      "documentos": 444,
+      "monto_total": 245917.76,
+      "asientos": 1271
+    },
+    {
+      "period": "2025-08-01",
+      "documentos": 369,
+      "monto_total": 220486.64,
+      "asientos": 999
+    },
+    {
+      "period": "2025-09-01",
+      "documentos": 451,
+      "monto_total": 343719.18,
+      "asientos": 1183
+    },
+    {
+      "period": "2025-10-01",
+      "documentos": 420,
+      "monto_total": 392021.11,
+      "asientos": 1084
+    },
+    {
+      "period": "2025-11-01",
+      "documentos": 431,
+      "monto_total": 289535.37,
+      "asientos": 1130
+    },
+    {
+      "period": "2025-12-01",
+      "documentos": 472,
+      "monto_total": 407061.79,
+      "asientos": 1292
+    },
+    {
+      "period": "2026-01-01",
+      "documentos": 485,
+      "monto_total": 314986.76,
+      "asientos": 1284
+    },
+    {
+      "period": "2026-02-01",
+      "documentos": 429,
+      "monto_total": 292748.89,
+      "asientos": 1094
+    },
+    {
+      "period": "2026-03-01",
+      "documentos": 438,
+      "monto_total": 381231.92,
+      "asientos": 1078
+    }
+  ],
+  "narrative": [
+    "La cobertura histórica consolidada arranca en 2019 y llega hasta 2026.",
+    "El peso operativo principal está en documentos y asientos, que concentran la mayor densidad del histórico.",
+    "Inventario presenta una anomalía de conteo en origen, ya normalizada a IDs únicos dentro del modelo analítico."
+  ]
+}
