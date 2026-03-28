@@ -109,6 +109,9 @@ const elements = {
     performanceStory: document.getElementById("database-performance-story"),
     performanceTable: document.getElementById("database-performance-table"),
     performanceRunsTable: document.getElementById("database-performance-runs-table"),
+    performanceComparisonMetrics: document.getElementById("database-performance-comparison-metrics"),
+    performanceComparisonStory: document.getElementById("database-performance-comparison-story"),
+    performanceComparisonTable: document.getElementById("database-performance-comparison-table"),
   },
   filters: {
     dateFrom: document.getElementById("filter-date-from"),
@@ -1037,6 +1040,17 @@ function formatSeconds(value) {
   return `${formatNumber(value)} s`;
 }
 
+function formatSignedNumber(value, suffix = "") {
+  const number = Number(value || 0);
+  const sign = number > 0 ? "+" : "";
+  return `${sign}${formatNumber(number)}${suffix}`;
+}
+
+function comparisonBadge(status) {
+  const label = status === "mejora" ? "mejora" : status === "regresion" ? "regresion" : "sin cambio";
+  return `<span class="priority-pill ${status === "mejora" ? "bajo" : status === "regresion" ? "alto" : "medio"}">${label}</span>`;
+}
+
 function renderDatabase() {
   const database = snapshot.database;
   if (!database) return;
@@ -1210,6 +1224,33 @@ function renderDatabase() {
     { key: "slowest_resource", label: "Mas lento" },
     { key: "slowest_duration_seconds", label: "Tiempo mas lento", formatter: formatDuration },
   ]);
+
+  const comparison = database.performance_comparison;
+  if (comparison) {
+    renderMetricCards(elements.database.performanceComparisonMetrics, [
+      { label: "Ultimo run", value: comparison.latest_run_id, caption: `Duracion ${formatDuration(comparison.latest_total_duration_seconds)}.` },
+      { label: "Run anterior", value: comparison.previous_run_id, caption: `Duracion ${formatDuration(comparison.previous_total_duration_seconds)}.` },
+      { label: "Delta total", value: formatSignedNumber(comparison.total_delta_seconds, " s"), caption: `${formatSignedNumber(comparison.total_delta_pct, "%")} frente al run anterior.` },
+      { label: "Recursos con mejora", value: formatPreciseNumber(comparison.improved_resources || 0), caption: "Recursos que bajaron su tiempo en la ultima corrida." },
+      { label: "Recursos con regresion", value: formatPreciseNumber(comparison.regressed_resources || 0), caption: "Recursos que subieron su tiempo en la ultima corrida." },
+      { label: "Cambio en el mas lento", value: `${comparison.previous_slowest_resource || "--"} -> ${comparison.latest_slowest_resource || "--"}`, caption: "Comparacion del principal cuello de botella entre corridas." },
+    ]);
+    renderStoryCards(elements.database.performanceComparisonStory, database.performance_comparison_story_cards || []);
+    renderTable("database-performance-comparison-table", database.performance_resource_comparison || [], [
+      { key: "resource", label: "Recurso" },
+      { key: "status", label: "Estado", formatter: comparisonBadge },
+      { key: "previous_duration_seconds", label: "Antes", formatter: formatSeconds },
+      { key: "latest_duration_seconds", label: "Despues", formatter: formatSeconds },
+      { key: "delta_seconds", label: "Delta", formatter: (value) => formatSignedNumber(value, " s") },
+      { key: "delta_pct", label: "Delta %", formatter: (value) => formatSignedNumber(value, "%") },
+      { key: "same_volume", label: "Mismo volumen", formatter: (value) => yesNoLabel(value, "Si", "No") },
+      { key: "explanation", label: "Lectura tecnica" },
+    ]);
+  } else {
+    elements.database.performanceComparisonMetrics.innerHTML = `<div class="table-empty">Aun no hay dos corridas exitosas comparables para mostrar ahorro o regresion.</div>`;
+    elements.database.performanceComparisonStory.innerHTML = "";
+    elements.database.performanceComparisonTable.innerHTML = `<div class="table-empty">Ejecuta al menos dos corridas exitosas para habilitar el comparativo antes vs despues.</div>`;
+  }
 }
 
 function renderTechnical() {

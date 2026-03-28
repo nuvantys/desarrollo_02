@@ -1859,6 +1859,107 @@ def build_database(
             }
         )
 
+    previous_run_summary = performance_runs[1] if len(performance_runs) > 1 else None
+    previous_performance_run_id = previous_run_summary["run_id"] if previous_run_summary else None
+    previous_resource_map = {
+        row["resource"]: row
+        for row in run_groups.get(previous_performance_run_id, [])
+    }
+    resource_comparison = []
+    improved_resources = 0
+    regressed_resources = 0
+    unchanged_resources = 0
+    for row in performance_resources:
+        previous = previous_resource_map.get(row["resource"])
+        if not previous:
+            continue
+        previous_duration = int(previous.get("duration_seconds") or 0)
+        latest_duration = int(row["latest_duration_seconds"] or 0)
+        delta_seconds = latest_duration - previous_duration
+        delta_pct = round((delta_seconds / previous_duration) * 100, 2) if previous_duration else 0
+        if delta_seconds < 0:
+            status = "mejora"
+            improved_resources += 1
+        elif delta_seconds > 0:
+            status = "regresion"
+            regressed_resources += 1
+        else:
+            status = "sin_cambio"
+            unchanged_resources += 1
+        same_volume = (
+            int(row.get("latest_pages_fetched") or 0) == int(previous.get("pages_fetched") or 0)
+            and int(row.get("latest_source_count") or 0) == int(previous.get("source_count") or 0)
+            and int(row.get("latest_core_rows_loaded") or 0) == int(previous.get("core_rows_loaded") or 0)
+        )
+        if same_volume and delta_seconds < 0:
+            explanation = "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
+        elif same_volume and delta_seconds > 0:
+            explanation = "Mismo volumen pero mayor tiempo: revisar variacion de red, API o presion del motor."
+        elif delta_seconds < 0:
+            explanation = "Mejora con cambios de volumen; el recurso sigue respondiendo mas rapido en el ultimo run."
+        elif delta_seconds > 0:
+            explanation = "El recurso empeoro respecto al run anterior; conviene revisar concurrencia y carga hija."
+        else:
+            explanation = "Sin cambio material frente al run anterior."
+        resource_comparison.append(
+            {
+                "resource": row["resource"],
+                "latest_duration_seconds": latest_duration,
+                "previous_duration_seconds": previous_duration,
+                "delta_seconds": delta_seconds,
+                "delta_pct": delta_pct,
+                "latest_pages_fetched": int(row.get("latest_pages_fetched") or 0),
+                "previous_pages_fetched": int(previous.get("pages_fetched") or 0),
+                "latest_source_count": int(row.get("latest_source_count") or 0),
+                "previous_source_count": int(previous.get("source_count") or 0),
+                "latest_core_rows_loaded": int(row.get("latest_core_rows_loaded") or 0),
+                "previous_core_rows_loaded": int(previous.get("core_rows_loaded") or 0),
+                "status": status,
+                "same_volume": same_volume,
+                "explanation": explanation,
+            }
+        )
+    resource_comparison.sort(key=lambda row: abs(int(row["delta_seconds"])), reverse=True)
+
+    run_comparison = None
+    comparison_story_cards: list[dict[str, Any]] = []
+    if previous_run_summary:
+        total_delta_seconds = int(performance_runs[0]["total_duration_seconds"] or 0) - int(previous_run_summary["total_duration_seconds"] or 0)
+        total_delta_pct = round((total_delta_seconds / int(previous_run_summary["total_duration_seconds"] or 1)) * 100, 2)
+        run_comparison = {
+            "latest_run_id": performance_runs[0]["run_id"],
+            "previous_run_id": previous_run_summary["run_id"],
+            "latest_total_duration_seconds": int(performance_runs[0]["total_duration_seconds"] or 0),
+            "previous_total_duration_seconds": int(previous_run_summary["total_duration_seconds"] or 0),
+            "total_delta_seconds": total_delta_seconds,
+            "total_delta_pct": total_delta_pct,
+            "improved_resources": improved_resources,
+            "regressed_resources": regressed_resources,
+            "unchanged_resources": unchanged_resources,
+            "latest_slowest_resource": performance_runs[0]["slowest_resource"],
+            "previous_slowest_resource": previous_run_summary["slowest_resource"],
+            "latest_pages_fetched": int(performance_runs[0]["total_pages_fetched"] or 0),
+            "previous_pages_fetched": int(previous_run_summary["total_pages_fetched"] or 0),
+            "latest_source_rows": int(performance_runs[0]["total_source_rows"] or 0),
+            "previous_source_rows": int(previous_run_summary["total_source_rows"] or 0),
+            "latest_core_rows": int(performance_runs[0]["total_core_rows"] or 0),
+            "previous_core_rows": int(previous_run_summary["total_core_rows"] or 0),
+        }
+        comparison_story_cards = [
+            {
+                "title": "Comparativo entre corridas",
+                "body": f"La corrida {performance_runs[0]['run_id']} se compara contra {previous_run_summary['run_id']}. La variacion total es de {total_delta_seconds} segundos con el mismo orden de recursos y el mismo enfoque de backfill.",
+            },
+            {
+                "title": "Lectura de mejora",
+                "body": f"Recursos con mejora: {improved_resources}. Recursos con regresion: {regressed_resources}. Recursos sin cambio material: {unchanged_resources}.",
+            },
+            {
+                "title": "Interpretacion tecnica",
+                "body": "Cuando el volumen y la paginacion se mantienen, una baja en tiempo sugiere menos costo de roundtrips y menos trabajo repetido durante la carga. Esa lectura es inferencia basada en las metricas del pipeline.",
+            },
+        ]
+
     slowest_resource = performance_resources[0] if performance_resources else None
     highest_fanout = max(performance_resources, key=lambda row: row["fanout_ratio"], default=None)
     highest_pages = max(performance_resources, key=lambda row: row["latest_pages_fetched"], default=None)
@@ -1957,6 +2058,9 @@ def build_database(
         "performance_story_cards": performance_story_cards,
         "performance_resources": performance_resources,
         "performance_runs": performance_runs,
+        "performance_comparison": run_comparison,
+        "performance_comparison_story_cards": comparison_story_cards,
+        "performance_resource_comparison": resource_comparison,
     }
 
 
