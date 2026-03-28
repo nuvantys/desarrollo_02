@@ -639,7 +639,10 @@ def build_consistency_review(conn) -> dict[str, list[dict[str, Any]]]:
             ),
             "issue": "Existen cabeceras de movimiento sin lineas asociadas, por lo que el evento no tiene sustento operativo completo.",
             "impact": "El kardex y los analisis por producto o bodega pueden quedar incompletos o sesgados.",
+            "analysis_risk": "Infla el conteo de eventos operativos y contamina cualquier lectura de rotacion, consumo o intensidad por bodega.",
+            "decision_risk": "Puede llevar a sobrerreaccionar en reabastecimiento, auditoria interna o control de perdidas usando eventos que no tienen soporte real.",
             "suggested_action": "Revisar si son anulaciones, cargas parciales o errores de integracion. Excluirlos del analisis operativo o reconstruir los detalles antes de consolidar.",
+            "positive_outlook": "Al depurar estas cabeceras, la lectura del inventario queda mas confiable y las decisiones de abastecimiento descansan sobre eventos completos.",
             "sample_rows": query_rows(
                 conn,
                 """
@@ -673,7 +676,10 @@ def build_consistency_review(conn) -> dict[str, list[dict[str, Any]]]:
             ),
             "issue": "Hay movimientos con detalle fisico y total monetario en cero.",
             "impact": "La valorizacion de inventario y el costo movilizado quedan subestimados o invisibles.",
+            "analysis_risk": "Los analisis economicos por categoria, producto o periodo omiten costo movilizado real aunque si exista movimiento fisico.",
+            "decision_risk": "Puede aparentar que ciertas entradas no cuestan nada y sesgar decisiones de precio, margen o priorizacion de compras.",
             "suggested_action": "Validar costo unitario, politica de ingresos a costo cero y recalcular el total del movimiento cuando corresponda.",
+            "positive_outlook": "Corregir estos casos mejora el enlace entre inventario fisico y valor economico, lo que fortalece analisis de margen y costo.",
             "sample_rows": query_rows(
                 conn,
                 """
@@ -693,11 +699,36 @@ def build_consistency_review(conn) -> dict[str, list[dict[str, Any]]]:
         {
             "area": "inventario",
             "severity": "high",
+            "title": "Movimientos sin cuenta contable",
+            "metric": query_value(conn, "SELECT COUNT(*)::bigint FROM core.movimientos WHERE cuenta_id IS NULL", default=0),
+            "issue": "Hay movimientos de inventario que no quedaron conectados a una cuenta contable.",
+            "impact": "Se debilita el puente entre operacion fisica y lectura contable del inventario.",
+            "analysis_risk": "No es posible reconciliar con precision ciertos movimientos contra la estructura contable ni trazar impacto economico por movimiento.",
+            "decision_risk": "Dificulta decisiones sobre costo, rentabilidad y control de inventario porque parte del flujo queda fuera del mapa contable.",
+            "suggested_action": "Completar el mapeo de cuenta a nivel de movimiento o reforzar la herencia contable desde producto/categoria al momento de registrar el evento.",
+            "positive_outlook": "Conectar estos movimientos a cuenta mejora la conciliacion inventario-contabilidad y permite analisis mas confiables de costo y margen.",
+            "sample_rows": query_rows(
+                conn,
+                """
+                SELECT id, fecha::date AS fecha, COALESCE(tipo, '(sin tipo)') AS tipo, bodega_id
+                FROM core.movimientos
+                WHERE cuenta_id IS NULL
+                ORDER BY fecha DESC
+                LIMIT 5
+                """,
+            ),
+        },
+        {
+            "area": "inventario",
+            "severity": "high",
             "title": "Productos con stock negativo",
             "metric": query_value(conn, "SELECT COUNT(*)::bigint FROM core.productos WHERE cantidad_stock < 0", default=0),
             "issue": "Existen productos con saldo de stock menor que cero.",
             "impact": "Rompe consistencia de inventario, puede esconder faltantes fisicos o movimientos no registrados.",
+            "analysis_risk": "Toda lectura de stock disponible, cobertura o rotacion queda contaminada para esos productos.",
+            "decision_risk": "Puede inducir compras urgentes innecesarias o esconder un problema de registro y control fisico.",
             "suggested_action": "Revisar el kardex del producto, regularizar entradas y salidas pendientes y bloquear analisis de rotacion hasta corregir el saldo.",
+            "positive_outlook": "Regularizar estos saldos fortalece la confianza en stock disponible y mejora la planeacion de reposicion.",
             "sample_rows": query_rows(
                 conn,
                 """
@@ -716,7 +747,10 @@ def build_consistency_review(conn) -> dict[str, list[dict[str, Any]]]:
             "metric": query_value(conn, "SELECT COUNT(*)::bigint FROM core.productos WHERE marca_id IS NULL", default=0),
             "issue": "Una porcion importante del catalogo no tiene marca asociada.",
             "impact": "El analisis por proveedor, fabricante o linea de marca queda incompleto.",
+            "analysis_risk": "Se pierde profundidad al segmentar catalogo, mix y comportamiento comercial por marca.",
+            "decision_risk": "Reduce la calidad de decisiones comerciales y de compras cuando se requiere priorizar marcas o fabricantes.",
             "suggested_action": "Completar la gobernanza del catalogo y marcar como opcional solo los productos que realmente no usan marca.",
+            "positive_outlook": "Completar este atributo abre una segmentacion mas rica para compras, ventas y seguimiento del portafolio.",
             "sample_rows": query_rows(
                 conn,
                 """
@@ -737,7 +771,10 @@ def build_consistency_review(conn) -> dict[str, list[dict[str, Any]]]:
             "metric": query_value(conn, "SELECT COUNT(*)::bigint FROM core.productos WHERE cuenta_compra_id IS NULL", default=0),
             "issue": "Hay productos sin mapeo de cuenta de compra.",
             "impact": "Las compras pueden quedar sin clasificacion correcta o depender de imputaciones manuales.",
+            "analysis_risk": "El costo de adquisicion por linea de producto pierde trazabilidad contable y complica cortes por categoria.",
+            "decision_risk": "Puede sesgar decisiones de compra, margen y control presupuestario por no saber donde cae realmente el gasto.",
             "suggested_action": "Asignar cuenta de compra por producto o heredarla desde categoria cuando aplique.",
+            "positive_outlook": "Cerrar este mapeo mejora la lectura de compras y deja mejor preparado el modelo para conciliacion contable automatica.",
             "sample_rows": query_rows(
                 conn,
                 """
@@ -756,7 +793,10 @@ def build_consistency_review(conn) -> dict[str, list[dict[str, Any]]]:
             "metric": query_value(conn, "SELECT COUNT(*)::bigint FROM core.productos WHERE cuenta_costo_id IS NULL", default=0),
             "issue": "Hay productos sin cuenta de costo asociada.",
             "impact": "El analisis de margen y la salida contable de inventario pueden quedar incompletos.",
+            "analysis_risk": "La lectura de rentabilidad por producto o categoria queda debilitada porque el costo no aterriza de forma consistente.",
+            "decision_risk": "Puede llevar a fijar precios o promociones sin un costo bien representado en el modelo.",
             "suggested_action": "Completar la cuenta de costo a nivel de producto o definir una regla de herencia desde la categoria.",
+            "positive_outlook": "Con este ajuste el dashboard puede evolucionar hacia analisis de margen real por producto con mucha mas confianza.",
             "sample_rows": query_rows(
                 conn,
                 """
@@ -783,7 +823,10 @@ def build_consistency_review(conn) -> dict[str, list[dict[str, Any]]]:
             ),
             "issue": "Hay categorias sin todas las cuentas clave de venta, compra o inventario.",
             "impact": "Los nuevos productos o documentos que dependan de la categoria pueden heredar configuracion incompleta.",
+            "analysis_risk": "La consistencia futura del modelo se erosiona porque cada nuevo dato que herede desde la categoria puede nacer incompleto.",
+            "decision_risk": "Aumenta el riesgo de clasificacion desigual entre productos similares y distorsiona comparaciones entre lineas.",
             "suggested_action": "Completar el mapeo por categoria y separar categorias de servicio de categorias inventariables para no mezclar reglas.",
+            "positive_outlook": "Corregir la capa categoria reduce errores futuros y simplifica la gobernanza contable del catalogo.",
             "sample_rows": query_rows(
                 conn,
                 """
@@ -810,7 +853,10 @@ def build_consistency_review(conn) -> dict[str, list[dict[str, Any]]]:
             ),
             "issue": "Existen lineas documentales imputadas directo a cuenta contable sin producto asociado.",
             "impact": "Estas lineas no deben mezclarse con analisis de inventario, pero si con revision de ingresos o gastos directos.",
+            "analysis_risk": "Si se leen como venta de producto, inflan o deforman mix comercial, top productos y analisis de inventario.",
+            "decision_risk": "Puede llevar a decisiones equivocadas sobre portafolio si cargos directos o servicios se interpretan como producto fisico.",
             "suggested_action": "Separarlas explicitamente como servicios o cargos directos y revisar si algunas debieron codificarse como producto.",
+            "positive_outlook": "Separar bien estos casos mejora la lectura entre ingreso directo, servicio e inventario, lo que hace el analisis mucho mas fino.",
             "sample_rows": query_rows(
                 conn,
                 """
@@ -842,7 +888,10 @@ def build_consistency_review(conn) -> dict[str, list[dict[str, Any]]]:
             ),
             "issue": "El plan contable contiene cuentas sin movimiento dentro del historico cargado.",
             "impact": "No rompe integridad, pero complica revision manual y puede ocultar catalogo obsoleto.",
+            "analysis_risk": "Amplia el ruido del catalogo contable y dificulta distinguir cuentas realmente operativas de cuentas residuales.",
+            "decision_risk": "Puede distraer esfuerzos de saneamiento y llevar a sobredimensionar la complejidad operativa del plan contable.",
             "suggested_action": "Depurar el plan contable operativo o clasificar cuentas vigentes sin uso para no tratarlas como anomalias futuras.",
+            "positive_outlook": "Un plan contable mas limpio acelera revision, capacitacion y analisis por cuenta realmente usada.",
             "sample_rows": query_rows(
                 conn,
                 """
@@ -862,6 +911,100 @@ def build_consistency_review(conn) -> dict[str, list[dict[str, Any]]]:
     return {
         "inventory": [card for card in inventory_cards if int(card["metric"] or 0) > 0],
         "accounting": [card for card in accounting_cards if int(card["metric"] or 0) > 0],
+    }
+
+
+def build_source_overview(conn, meta: dict[str, Any], recent_runs: list[dict[str, Any]], summary: dict[str, Any]) -> dict[str, Any]:
+    history_summary = query_rows(
+        conn,
+        """
+        WITH run_summary AS (
+            SELECT
+                run_id,
+                CASE
+                    WHEN SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) > 0 THEN 'error'
+                    WHEN SUM(CASE WHEN status = 'success' THEN 1 ELSE 0 END) = COUNT(*) THEN 'success'
+                    ELSE 'partial'
+                END AS run_status
+            FROM meta.extract_runs
+            GROUP BY run_id
+        )
+        SELECT
+            COUNT(*)::bigint AS total_runs,
+            SUM(CASE WHEN run_status = 'success' THEN 1 ELSE 0 END)::bigint AS successful_runs,
+            SUM(CASE WHEN run_status = 'error' THEN 1 ELSE 0 END)::bigint AS failed_runs
+        FROM run_summary
+        """
+    )[0]
+    latest_success = next((row for row in recent_runs if row.get("status") == "success"), None)
+    latest_error = next((row for row in recent_runs if row.get("status") == "error"), None)
+    senior_summary = [
+        {
+            "title": "Lectura senior del estado actual",
+            "body": f"La base publicada al dashboard sigue siendo local y materializada, pero su fuente de origen real es Contifico API. Hoy el snapshot vigente parte del run {meta.get('run_id')} y refleja {summary.get('resources_processed', 0)} recursos procesados con {summary.get('tables_updated', 0)} tablas impactadas.",
+        },
+        {
+            "title": "Cadena de origen de los datos",
+            "body": "La secuencia operativa es: Contifico API -> contifico_pg_backfill.py -> PostgreSQL contifico_backfill -> export_dashboard_data.py -> dashboard/data/*.json -> vista estatica del dashboard. La API local solo orquesta estado y refresh, no reemplaza la base maestra.",
+        },
+        {
+            "title": "Modo local versus modo vivo",
+            "body": "El modo local mantiene estabilidad porque sirve el ultimo snapshot ya consolidado. El modo vivo dispara de un clic la reconstruccion desde APIs y republica el snapshot, lo que conserva control operativo sin sacrificar frescura.",
+        },
+        {
+            "title": "Historial reciente del pipeline",
+            "body": f"El historial acumulado registra {history_summary.get('total_runs', 0)} corridas, de las cuales {history_summary.get('successful_runs', 0)} fueron exitosas y {history_summary.get('failed_runs', 0)} cerraron con error. La ultima corrida exitosa es {latest_success.get('run_id') if latest_success else '--'} y la ultima corrida con error es {latest_error.get('run_id') if latest_error else '--'}.",
+        },
+    ]
+    source_chain = [
+        {
+            "layer": "Contifico API",
+            "role": "Fuente viva de personas, productos, documentos, tickets, movimientos, asientos y catalogos.",
+        },
+        {
+            "layer": "contifico_pg_backfill.py",
+            "role": "Extrae, deduplica, normaliza y carga el historico en PostgreSQL.",
+        },
+        {
+            "layer": "PostgreSQL contifico_backfill",
+            "role": "Base maestra local para analitica, revision tecnica y trazabilidad.",
+        },
+        {
+            "layer": "export_dashboard_data.py",
+            "role": "Materializa snapshots JSON optimizados para navegacion web.",
+        },
+        {
+            "layer": "dashboard/data/*.json",
+            "role": "Snapshot local estable consumido por la vista analitica.",
+        },
+        {
+            "layer": "local_dashboard_api.py",
+            "role": "Expone estado tecnico y orquesta refresh bajo demanda desde la UI.",
+        },
+    ]
+    operating_modes = [
+        {
+            "mode": "Local estable",
+            "script": "dashboard/start_dashboard_server.ps1",
+            "description": "Levanta dashboard + API tecnica y conserva el ultimo snapshot materializado sin ejecutar refresco automatico.",
+        },
+        {
+            "mode": "API en un clic",
+            "script": "dashboard/start_dashboard_live_refresh.ps1",
+            "description": "Levanta dashboard + API tecnica y dispara automaticamente el refresh completo desde Contifico API hacia PostgreSQL y JSON.",
+        },
+    ]
+    return {
+        "senior_summary": senior_summary,
+        "source_chain": source_chain,
+        "operating_modes": operating_modes,
+        "history_summary": {
+            **history_summary,
+            "latest_success_run": latest_success.get("run_id") if latest_success else None,
+            "latest_success_finished_at": latest_success.get("finished_at") if latest_success else None,
+            "latest_error_run": latest_error.get("run_id") if latest_error else None,
+            "latest_error_finished_at": latest_error.get("finished_at") if latest_error else None,
+        },
     }
 
 
@@ -1036,6 +1179,17 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         f"La diferencia fuente vs core mas visible sigue en movimiento-inventario con {int(movement_anomaly.get('difference') or 0) if movement_anomaly else 0} filas de brecha despues de deduplicacion.",
         f"La salud referencial consolidada registra {orphan_total} huerfanos y {sum(int(row.get('placeholder_count') or 0) for row in placeholders)} placeholders controlados.",
     ]
+    summary = {
+        "status": last_run.get("status", "unknown"),
+        "resources_processed": int(last_run.get("resources_processed") or 0),
+        "resources_success": resources_success,
+        "resources_failed": resources_failed,
+        "tables_updated": updated_tables,
+        "core_rows_updated": total_core_rows,
+        "source_rows_processed": int(last_run.get("source_rows") or 0),
+        "raw_rows_processed": int(last_run.get("raw_rows") or 0),
+    }
+    source_overview = build_source_overview(conn, meta, recent_runs, summary)
     return {
         **meta,
         "filters_available": filters,
@@ -1047,16 +1201,7 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         "freshness_seconds": freshness_seconds,
         "coverage_min": meta.get("coverage_min"),
         "coverage_max": meta.get("coverage_max"),
-        "summary": {
-            "status": last_run.get("status", "unknown"),
-            "resources_processed": int(last_run.get("resources_processed") or 0),
-            "resources_success": resources_success,
-            "resources_failed": resources_failed,
-            "tables_updated": updated_tables,
-            "core_rows_updated": total_core_rows,
-            "source_rows_processed": int(last_run.get("source_rows") or 0),
-            "raw_rows_processed": int(last_run.get("raw_rows") or 0),
-        },
+        "summary": summary,
         "resource_metrics": resource_metrics,
         "load_metrics": load_metrics,
         "watermarks": watermarks,
@@ -1067,6 +1212,7 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         "placeholders": placeholders,
         "nulls_allowed": nulls_allowed,
         "consistency_review": consistency_review,
+        "source_overview": source_overview,
         "recent_runs": recent_runs,
         "narrative": narrative,
     }

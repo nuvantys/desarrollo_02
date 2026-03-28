@@ -90,6 +90,9 @@ const elements = {
     storyCards: document.getElementById("technical-story-cards"),
     inventoryReview: document.getElementById("technical-inventory-review"),
     accountingReview: document.getElementById("technical-accounting-review"),
+    seniorSummary: document.getElementById("technical-senior-summary"),
+    sourceModes: document.getElementById("technical-source-modes"),
+    detailedFindings: document.getElementById("technical-detailed-findings"),
   },
   filters: {
     dateFrom: document.getElementById("filter-date-from"),
@@ -913,6 +916,82 @@ function renderReviewCards(target, cards) {
     .join("");
 }
 
+function renderSourceCards(target, sourceOverview) {
+  const cards = [
+    ...(sourceOverview.source_chain || []).map((entry) => ({
+      title: entry.layer,
+      body: entry.role,
+    })),
+    ...(sourceOverview.operating_modes || []).map((entry) => ({
+      title: entry.mode,
+      body: `${entry.description} Script: ${entry.script}`,
+    })),
+  ];
+  target.innerHTML = cards
+    .map(
+      (card) => `
+        <article class="source-card">
+          <h4>${card.title}</h4>
+          <p>${card.body}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderDetailedFindings(target, cards) {
+  if (!cards.length) {
+    target.innerHTML = `<div class="table-empty">No se detectaron hallazgos para detallar.</div>`;
+    return;
+  }
+  target.innerHTML = cards
+    .map(
+      (card) => `
+        <article class="detailed-review-card ${card.severity}">
+          <div class="detailed-review-card-header">
+            <h4>${card.title}</h4>
+            <span class="severity-pill ${card.severity}">${card.area}</span>
+          </div>
+          <strong>${formatPreciseNumber(card.metric)}</strong>
+          <div class="detail-grid">
+            <div class="detail-block">
+              <h5>Incongruencia</h5>
+              <p>${card.issue}</p>
+            </div>
+            <div class="detail-block">
+              <h5>Perjuicio analitico</h5>
+              <p>${card.analysis_risk || card.impact}</p>
+            </div>
+            <div class="detail-block">
+              <h5>Riesgo para decision</h5>
+              <p>${card.decision_risk || card.impact}</p>
+            </div>
+            <div class="detail-block">
+              <h5>Solucion o ajuste</h5>
+              <p>${card.suggested_action}</p>
+            </div>
+            <div class="detail-block">
+              <h5>Enfoque positivo</h5>
+              <p>${card.positive_outlook || "Corregir este punto mejora la confiabilidad del modelo y fortalece la toma de decisiones."}</p>
+            </div>
+            <div class="detail-block">
+              <h5>Impacto resumido</h5>
+              <p>${card.impact}</p>
+            </div>
+          </div>
+          ${
+            (card.sample_rows || []).length
+              ? `<div class="review-samples"><h5>Muestras</h5><ul>${card.sample_rows
+                  .map((row) => `<li>${formatSampleRow(row)}</li>`)
+                  .join("")}</ul></div>`
+              : ""
+          }
+        </article>
+      `,
+    )
+    .join("");
+}
+
 function renderTechnical() {
   if (!technicalState.data) return;
   const technical = technicalState.data;
@@ -1011,6 +1090,12 @@ function renderTechnical() {
   );
   renderReviewCards(elements.technical.inventoryReview, technical.consistency_review?.inventory || []);
   renderReviewCards(elements.technical.accountingReview, technical.consistency_review?.accounting || []);
+  renderStoryCards(elements.technical.seniorSummary, technical.source_overview?.senior_summary || []);
+  renderSourceCards(elements.technical.sourceModes, technical.source_overview || { source_chain: [], operating_modes: [] });
+  renderDetailedFindings(
+    elements.technical.detailedFindings,
+    [...(technical.consistency_review?.inventory || []), ...(technical.consistency_review?.accounting || [])],
+  );
 }
 
 function showServerHelp() {

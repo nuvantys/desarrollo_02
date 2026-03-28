@@ -535,6 +535,92 @@ select:focus {
   line-height: 1.45;
 }
 
+.detailed-review-grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.detailed-review-card {
+  padding: 20px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.detailed-review-card.high {
+  border-color: rgba(185, 79, 68, 0.22);
+  background: rgba(252, 236, 234, 0.88);
+}
+
+.detailed-review-card.medium {
+  border-color: rgba(201, 134, 29, 0.22);
+  background: rgba(251, 243, 225, 0.84);
+}
+
+.detailed-review-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.detailed-review-card-header h4 {
+  margin: 0;
+  font-size: 1.08rem;
+}
+
+.detailed-review-card strong {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 1.8rem;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+}
+
+.detail-block {
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(248, 250, 247, 0.92);
+}
+
+.detail-block h5 {
+  margin: 0 0 8px;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.detail-block p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.source-card {
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.source-card h4 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.source-card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
 .section-block {
   display: grid;
   gap: 20px;
@@ -713,6 +799,10 @@ th {
 
   .chart {
     height: 320px;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
   }
 
   .tab-switcher,
