@@ -6,26 +6,26 @@
 - Base PostgreSQL: `contifico_backfill` en `127.0.0.1:5432`
 - Modo: `backfill`
 - API base: `https://api.contifico.com`
-- Raw auditado: `si`
-- Run ID: `20260328180214`
+- Raw auditado: `no`
+- Run ID: `20260328205519`
 
 ## Recursos procesados
 
 | resource | status | source_count | pages_fetched | raw_row_count | started_at | finished_at |
 | --- | --- | --- | --- | --- | --- | --- |
-| bodega | success | 21 | 1 | 21 | 2026-03-28 13:02:14-05:00 | 2026-03-28 13:02:15-05:00 |
-| categoria | success | 22 | 1 | 22 | 2026-03-28 13:02:14-05:00 | 2026-03-28 13:02:14-05:00 |
-| cuenta-contable | success | 572 | 1 | 572 | 2026-03-28 13:02:14-05:00 | 2026-03-28 13:02:14-05:00 |
-| centro-costo | success | 2 | 1 | 2 | 2026-03-28 13:02:15-05:00 | 2026-03-28 13:02:15-05:00 |
-| contabilidad/periodo | success | 8 | 1 | 8 | 2026-03-28 13:02:15-05:00 | 2026-03-28 13:02:15-05:00 |
-| marca | success | 16 | 1 | 16 | 2026-03-28 13:02:15-05:00 | 2026-03-28 13:02:15-05:00 |
-| persona | success | 2060 | 21 | 2060 | 2026-03-28 13:02:15-05:00 | 2026-03-28 13:02:22-05:00 |
-| unidad | success | 20 | 1 | 20 | 2026-03-28 13:02:15-05:00 | 2026-03-28 13:02:15-05:00 |
-| producto | success | 1237 | 13 | 1237 | 2026-03-28 13:02:22-05:00 | 2026-03-28 13:02:40-05:00 |
-| movimiento-inventario | success | 14101 | 142 | 46146 | 2026-03-28 13:02:40-05:00 | 2026-03-28 13:04:21-05:00 |
-| documento | success | 23911 | 240 | 125397 | 2026-03-28 13:04:21-05:00 | 2026-03-28 13:13:12-05:00 |
-| documento/tickets | success | 23911 | 240 | 101358 | 2026-03-28 13:13:13-05:00 | 2026-03-28 13:29:54-05:00 |
-| contabilidad/asiento | success | 67402 | 675 | 346756 | 2026-03-28 13:29:54-05:00 | 2026-03-28 13:35:14-05:00 |
+| cuenta-contable | success | 572 | 1 | 0 | 2026-03-28 15:55:19-05:00 | 2026-03-28 15:55:20-05:00 |
+| bodega | success | 21 | 1 | 0 | 2026-03-28 15:55:20-05:00 | 2026-03-28 15:55:20-05:00 |
+| categoria | success | 22 | 1 | 0 | 2026-03-28 15:55:20-05:00 | 2026-03-28 15:55:20-05:00 |
+| centro-costo | success | 2 | 1 | 0 | 2026-03-28 15:55:20-05:00 | 2026-03-28 15:55:20-05:00 |
+| contabilidad/periodo | success | 8 | 1 | 0 | 2026-03-28 15:55:20-05:00 | 2026-03-28 15:55:21-05:00 |
+| marca | success | 16 | 1 | 0 | 2026-03-28 15:55:20-05:00 | 2026-03-28 15:55:20-05:00 |
+| unidad | success | 20 | 1 | 0 | 2026-03-28 15:55:20-05:00 | 2026-03-28 15:55:20-05:00 |
+| persona | success | 2060 | 21 | 0 | 2026-03-28 15:55:21-05:00 | 2026-03-28 15:55:24-05:00 |
+| producto | success | 1237 | 13 | 0 | 2026-03-28 15:55:24-05:00 | 2026-03-28 15:55:39-05:00 |
+| movimiento-inventario | success | 14101 | 142 | 0 | 2026-03-28 15:55:39-05:00 | 2026-03-28 15:56:45-05:00 |
+| documento | success | 23911 | 240 | 0 | 2026-03-28 15:56:45-05:00 | 2026-03-28 16:00:59-05:00 |
+| documento/tickets | success | 23911 | 240 | 0 | 2026-03-28 16:00:59-05:00 | 2026-03-28 16:12:26-05:00 |
+| contabilidad/asiento | success | 67402 | 675 | 0 | 2026-03-28 16:12:26-05:00 | 2026-03-28 16:16:11-05:00 |
 
 ## Filas cargadas por tabla
 
@@ -49,32 +49,19 @@
 | documento/tickets | core | tickets_detalles | 77447 |
 | documento/tickets | core | tickets_documentos | 23911 |
 | unidad | core | unidades | 20 |
-| contabilidad/asiento | raw | resource_rows | 346756 |
-| cuenta-contable | raw | resource_rows | 572 |
-| categoria | raw | resource_rows | 22 |
-| bodega | raw | resource_rows | 21 |
-| marca | raw | resource_rows | 16 |
-| unidad | raw | resource_rows | 20 |
-| centro-costo | raw | resource_rows | 2 |
-| contabilidad/periodo | raw | resource_rows | 8 |
-| persona | raw | resource_rows | 2060 |
-| producto | raw | resource_rows | 1237 |
-| movimiento-inventario | raw | resource_rows | 46146 |
-| documento | raw | resource_rows | 125397 |
-| documento/tickets | raw | resource_rows | 101358 |
 
 ## Fuente vs tabla principal
 
 | resource | source_count | core_primary_count | difference |
 | --- | --- | --- | --- |
+| cuenta-contable | 572 | 572 | 0 |
 | bodega | 21 | 21 | 0 |
 | categoria | 22 | 23 | -1 |
-| cuenta-contable | 572 | 572 | 0 |
 | centro-costo | 2 | 2 | 0 |
 | contabilidad/periodo | 8 | 8 | 0 |
 | marca | 16 | 16 | 0 |
-| persona | 2060 | 2060 | 0 |
 | unidad | 20 | 20 | 0 |
+| persona | 2060 | 2060 | 0 |
 | producto | 1237 | 1237 | 0 |
 | movimiento-inventario | 14101 | 9024 | 5077 |
 | documento | 23911 | 23911 | 0 |

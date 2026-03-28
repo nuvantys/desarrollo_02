@@ -8,6 +8,185 @@
   </head>
   <body>
     <div class="app-shell">
+      <section class="top-nav-panel">
+        <div class="top-nav-copy">
+          <p class="eyebrow">Control del dataset</p>
+          <h2>Dos vistas sobre la misma base Contifico</h2>
+          <p>
+            Revision tecnica para operar el pipeline y vista analitica para explorar el snapshot sin alterar la lectura actual.
+          </p>
+        </div>
+        <div class="tab-switcher" role="tablist" aria-label="Vistas del dashboard">
+          <button class="tab-button active" id="tab-technical" data-tab-target="technical-view" type="button">Revision tecnica</button>
+          <button class="tab-button" id="tab-analytics" data-tab-target="analytic-view" type="button">Vista analitica</button>
+        </div>
+      </section>
+
+      <section class="tab-view active" id="technical-view">
+        <section class="section-block technical-hero-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Revision tecnica</p>
+              <h2>Estado de la base y del pipeline Contifico</h2>
+              <p id="technical-subtitle">Cargando estado tecnico del snapshot y del backend local...</p>
+            </div>
+            <div class="technical-actions">
+              <button id="technical-refresh-button" class="primary-button" type="button">Actualizar datos</button>
+              <button id="technical-reload-button" class="ghost-button" type="button">Recargar estado</button>
+            </div>
+          </div>
+          <div class="technical-runtime-panel panel">
+            <div class="panel-header">
+              <div>
+                <h3>Estado general del sistema</h3>
+                <p>Ultima actualizacion, cobertura, run_id y estado del pipeline bajo demanda.</p>
+              </div>
+              <span class="runtime-badge" id="technical-runtime-badge">Cargando</span>
+            </div>
+            <div class="metric-grid technical-summary-grid" id="technical-summary-metrics"></div>
+            <div class="technical-runtime-detail">
+              <div class="technical-status-card">
+                <h4>Proceso actual</h4>
+                <p id="technical-runtime-message">Preparando lectura del estado del backend local.</p>
+                <div class="progress-shell">
+                  <div class="progress-bar" id="technical-progress-bar"></div>
+                </div>
+                <div class="technical-meta-list" id="technical-runtime-meta"></div>
+              </div>
+              <div class="technical-status-card">
+                <h4>Alertas y disponibilidad</h4>
+                <div id="technical-alerts" class="technical-alert-stack"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Pipeline</p>
+              <h2>Volumen y trazabilidad de la ultima corrida</h2>
+            </div>
+          </div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Filas actualizadas por recurso</h3>
+                  <p>Volumen core cargado por cada recurso procesado en el ultimo run.</p>
+                </div>
+              </div>
+              <div id="technical-resource-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Fuente vs core</h3>
+                  <p>Diferencias detectadas entre conteo origen y modelo materializado.</p>
+                </div>
+              </div>
+              <div id="technical-difference-chart" class="chart"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Bitacora del refresh</h3>
+                  <p>Ultimas corridas con duracion, recursos procesados y resultado.</p>
+                </div>
+              </div>
+              <div id="technical-runs-table" class="table-wrap"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Metricas de carga por tabla</h3>
+                  <p>Tablas mas impactadas por la ultima actualizacion materializada.</p>
+                </div>
+              </div>
+              <div id="technical-load-table" class="table-wrap"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Calidad y salud</p>
+              <h2>Integridad, placeholders y cobertura temporal</h2>
+            </div>
+          </div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Integridad relacional</h3>
+                  <p>Huelfanos por relacion validada y semaforo consolidado.</p>
+                </div>
+              </div>
+              <div id="technical-fk-table" class="table-wrap"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Watermarks y cobertura</h3>
+                  <p>Fechas minimas, maximas y actualizacion registrada por recurso.</p>
+                </div>
+              </div>
+              <div id="technical-watermarks-table" class="table-wrap"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Indicadores tecnicos</h3>
+                  <p>Nulos tolerados, placeholders y hallazgos que afectan interpretacion.</p>
+                </div>
+              </div>
+              <div class="metric-grid compact" id="technical-health-metrics"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Narrativa tecnica</h3>
+                  <p>Lectura guiada del estado actual de la base y del pipeline Contifico.</p>
+                </div>
+              </div>
+              <div id="technical-story-cards" class="story-grid"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Revision exploratoria</p>
+              <h2>Inventario y cuenta contable bajo analisis</h2>
+              <p>Tarjetas con incoherencia detectada, evidencia minima y ajuste sugerido para revision manual.</p>
+            </div>
+          </div>
+          <div class="panel-grid panel-grid-2">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Revision de inventario</h3>
+                  <p>Hallazgos sobre stock, movimientos y consistencia operativa del catalogo.</p>
+                </div>
+              </div>
+              <div id="technical-inventory-review" class="review-card-grid"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <h3>Revision de cuenta contable</h3>
+                  <p>Hallazgos sobre mapeo, uso del plan contable y lineas directas sin producto.</p>
+                </div>
+              </div>
+              <div id="technical-accounting-review" class="review-card-grid"></div>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <section class="tab-view" id="analytic-view">
       <header class="hero">
         <div class="hero-copy">
           <p class="eyebrow">Contifico Analytics Snapshot</p>
@@ -386,6 +565,7 @@
           </div>
         </section>
       </main>
+      </section>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>

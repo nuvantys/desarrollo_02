@@ -26,6 +26,8 @@ const fileNames = [
   "tables.json",
 ];
 
+const apiBase = `${window.location.protocol}//${window.location.hostname || "127.0.0.1"}:8130/api/technical`;
+
 const state = {
   global: {
     dateFrom: "",
@@ -41,6 +43,20 @@ const state = {
     account: "",
     center: "",
   },
+  ui: {
+    activeTab: "technical-view",
+  },
+};
+
+const technicalState = {
+  data: null,
+  apiAvailable: false,
+  apiError: "",
+  runtime: {
+    current_job: null,
+    last_job: null,
+  },
+  pollHandle: null,
 };
 
 const tableExports = new Map();
@@ -54,6 +70,27 @@ const elements = {
   storyCards: document.getElementById("story-cards"),
   qualityMetrics: document.getElementById("quality-metrics"),
   activeFilters: document.getElementById("active-filters"),
+  tabs: document.querySelectorAll("[data-tab-target]"),
+  tabViews: document.querySelectorAll(".tab-view"),
+  technical: {
+    subtitle: document.getElementById("technical-subtitle"),
+    refreshButton: document.getElementById("technical-refresh-button"),
+    reloadButton: document.getElementById("technical-reload-button"),
+    runtimeBadge: document.getElementById("technical-runtime-badge"),
+    summaryMetrics: document.getElementById("technical-summary-metrics"),
+    runtimeMessage: document.getElementById("technical-runtime-message"),
+    progressBar: document.getElementById("technical-progress-bar"),
+    runtimeMeta: document.getElementById("technical-runtime-meta"),
+    alerts: document.getElementById("technical-alerts"),
+    runsTable: document.getElementById("technical-runs-table"),
+    loadTable: document.getElementById("technical-load-table"),
+    fkTable: document.getElementById("technical-fk-table"),
+    watermarksTable: document.getElementById("technical-watermarks-table"),
+    healthMetrics: document.getElementById("technical-health-metrics"),
+    storyCards: document.getElementById("technical-story-cards"),
+    inventoryReview: document.getElementById("technical-inventory-review"),
+    accountingReview: document.getElementById("technical-accounting-review"),
+  },
   filters: {
     dateFrom: document.getElementById("filter-date-from"),
     dateTo: document.getElementById("filter-date-to"),
@@ -739,9 +776,248 @@ function renderStaticMeta() {
   elements.heroCoverage.textContent = `Cobertura: ${snapshot.manifest.coverage_min} a ${snapshot.manifest.coverage_max}`;
 }
 
+function formatDateTime(value) {
+  if (!value) return "--";
+  try {
+    return new Intl.DateTimeFormat("es-EC", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    }).format(new Date(value));
+  } catch {
+    return String(value);
+  }
+}
+
+function formatDuration(seconds) {
+  const total = Number(seconds || 0);
+  if (!total) return "0 s";
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const secs = total % 60;
+  const parts = [];
+  if (hours) parts.push(`${hours} h`);
+  if (minutes) parts.push(`${minutes} min`);
+  if (secs || !parts.length) parts.push(`${secs} s`);
+  return parts.join(" ");
+}
+
+function freshnessLabel(seconds) {
+  const total = Number(seconds || 0);
+  if (!Number.isFinite(total)) return "--";
+  if (total < 60) return `${total} s`;
+  if (total < 3600) return `${Math.floor(total / 60)} min`;
+  if (total < 86400) return `${Math.floor(total / 3600)} h`;
+  return `${Math.floor(total / 86400)} d`;
+}
+
+function stageProgress(stage, status) {
+  if (status === "success") return 100;
+  if (status === "error") return 100;
+  const map = {
+    extrayendo: 20,
+    normalizando: 40,
+    "cargando PostgreSQL": 68,
+    "regenerando snapshot": 88,
+    finalizado: 100,
+  };
+  return map[stage] || 8;
+}
+
+function runtimeBadgeClass(status) {
+  if (status === "error") return "runtime-badge error";
+  if (status === "running") return "runtime-badge warning";
+  return "runtime-badge";
+}
+
+function setActiveTab(targetId) {
+  state.ui.activeTab = targetId;
+  elements.tabs.forEach((button) => {
+    button.classList.toggle("active", button.dataset.tabTarget === targetId);
+  });
+  elements.tabViews.forEach((view) => {
+    view.classList.toggle("active", view.id === targetId);
+  });
+  resizeCharts();
+}
+
+function renderTechnicalAlerts(alerts, runtime) {
+  const cards = [...alerts];
+  if (!technicalState.apiAvailable) {
+    cards.unshift({
+      level: "warning",
+      title: "API tecnica no disponible",
+      message:
+        technicalState.apiError ||
+        "Se muestra el ultimo technical.json estable. La vista analitica sigue operativa, pero el refresh bajo demanda no puede ejecutarse.",
+      metric: 0,
+    });
+  }
+  if (runtime?.status === "error" && runtime.error_text) {
+    cards.unshift({
+      level: "error",
+      title: "Ultimo refresh con error",
+      message: runtime.error_text,
+      metric: 0,
+    });
+  }
+  elements.technical.alerts.innerHTML = cards
+    .map(
+      (alert) => `
+        <article class="technical-alert-card ${alert.level}">
+          <h4>${alert.title}</h4>
+          <p>${alert.message}</p>
+          ${alert.metric ? `<p><strong>${formatCompact(alert.metric)}</strong></p>` : ""}
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function formatSampleRow(row) {
+  return Object.entries(row)
+    .map(([key, value]) => `${key}: ${value ?? "--"}`)
+    .join(" | ");
+}
+
+function renderReviewCards(target, cards) {
+  if (!cards.length) {
+    target.innerHTML = `<div class="table-empty">No se detectaron incoherencias para esta seccion.</div>`;
+    return;
+  }
+  target.innerHTML = cards
+    .map(
+      (card) => `
+        <article class="review-card ${card.severity}">
+          <div class="review-card-header">
+            <h4>${card.title}</h4>
+            <span class="severity-pill ${card.severity}">${card.severity}</span>
+          </div>
+          <strong>${formatPreciseNumber(card.metric)}</strong>
+          <p><b>Incoherencia:</b> ${card.issue}</p>
+          <p><b>Impacto:</b> ${card.impact}</p>
+          <p><b>Solucion o ajuste:</b> ${card.suggested_action}</p>
+          ${
+            (card.sample_rows || []).length
+              ? `<div class="review-samples"><h5>Muestras</h5><ul>${card.sample_rows
+                  .map((row) => `<li>${formatSampleRow(row)}</li>`)
+                  .join("")}</ul></div>`
+              : ""
+          }
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderTechnical() {
+  if (!technicalState.data) return;
+  const technical = technicalState.data;
+  const runtime = technicalState.runtime.current_job || technicalState.runtime.last_job;
+  const runtimeStatus = runtime?.status || technical.summary?.status || "success";
+
+  elements.technical.subtitle.textContent = `Cobertura ${technical.coverage_min || "--"} a ${technical.coverage_max || "--"} con run_id ${technical.run_id || "--"}.`;
+  elements.technical.runtimeBadge.className = runtimeBadgeClass(runtimeStatus);
+  elements.technical.runtimeBadge.textContent = runtimeStatus === "running" ? "Actualizando" : runtimeStatus === "error" ? "Con error" : "Estable";
+  elements.technical.runtimeMessage.textContent =
+    runtime?.message || "No hay procesos activos. El estado expuesto corresponde al ultimo snapshot tecnico disponible.";
+  elements.technical.progressBar.style.width = `${stageProgress(runtime?.stage, runtimeStatus)}%`;
+  elements.technical.refreshButton.disabled = !technicalState.apiAvailable || runtimeStatus === "running";
+
+  const summary = technical.summary || {};
+  renderMetricCards(elements.technical.summaryMetrics, [
+    { label: "Ultima actualizacion", value: formatDateTime(technical.generated_at), caption: "Hora efectiva del snapshot tecnico publicado." },
+    { label: "Duracion ultima corrida", value: formatDuration(technical.last_refresh_duration_seconds), caption: "Tiempo total del ultimo backfill mas snapshot." },
+    { label: "Filas core actualizadas", value: formatPreciseNumber(summary.core_rows_updated || 0), caption: "Suma de filas materializadas en tablas core." },
+    { label: "Tablas actualizadas", value: formatPreciseNumber(summary.tables_updated || 0), caption: "Total de tablas impactadas por la ultima corrida." },
+    { label: "Recursos procesados", value: formatPreciseNumber(summary.resources_processed || 0), caption: "Recursos de Contifico recorridos por el pipeline." },
+    { label: "Freshness", value: freshnessLabel(technical.freshness_seconds), caption: "Tiempo transcurrido desde la ultima generacion del snapshot." },
+  ]);
+
+  const metaPills = [
+    `Run ID: ${technical.run_id || "--"}`,
+    `Inicio: ${formatDateTime(technical.last_refresh_started_at)}`,
+    `Fin: ${formatDateTime(technical.last_refresh_finished_at)}`,
+    `Exitosos: ${summary.resources_success || 0}`,
+    `Fallidos: ${summary.resources_failed || 0}`,
+    `Filas origen: ${formatCompact(summary.source_rows_processed || 0)}`,
+  ];
+  elements.technical.runtimeMeta.innerHTML = metaPills.map((item) => `<span class="technical-meta-pill">${item}</span>`).join("");
+  renderTechnicalAlerts(technical.alerts || [], runtime);
+
+  const resourceRows = sortByValueDescending(
+    (technical.resource_metrics || []).map((row) => ({
+      label: row.resource,
+      value: toNumber(row.core_rows_loaded),
+    })),
+  ).slice(0, 10);
+  setOption("technical-resource-chart", horizontalBarOption({ labels: resourceRows.map((row) => row.label), values: resourceRows.map((row) => row.value), formatter: formatNumber, color: "#0d6c5f" }));
+
+  const differenceRows = sortByValueDescending(
+    (technical.source_vs_core || []).map((row) => ({
+      label: row.resource,
+      value: Math.abs(toNumber(row.difference)),
+    })),
+  ).slice(0, 10);
+  setOption("technical-difference-chart", horizontalBarOption({ labels: differenceRows.map((row) => row.label), values: differenceRows.map((row) => row.value), formatter: formatNumber, color: "#b94f44" }));
+
+  renderTable("technical-runs-table", technical.recent_runs || [], [
+    { key: "run_id", label: "Run ID" },
+    { key: "status", label: "Estado" },
+    { key: "started_at", label: "Inicio", formatter: formatDateTime },
+    { key: "duration_seconds", label: "Duracion", formatter: formatDuration },
+    { key: "resources_processed", label: "Recursos", formatter: formatNumber },
+    { key: "source_rows", label: "Filas origen", formatter: formatNumber },
+  ]);
+  renderTable("technical-load-table", (technical.load_metrics || []).slice(0, 20), [
+    { key: "stage", label: "Stage" },
+    { key: "table_name", label: "Tabla" },
+    { key: "row_count", label: "Filas", formatter: formatNumber },
+    { key: "measured_at", label: "Medido", formatter: formatDateTime },
+  ]);
+  renderTable("technical-fk-table", technical.fk_health || [], [
+    { key: "relation_name", label: "Relacion" },
+    { key: "orphan_count", label: "Huerfanos", formatter: formatNumber },
+  ]);
+  renderTable("technical-watermarks-table", technical.watermarks || [], [
+    { key: "resource", label: "Recurso" },
+    { key: "min_record_date", label: "Desde" },
+    { key: "max_record_date", label: "Hasta" },
+    { key: "updated_at", label: "Actualizado", formatter: formatDateTime },
+  ]);
+
+  const healthMetrics = [
+    ...(technical.placeholders || []).map((row) => ({
+      label: `Placeholders ${row.table_name}`,
+      value: formatPreciseNumber(row.placeholder_count),
+      caption: "Registros auxiliares para sostener integridad referencial.",
+    })),
+    ...(technical.nulls_allowed || []).map((row) => ({
+      label: row.metric,
+      value: formatPreciseNumber(row.value),
+      caption: "Nulos tolerados y hallazgos tecnicos del modelo.",
+    })),
+  ].slice(0, 6);
+  renderMetricCards(elements.technical.healthMetrics, healthMetrics);
+  renderStoryCards(
+    elements.technical.storyCards,
+    (technical.narrative || []).map((body, index) => ({
+      title: `Hallazgo ${index + 1}`,
+      body,
+    })),
+  );
+  renderReviewCards(elements.technical.inventoryReview, technical.consistency_review?.inventory || []);
+  renderReviewCards(elements.technical.accountingReview, technical.consistency_review?.accounting || []);
+}
+
 function showServerHelp() {
   elements.heroText.textContent =
     "El dashboard no puede cargarse correctamente si abres index.html directo con file://. Levántalo con servidor local y entra por http://127.0.0.1:8123.";
+  elements.technical.subtitle.textContent =
+    "El frontend requiere servidor HTTP local para leer snapshots JSON y conectarse a la API tecnica.";
   elements.heroAlerts.innerHTML = `
     <article class="alert-card warning">
       <h3>Servidor requerido</h3>
@@ -760,6 +1036,7 @@ function renderAll() {
   renderAccounting();
   renderQuality();
   renderTables();
+  renderTechnical();
 }
 
 function populateControls() {
@@ -797,7 +1074,99 @@ function populateControls() {
   makeOptionList(elements.filters.center, filters.cost_centers, "value", "label");
 }
 
+async function fetchJson(url, options = {}) {
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    throw new Error(`${response.status} ${response.statusText}`);
+  }
+  return response.json();
+}
+
+async function loadTechnicalState() {
+  try {
+    const payload = await fetchJson(`${apiBase}/status`);
+    technicalState.apiAvailable = true;
+    technicalState.apiError = "";
+    technicalState.runtime = payload.runtime || { current_job: null, last_job: null };
+    technicalState.data = payload.technical;
+  } catch (error) {
+    technicalState.apiAvailable = false;
+    technicalState.apiError = error.message;
+    technicalState.runtime = { current_job: null, last_job: null };
+    technicalState.data = await fetchJson("./data/technical.json");
+  }
+}
+
+async function reloadTechnicalStatus(reloadAnalytics = false) {
+  await loadTechnicalState();
+  renderTechnical();
+  if (reloadAnalytics) {
+    snapshot = await loadSnapshot();
+    renderAlerts(snapshot.manifest.alerts);
+    renderStaticMeta();
+    populateControls();
+    renderAll();
+  }
+}
+
+function clearPolling() {
+  if (technicalState.pollHandle) {
+    clearInterval(technicalState.pollHandle);
+    technicalState.pollHandle = null;
+  }
+}
+
+async function pollRefreshJob(jobId) {
+  clearPolling();
+  technicalState.pollHandle = window.setInterval(async () => {
+    try {
+      const payload = await fetchJson(`${apiBase}/refresh/${jobId}`);
+      technicalState.runtime.current_job = payload.job?.status === "running" ? payload.job : null;
+      technicalState.runtime.last_job = payload.job?.status === "running" ? technicalState.runtime.last_job : payload.job;
+      renderTechnical();
+      if (payload.job && payload.job.status !== "running") {
+        clearPolling();
+        await reloadTechnicalStatus(payload.job.status === "success");
+      }
+    } catch (error) {
+      clearPolling();
+      technicalState.apiError = error.message;
+      renderTechnical();
+    }
+  }, 4000);
+}
+
+async function startTechnicalRefresh() {
+  if (!technicalState.apiAvailable) {
+    renderTechnical();
+    return;
+  }
+  try {
+    const payload = await fetchJson(`${apiBase}/refresh`, { method: "POST" });
+    technicalState.runtime.current_job = payload.job;
+    setActiveTab("technical-view");
+    renderTechnical();
+    await pollRefreshJob(payload.job.job_id);
+  } catch (error) {
+    technicalState.apiError = error.message;
+    renderTechnical();
+  }
+}
+
+async function reloadTechnicalSnapshotOnly() {
+  if (technicalState.apiAvailable) {
+    await fetchJson(`${apiBase}/reload`, { method: "POST" });
+  }
+  await reloadTechnicalStatus(true);
+}
+
 function bindEvents() {
+  elements.tabs.forEach((button) => {
+    button.addEventListener("click", () => setActiveTab(button.dataset.tabTarget));
+  });
+  elements.technical.refreshButton.addEventListener("click", startTechnicalRefresh);
+  elements.technical.reloadButton.addEventListener("click", reloadTechnicalSnapshotOnly);
+
   elements.filters.dateFrom.addEventListener("input", (event) => {
     state.global.dateFrom = event.target.value;
     renderAll();
@@ -867,7 +1236,7 @@ function bindEvents() {
 }
 
 async function loadSnapshot() {
-  const responses = await Promise.all(fileNames.map((file) => fetch(`./data/${file}`).then((response) => response.json())));
+  const responses = await Promise.all(fileNames.map((file) => fetchJson(`./data/${file}`)));
   const [manifest, overview, commercial, customers, products, inventory, accounting, quality, tables] = responses;
   return { manifest, overview, commercial, customers, products, inventory, accounting, quality, tables };
 }
@@ -878,14 +1247,20 @@ async function init() {
     return;
   }
   try {
-    snapshot = await loadSnapshot();
+    [snapshot] = await Promise.all([loadSnapshot(), loadTechnicalState()]);
     renderAlerts(snapshot.manifest.alerts);
     renderStaticMeta();
     populateControls();
+    renderTechnical();
     bindEvents();
     renderAll();
+    setActiveTab("technical-view");
+    if (technicalState.runtime.current_job?.job_id) {
+      await pollRefreshJob(technicalState.runtime.current_job.job_id);
+    }
   } catch (error) {
     elements.heroText.textContent = `No fue posible cargar el snapshot del dashboard. ${error.message}`;
+    elements.technical.subtitle.textContent = `No fue posible cargar la revision tecnica. ${error.message}`;
     showServerHelp();
     console.error(error);
   }

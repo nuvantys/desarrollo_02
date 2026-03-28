@@ -1,8 +1,8 @@
 {
-  "run_id": "20260328180214",
+  "run_id": "20260328205519",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-03-28T13:35:14-05:00",
+  "generated_at": "2026-03-28T16:16:11-05:00",
   "version": "1.0.0",
   "counts": [
     {
@@ -666,6 +666,7 @@
     "inventory.json",
     "accounting.json",
     "quality.json",
+    "technical.json",
     "tables.json"
   ]
 }
