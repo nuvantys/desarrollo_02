@@ -34,6 +34,7 @@ DEFAULT_PGHOST = "127.0.0.1"
 DEFAULT_PGPORT = 5432
 DEFAULT_PG_MAINTENANCE_DB = "postgres"
 BACKFILL_MODE = "backfill"
+INSERT_BATCH_SIZE = 2000
 
 
 RESOURCE_ORDER = (
@@ -909,7 +910,7 @@ def insert_rows(
     if conflict_clause:
         statement = f"{statement} {conflict_clause}"
     values = [tuple(row.get(column) for column in columns) for row in rows]
-    execute_values(cur, statement, values, page_size=500)
+    execute_values(cur, statement, values, page_size=INSERT_BATCH_SIZE)
     return len(rows)
 
 
@@ -1023,6 +1024,18 @@ def ensure_batch_references(cur, core_rows: dict[str, list[dict[str, Any]]], run
                     ids_needed[target_table].add(str(value))
     for target_table in STUB_TARGET_ORDER:
         ensure_reference_rows(cur, target_table, ids_needed.get(target_table, set()), run_id, ingested_at)
+
+
+def dedupe_core_rows(table_name: str, rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    primary_keys = CORE_PRIMARY_KEYS[table_name]
+    deduped: dict[tuple[Any, ...], dict[str, Any]] = {}
+    ordered_keys: list[tuple[Any, ...]] = []
+    for row in rows:
+        key = tuple(row.get(column) for column in primary_keys)
+        if key not in deduped:
+            ordered_keys.append(key)
+        deduped[key] = row
+    return [deduped[key] for key in ordered_keys]
 
 
 def normalize_catalog_records(
@@ -1582,26 +1595,34 @@ def process_resource(conn, client: ApiClient, spec: ResourceSpec, run_id: str, i
     try:
         pages, source_count = fetch_resource_pages(client, spec)
         pages_fetched = len(pages)
+        aggregated_raw_rows: list[dict[str, Any]] = []
+        aggregated_core_rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        for page_number, payload in pages:
+            fetched_at = parse_iso_timestamp(iso_now())
+            request_params = {} if spec.response_kind == "flat" else {"page": page_number}
+            page_records = payload if spec.response_kind == "flat" else payload.get("results", [])
+            if not isinstance(page_records, list):
+                raise RuntimeError(f"Expected list of records for {spec.key}")
+            raw_rows, core_rows = normalize_records(spec, page_records, run_id, ingested_at, page_number, request_params, fetched_at)
+            if save_raw:
+                aggregated_raw_rows.extend(raw_rows)
+            for table_name, rows in core_rows.items():
+                aggregated_core_rows[table_name].extend(rows)
+
         with conn.cursor() as cur:
             cur.execute("SET CONSTRAINTS ALL DEFERRED")
-            for page_number, payload in pages:
-                fetched_at = parse_iso_timestamp(iso_now())
-                request_params = {} if spec.response_kind == "flat" else {"page": page_number}
-                page_records = payload if spec.response_kind == "flat" else payload.get("results", [])
-                if not isinstance(page_records, list):
-                    raise RuntimeError(f"Expected list of records for {spec.key}")
-                raw_rows, core_rows = normalize_records(spec, page_records, run_id, ingested_at, page_number, request_params, fetched_at)
-                ensure_batch_references(cur, core_rows, run_id, ingested_at)
-                if save_raw:
-                    raw_row_count += insert_rows(cur, "raw.resource_rows", RAW_RESOURCE_ROW_COLUMNS, raw_rows)
-                for table_name, rows in core_rows.items():
-                    table_counts[table_name] += insert_rows(
-                        cur,
-                        f"core.{table_name}",
-                        CORE_TABLE_COLUMNS[table_name],
-                        rows,
-                        conflict_clause=build_upsert_clause(table_name),
-                    )
+            ensure_batch_references(cur, aggregated_core_rows, run_id, ingested_at)
+            if save_raw:
+                raw_row_count += insert_rows(cur, "raw.resource_rows", RAW_RESOURCE_ROW_COLUMNS, aggregated_raw_rows)
+            for table_name, rows in aggregated_core_rows.items():
+                deduped_rows = dedupe_core_rows(table_name, rows)
+                table_counts[table_name] += insert_rows(
+                    cur,
+                    f"core.{table_name}",
+                    CORE_TABLE_COLUMNS[table_name],
+                    deduped_rows,
+                    conflict_clause=build_upsert_clause(table_name),
+                )
             finished_at = parse_iso_timestamp(iso_now())
             metrics = [
                 {"run_id": run_id, "resource": spec.key, "stage": "core", "table_name": name, "row_count": count, "measured_at": finished_at}
