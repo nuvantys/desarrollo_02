@@ -93,6 +93,7 @@ const elements = {
     seniorSummary: document.getElementById("technical-senior-summary"),
     sourceModes: document.getElementById("technical-source-modes"),
     detailedFindings: document.getElementById("technical-detailed-findings"),
+    priorityMatrix: document.getElementById("technical-priority-matrix"),
   },
   filters: {
     dateFrom: document.getElementById("filter-date-from"),
@@ -992,6 +993,14 @@ function renderDetailedFindings(target, cards) {
     .join("");
 }
 
+function renderPriorityBadge(level, code) {
+  return `<span class="priority-pill ${level || "bajo"}">${level || "bajo"}${code ? ` / ${code}` : ""}</span>`;
+}
+
+function renderAreaBadge(area) {
+  return `<span class="area-pill">${String(area || "").replaceAll("_", " ")}</span>`;
+}
+
 function renderTechnical() {
   if (!technicalState.data) return;
   const technical = technicalState.data;
@@ -1096,6 +1105,17 @@ function renderTechnical() {
     elements.technical.detailedFindings,
     [...(technical.consistency_review?.inventory || []), ...(technical.consistency_review?.accounting || [])],
   );
+  renderTable("technical-priority-matrix", technical.priority_matrix || [], [
+    { key: "correction_order", label: "Orden", formatter: formatNumber },
+    { key: "priority_level", label: "Prioridad", formatter: (value, row) => renderPriorityBadge(value, row.priority_code) },
+    { key: "title", label: "Hallazgo" },
+    { key: "area", label: "Area", formatter: renderAreaBadge },
+    { key: "metric", label: "Volumen", formatter: formatNumber },
+    { key: "recommended_owner", label: "Responsable" },
+    { key: "workstream", label: "Frente" },
+    { key: "why_now", label: "Por que ahora" },
+    { key: "success_criteria", label: "Criterio de cierre" },
+  ]);
 }
 
 function showServerHelp() {

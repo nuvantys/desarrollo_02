@@ -718,6 +718,44 @@ select:focus {
   overflow: auto;
 }
 
+.priority-pill,
+.area-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.priority-pill {
+  background: rgba(13, 108, 95, 0.08);
+  color: var(--accent);
+}
+
+.priority-pill.alto {
+  background: rgba(185, 79, 68, 0.16);
+  color: var(--danger);
+}
+
+.priority-pill.medio {
+  background: rgba(201, 134, 29, 0.18);
+  color: var(--warn);
+}
+
+.priority-pill.bajo {
+  background: rgba(13, 108, 95, 0.08);
+  color: var(--accent);
+}
+
+.area-pill {
+  background: rgba(30, 44, 37, 0.08);
+  color: var(--text);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

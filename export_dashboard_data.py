@@ -1008,6 +1008,118 @@ def build_source_overview(conn, meta: dict[str, Any], recent_runs: list[dict[str
     }
 
 
+def build_priority_matrix(consistency_review: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
+    priority_band_map = {
+        "P1": "alto",
+        "P2": "medio",
+        "P3": "bajo",
+    }
+    priority_rules = {
+        "Categorias con mapeo contable incompleto": {
+            "priority_rank": 1,
+            "priority_label": "P1",
+            "responsible_role": "Contabilidad + Maestro de catalogo",
+            "workstream": "Gobernanza contable base",
+            "why_now": "Corrige la capa de herencia antes de seguir ajustando productos y transacciones.",
+            "success_criteria": "Toda categoria inventariable queda con cuenta de venta, compra e inventario completas.",
+        },
+        "Productos sin cuenta de costo": {
+            "priority_rank": 2,
+            "priority_label": "P1",
+            "responsible_role": "Contabilidad + Responsable de productos",
+            "workstream": "Rentabilidad y costo",
+            "why_now": "Sin cuenta de costo no hay margen confiable por producto ni salida contable consistente.",
+            "success_criteria": "Todo producto activo queda con cuenta de costo valida o heredada con regla explicita.",
+        },
+        "Productos sin cuenta de compra": {
+            "priority_rank": 3,
+            "priority_label": "P1",
+            "responsible_role": "Compras + Contabilidad",
+            "workstream": "Clasificacion de adquisiciones",
+            "why_now": "Evita que nuevas compras sigan entrando sin una imputacion consistente.",
+            "success_criteria": "Todo producto comprable queda vinculado a cuenta de compra o regla de herencia controlada.",
+        },
+        "Movimientos sin cuenta contable": {
+            "priority_rank": 4,
+            "priority_label": "P1",
+            "responsible_role": "Inventario + Contabilidad",
+            "workstream": "Conciliacion operacion-contabilidad",
+            "why_now": "Cierra el puente entre movimiento fisico y lectura contable antes de profundizar analisis de costo.",
+            "success_criteria": "Todo movimiento relevante queda trazable a una cuenta contable o justificado como excepcion controlada.",
+        },
+        "Movimientos sin detalle": {
+            "priority_rank": 5,
+            "priority_label": "P1",
+            "responsible_role": "Operaciones + Inventario",
+            "workstream": "Calidad transaccional",
+            "why_now": "El evento sin detalle degrada kardex, rotacion y auditoria operativa.",
+            "success_criteria": "Toda cabecera valida queda con detalle asociado o es marcada como anulada/no analizable.",
+        },
+        "Productos con stock negativo": {
+            "priority_rank": 6,
+            "priority_label": "P1",
+            "responsible_role": "Inventario + Bodega",
+            "workstream": "Regularizacion de saldos",
+            "why_now": "El stock negativo rompe disponibilidad, reposicion y control fisico.",
+            "success_criteria": "Los productos con saldo negativo quedan regularizados y monitoreados.",
+        },
+        "Movimientos con cantidad y total cero": {
+            "priority_rank": 7,
+            "priority_label": "P2",
+            "responsible_role": "Inventario + Costos",
+            "workstream": "Valorizacion de movimientos",
+            "why_now": "Impacta la lectura economica del inventario aun cuando el movimiento fisico ya exista.",
+            "success_criteria": "Todo movimiento con cantidad relevante tiene una valorizacion consistente o una excepcion documentada.",
+        },
+        "Lineas directas sin producto y con cuenta": {
+            "priority_rank": 8,
+            "priority_label": "P2",
+            "responsible_role": "Comercial + Contabilidad",
+            "workstream": "Separacion producto-servicio",
+            "why_now": "Necesita limpiarse antes de interpretar mix comercial y top productos.",
+            "success_criteria": "Las lineas directas quedan clasificadas como servicio/cargo o migradas a producto cuando aplique.",
+        },
+        "Productos sin marca": {
+            "priority_rank": 9,
+            "priority_label": "P3",
+            "responsible_role": "Maestro de productos + Compras",
+            "workstream": "Enriquecimiento del catalogo",
+            "why_now": "No rompe integridad, pero limita segmentacion y lectura de portafolio.",
+            "success_criteria": "Los productos que usan marca quedan clasificados y los que no, marcados como excepcion valida.",
+        },
+        "Cuentas contables sin uso historico": {
+            "priority_rank": 10,
+            "priority_label": "P3",
+            "responsible_role": "Contabilidad",
+            "workstream": "Depuracion del plan contable",
+            "why_now": "Es limpieza de catalogo, util despues de estabilizar las capas transaccionales.",
+            "success_criteria": "El plan contable distingue cuentas operativas, historicas y obsoletas con criterio explicito.",
+        },
+    }
+    all_cards = [*consistency_review.get("inventory", []), *consistency_review.get("accounting", [])]
+    matrix: list[dict[str, Any]] = []
+    for card in all_cards:
+        rule = priority_rules.get(card["title"], {})
+        matrix.append(
+            {
+                "priority_rank": rule.get("priority_rank", 999),
+                "correction_order": rule.get("priority_rank", 999),
+                "priority_code": rule.get("priority_label", "P3"),
+                "priority_level": priority_band_map.get(rule.get("priority_label", "P3"), "bajo"),
+                "severity": card.get("severity"),
+                "title": card.get("title"),
+                "area": card.get("area"),
+                "metric": card.get("metric"),
+                "recommended_owner": rule.get("responsible_role", "Equipo de datos"),
+                "workstream": rule.get("workstream", "Saneamiento de calidad"),
+                "why_now": rule.get("why_now", card.get("impact")),
+                "success_criteria": rule.get("success_criteria", card.get("suggested_action")),
+            }
+        )
+    matrix.sort(key=lambda row: (row["priority_rank"], row["title"]))
+    return matrix
+
+
 def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict[str, Any]:
     latest_run_id = meta.get("run_id")
     source_vs_core = query_rows(
@@ -1190,6 +1302,7 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         "raw_rows_processed": int(last_run.get("raw_rows") or 0),
     }
     source_overview = build_source_overview(conn, meta, recent_runs, summary)
+    priority_matrix = build_priority_matrix(consistency_review)
     return {
         **meta,
         "filters_available": filters,
@@ -1213,6 +1326,7 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         "nulls_allowed": nulls_allowed,
         "consistency_review": consistency_review,
         "source_overview": source_overview,
+        "priority_matrix": priority_matrix,
         "recent_runs": recent_runs,
         "narrative": narrative,
     }
