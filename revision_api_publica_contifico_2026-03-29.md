@@ -4,7 +4,7 @@ Fecha: 2026-03-29
 
 ## Objetivo
 
-Contrastar la documentación pública de Contifico con el modelo actualmente cargado en `contifico_backfill`, validando con la credencial activa qué APIs adicionales responden hoy y qué datos nuevos se pueden incorporar.
+Contrastar la documentación pública de Contifico con el modelo actualmente cargado en Supabase Postgres, validando con la credencial activa qué APIs adicionales responden hoy y qué datos nuevos se pueden incorporar.
 
 ## Alcance actual ya implementado
 

@@ -1,35 +1,35 @@
-# Sync a Supabase
+# Sync entre PostgreSQL y Supabase
 
-Este proyecto mantiene `contifico_backfill` como base maestra local y replica a Supabase como destino remoto. La idea es no romper el pipeline actual: primero se actualiza localmente desde Contifico, luego se sincroniza a Supabase en un paso aparte y explícito.
+Este utilitario queda como herramienta auxiliar para copiar tablas entre motores PostgreSQL compatibles. Ya no forma parte del flujo principal del dashboard, porque la base maestra operativa vive directamente en Supabase.
 
 ## Diseño
 
-- Fuente de verdad operativa: PostgreSQL local `contifico_backfill`
-- Destino remoto: Supabase Postgres
+- Fuente de verdad operativa actual: Supabase Postgres
+- Uso de este script: sincronizaciones auxiliares o migraciones puntuales entre entornos PostgreSQL
 - Esquemas preservados: `meta`, `raw`, `core`, `reporting`
-- Método de carga: `COPY` entre PostgreSQL local y PostgreSQL remoto
+- Metodo de carga: `COPY` entre dos instancias PostgreSQL
 - Validaciones post-carga:
-  - recreación de DDL si no existe
+  - recreacion de DDL si no existe
   - truncado seguro del destino antes de recargar
-  - validación de la FK `documento_cobros -> banco_cuentas`
-  - recreación de vistas `reporting`
+  - validacion de la FK `documento_cobros -> banco_cuentas`
+  - recreacion de vistas `reporting`
 
-## Por qué así
+## Por que asi
 
-- No mezcla refresh operativo con publicación remota.
-- Evita romper el dashboard local si Supabase falla o se satura.
-- Conserva la lógica relacional completa del modelo actual.
-- Permite decidir si subir o no `raw.resource_rows`, que suele ser la capa más pesada y menos necesaria para consumo web.
+- No mezcla refresh operativo con una migracion puntual entre entornos.
+- Sigue siendo util para replicar o mover datos entre dos motores PostgreSQL cuando haga falta.
+- Conserva la logica relacional completa del modelo actual.
+- Permite decidir si subir o no `raw.resource_rows`, que suele ser la capa mas pesada y menos necesaria para consumo web.
 
-## Recomendación operativa
+## Recomendacion operativa
 
 - Para pruebas y uso diario: sincronizar `core + meta + reporting`
-- Para auditoría profunda: añadir `--include-raw`
-- Para destino Supabase: usar conexión PostgreSQL nativa con SSL
+- Para auditoria profunda: anadir `--include-raw`
+- Para destino Supabase: usar conexion PostgreSQL nativa con SSL
 
-## Variables y ejecución
+## Variables y ejecucion
 
-Variables locales:
+Origen PostgreSQL opcional:
 
 ```powershell
 $env:PGHOST = '127.0.0.1'
@@ -44,19 +44,19 @@ Destino Supabase:
 $env:SUPABASE_DB_URL = 'postgresql://postgres.<ref>:<password>@<host>:5432/postgres?sslmode=require'
 ```
 
-Sincronización estándar:
+Sincronizacion estandar:
 
 ```powershell
 python .\supabase_sync.py `
-  --source-db-name contifico_backfill `
+  --source-db-name postgres `
   --report-out .\supabase_sync_report.md
 ```
 
-Sincronización incluyendo capa raw:
+Sincronizacion incluyendo capa raw:
 
 ```powershell
 python .\supabase_sync.py `
-  --source-db-name contifico_backfill `
+  --source-db-name postgres `
   --include-raw `
   --report-out .\supabase_sync_report.md
 ```
@@ -65,11 +65,11 @@ Si no quieres truncar el destino antes de copiar:
 
 ```powershell
 python .\supabase_sync.py `
-  --source-db-name contifico_backfill `
+  --source-db-name postgres `
   --no-truncate-target
 ```
 
-## Alcance actual de la réplica
+## Alcance actual de la replica
 
 Se sincronizan estas tablas:
 
@@ -106,15 +106,15 @@ Opcional:
 
 - `raw.resource_rows`
 
-## Lectura técnica
+## Lectura tecnica
 
-- `meta` permite que la réplica conserve bitácora, watermarks y trazabilidad.
-- `reporting` se reconstruye en el destino, no se copia físicamente.
-- La sincronización usa el mismo modelo relacional que el dashboard local, así que no requiere rehacer joins ni renombrar capas.
-- Supabase seguirá siendo PostgreSQL; por tanto, el diseño actual de FKs, vistas y tipos `jsonb`, `numeric`, `date` y `timestamptz` es compatible.
+- `meta` permite que la replica conserve bitacora, watermarks y trazabilidad.
+- `reporting` se reconstruye en el destino, no se copia fisicamente.
+- La sincronizacion usa el mismo modelo relacional que el dashboard, asi que no requiere rehacer joins ni renombrar capas.
+- Supabase sigue siendo PostgreSQL; por tanto, el diseño actual de FKs, vistas y tipos `jsonb`, `numeric`, `date` y `timestamptz` es compatible.
 
 ## Fuentes oficiales consultadas
 
 - Supabase Import data: https://supabase.com/docs/guides/database/import-data
 
-La recomendación de usar conexión PostgreSQL directa y cargas por `COPY`/herramientas de base se apoya en la guía oficial de importación de Supabase, que desaconseja usar la API para importaciones grandes y recomienda métodos de base de datos para cargas voluminosas.
+La recomendacion de usar conexion PostgreSQL directa y cargas por `COPY`/herramientas de base se apoya en la guia oficial de importacion de Supabase, que desaconseja usar la API para importaciones grandes y recomienda metodos de base de datos para cargas voluminosas.

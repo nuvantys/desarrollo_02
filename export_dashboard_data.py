@@ -50,6 +50,12 @@ def payload_top_level_rows(payload: dict[str, Any]) -> int:
     return sum(len(value) for value in payload.values() if isinstance(value, list))
 
 
+def database_label_from_config(config) -> str:
+    if getattr(config, "dsn", None):
+        return "Supabase postgres"
+    return config.db_name
+
+
 def base_metadata(conn) -> dict[str, Any]:
     manifest_row = query_rows(
         conn,
@@ -162,7 +168,7 @@ def build_manifest(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict[
         {
             "level": "info",
             "title": "Salud relacional",
-            "message": "Todas las relaciones validadas quedaron sin huérfanos en el modelo PostgreSQL.",
+            "message": "Todas las relaciones validadas quedaron sin huérfanos en el modelo relacional publicado en Supabase.",
             "metric": query_rows(conn, "SELECT SUM(orphan_count)::bigint AS value FROM reporting.v_fk_health")[0]["value"],
         },
         {
@@ -1129,15 +1135,15 @@ def build_source_overview(conn, meta: dict[str, Any], recent_runs: list[dict[str
     senior_summary = [
         {
             "title": "Lectura senior del estado actual",
-            "body": f"La base publicada al dashboard sigue siendo local y materializada, pero su fuente de origen real es Contifico API. Hoy el snapshot vigente parte del run {meta.get('run_id')} y refleja {summary.get('resources_processed', 0)} recursos procesados con {summary.get('tables_updated', 0)} tablas impactadas, incluyendo ya las capas de guias de remision y tesoreria bancaria.",
+            "body": f"La base publicada al dashboard ya opera sobre Supabase como capa maestra en la nube, con Contifico API como fuente viva. Hoy el snapshot vigente parte del run {meta.get('run_id')} y refleja {summary.get('resources_processed', 0)} recursos procesados con {summary.get('tables_updated', 0)} tablas impactadas, incluyendo ya las capas de guias de remision y tesoreria bancaria.",
         },
         {
             "title": "Cadena de origen de los datos",
-            "body": "La secuencia operativa es: Contifico API -> contifico_pg_backfill.py -> PostgreSQL contifico_backfill -> export_dashboard_data.py -> dashboard/data/*.json -> vista estatica del dashboard. La API local solo orquesta estado y refresh, no reemplaza la base maestra.",
+            "body": "La secuencia operativa es: Contifico API -> contifico_pg_backfill.py -> Supabase Postgres -> export_dashboard_data.py -> dashboard/data/*.json -> vista estatica del dashboard. El orquestador local solo dispara procesos y publica estado tecnico; la base maestra vive en la nube.",
         },
         {
-            "title": "Modo local versus modo vivo",
-            "body": "El modo local mantiene estabilidad porque sirve el ultimo snapshot ya consolidado. El modo vivo ahora separa refresh rapido y refresh completo: el rapido lee cambios recientes y el completo relee todo el historico para reconciliacion profunda.",
+            "title": "Snapshot estable y refresh vivo",
+            "body": "El dashboard sigue consumiendo un snapshot estable para navegar rapido, pero los refresh rapido y completo ya escriben directo en Supabase. El rapido lee cambios recientes y el completo relee todo el historico para reconciliacion profunda.",
         },
         {
             "title": "Historial reciente del pipeline",
@@ -1151,11 +1157,11 @@ def build_source_overview(conn, meta: dict[str, Any], recent_runs: list[dict[str
         },
         {
             "layer": "contifico_pg_backfill.py",
-            "role": "Extrae, deduplica, normaliza y carga el historico en PostgreSQL.",
+            "role": "Extrae, deduplica, normaliza y carga el historico directamente en Supabase Postgres.",
         },
         {
-            "layer": "PostgreSQL contifico_backfill",
-            "role": "Base maestra local para analitica, revision tecnica y trazabilidad.",
+            "layer": "Supabase Postgres",
+            "role": "Base maestra en la nube para analitica, revision tecnica, trazabilidad y futuros consumos web.",
         },
         {
             "layer": "export_dashboard_data.py",
@@ -1163,28 +1169,28 @@ def build_source_overview(conn, meta: dict[str, Any], recent_runs: list[dict[str
         },
         {
             "layer": "dashboard/data/*.json",
-            "role": "Snapshot local estable consumido por la vista analitica.",
+            "role": "Snapshot estable consumido por la vista analitica y regenerado desde Supabase.",
         },
         {
             "layer": "local_dashboard_api.py",
-            "role": "Expone estado tecnico y orquesta refresh bajo demanda desde la UI.",
+            "role": "Expone estado tecnico y orquesta refresh bajo demanda desde la UI, sin persistir datos fuera de Supabase.",
         },
     ]
     operating_modes = [
         {
-            "mode": "Local estable",
+            "mode": "Snapshot estable",
             "script": "dashboard/start_dashboard_server.ps1",
-            "description": "Levanta dashboard + API tecnica y conserva el ultimo snapshot materializado sin ejecutar refresco automatico.",
+            "description": "Levanta dashboard + API tecnica y conserva el ultimo snapshot materializado desde Supabase sin ejecutar refresco automatico.",
         },
         {
             "mode": "Refresh rapido",
             "script": "dashboard/start_dashboard_live_refresh.ps1",
-            "description": "Levanta dashboard + API tecnica y dispara el modo operacional: lee cambios recientes, actualiza IDs impactados y republica el snapshot.",
+            "description": "Levanta dashboard + API tecnica y dispara el modo operacional: lee cambios recientes desde Contifico API, actualiza Supabase y republica el snapshot.",
         },
         {
             "mode": "Refresh completo",
             "script": "dashboard/start_dashboard_full_refresh.ps1",
-            "description": "Levanta dashboard + API tecnica y dispara un backfill historico completo desde Contifico API hacia PostgreSQL y JSON.",
+            "description": "Levanta dashboard + API tecnica y dispara un backfill historico completo desde Contifico API hacia Supabase y JSON.",
         },
     ]
     return {
@@ -1498,7 +1504,7 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
     read_scope_note = (
         "Lee cambios recientes e IDs impactados; mantiene el historico ya almacenado."
         if last_run_mode == "refresh"
-        else "Relee todo el historico y reconstruye completamente la base local."
+        else "Relee todo el historico y reconstruye completamente la base maestra en Supabase."
         if last_run_mode == "backfill"
         else "No hay suficiente informacion para clasificar el alcance de la corrida."
     )
@@ -1521,7 +1527,7 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         {
             "level": "info" if orphan_total == 0 else "warning",
             "title": "Salud relacional",
-            "message": "Conteo consolidado de huerfanos en relaciones validadas del modelo PostgreSQL.",
+            "message": "Conteo consolidado de huerfanos en relaciones validadas del modelo relacional de Supabase.",
             "metric": orphan_total,
         },
         {
@@ -1545,15 +1551,15 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         },
         {
             "title": "Historico almacenado",
-            "body": f"La base local conserva {int(historical_core_rows_stored or 0)} filas en tablas core. Esa cifra representa lo que ya esta persistido y disponible para analitica, aunque la corrida actual haya leido menos filas desde origen.",
+            "body": f"Supabase conserva {int(historical_core_rows_stored or 0)} filas en tablas core. Esa cifra representa lo que ya esta persistido y disponible para analitica, aunque la corrida actual haya leido menos filas desde origen.",
         },
         {
             "title": "Garantia del refresh rapido",
-            "body": "El modo rapido captura nuevos registros y actualizaciones recientes en los recursos optimizados. Es el modo operacional recomendado para el dia a dia porque reduce tiempo sin vaciar el historico local.",
+            "body": "El modo rapido captura nuevos registros y actualizaciones recientes en los recursos optimizados. Es el modo operacional recomendado para el dia a dia porque reduce tiempo sin vaciar el historico persistido en Supabase.",
         },
         {
             "title": "Cuando usar refresh completo",
-            "body": "El modo completo relee todo el historico y reconstruye la base local. Conviene para conciliacion profunda, cierres, validaciones de integridad o cuando se sospechan cambios historicos fuera de la ventana reciente.",
+            "body": "El modo completo relee todo el historico y reconstruye la base maestra en Supabase. Conviene para conciliacion profunda, cierres, validaciones de integridad o cuando se sospechan cambios historicos fuera de la ventana reciente.",
         },
     ]
     summary = {
@@ -2261,7 +2267,7 @@ def build_database(
     story_cards = [
         {
             "title": "Base maestra relacional",
-            "body": f"La base {db_name} concentra {len(table_inventory)} tablas base, {len(view_inventory)} vistas y {relationship_total} relaciones FK materializadas. El esquema core domina el volumen con {core_rows} filas y soporta toda la capa analitica.",
+            "body": f"La base {db_name} concentra {len(table_inventory)} tablas base, {len(view_inventory)} vistas y {relationship_total} relaciones FK materializadas. El esquema core domina el volumen con {core_rows} filas y soporta toda la capa analitica publicada desde la nube.",
         },
         {
             "title": "Enfoque en relaciones",
@@ -2269,7 +2275,7 @@ def build_database(
         },
         {
             "title": "Back versus front",
-            "body": f"El backend conserva {total_backend_rows} filas entre meta, raw y core, mientras el snapshot web expone {frontend_total_rows} registros agregados en {len(frontend_assets)} archivos JSON para exploracion rapida sin abrir la base al navegador.",
+            "body": f"El backend en Supabase conserva {total_backend_rows} filas entre meta, raw y core, mientras el snapshot web expone {frontend_total_rows} registros agregados en {len(frontend_assets)} archivos JSON para exploracion rapida sin abrir la base al navegador.",
         },
         {
             "title": "Puntos de mayor acoplamiento",
@@ -2332,6 +2338,7 @@ def export_dashboard_data(args: argparse.Namespace) -> int:
     config = pg_config_from_env(args.db_name)
     out_dir = Path(args.out_dir).resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
+    database_label = database_label_from_config(config)
     with open_connection(config, config.db_name) as conn:
         meta = base_metadata(conn)
         filters = filters_available(conn)
@@ -2347,7 +2354,7 @@ def export_dashboard_data(args: argparse.Namespace) -> int:
             "technical.json": build_technical(conn, meta, filters),
             "tables.json": build_tables(conn, meta, filters),
         }
-        payloads["database.json"] = build_database(conn, meta, filters, args.db_name, payloads)
+        payloads["database.json"] = build_database(conn, meta, filters, database_label, payloads)
     for filename, payload in payloads.items():
         write_json(out_dir / filename, payload)
     return 0

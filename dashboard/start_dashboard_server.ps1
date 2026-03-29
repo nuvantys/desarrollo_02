@@ -29,6 +29,16 @@ Start-Process $python.Source -ArgumentList (Join-Path $rootDir "local_dashboard_
 Start-Sleep -Seconds 2
 
 if ($RunLiveRefresh) {
+  if (-not $env:SUPABASE_DB_URL -and -not $env:SUPABASE_DATABASE_URL -and -not $env:DATABASE_URL) {
+    Write-Host "Falta la conexion de Supabase. Define SUPABASE_DB_URL antes de lanzar un refresh desde la UI." -ForegroundColor Red
+    Start-Process $url
+    exit 1
+  }
+  if (-not $env:CONTIFICO_AUTHORIZATION) {
+    Write-Host "Falta CONTIFICO_AUTHORIZATION. Sin ese token no se puede leer Contifico API." -ForegroundColor Red
+    Start-Process $url
+    exit 1
+  }
   Write-Host "Esperando disponibilidad de la API tecnica para disparar refresh desde Contifico API..." -ForegroundColor Yellow
   $ready = $false
   foreach ($attempt in 1..12) {

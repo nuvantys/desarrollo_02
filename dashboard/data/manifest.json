@@ -1,45 +1,45 @@
 {
-  "run_id": "20260329202349",
+  "run_id": "20260329213305",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-03-29T15:25:16-05:00",
+  "generated_at": "2026-03-29T21:34:44+00:00",
   "version": "1.0.0",
   "counts": [
     {
-      "key": "guias",
-      "value": 38
-    },
-    {
-      "key": "productos",
-      "value": 1237
-    },
-    {
-      "key": "banco_movimientos",
-      "value": 2751
+      "key": "documentos",
+      "value": 23911
     },
     {
       "key": "personas",
       "value": 2060
     },
     {
+      "key": "productos",
+      "value": 1237
+    },
+    {
       "key": "movimientos",
       "value": 9024
     },
     {
-      "key": "documentos",
-      "value": 23911
+      "key": "guias",
+      "value": 38
+    },
+    {
+      "key": "banco_movimientos",
+      "value": 2751
     },
     {
       "key": "asientos",
       "value": 67402
     },
     {
-      "key": "asiento_detalles",
-      "value": 279354
-    },
-    {
       "key": "documento_detalles",
       "value": 77447
+    },
+    {
+      "key": "asiento_detalles",
+      "value": 279354
     }
   ],
   "alerts": [
@@ -52,7 +52,7 @@
     {
       "level": "info",
       "title": "Salud relacional",
-      "message": "Todas las relaciones validadas quedaron sin huérfanos en el modelo PostgreSQL.",
+      "message": "Todas las relaciones validadas quedaron sin huérfanos en el modelo relacional publicado en Supabase.",
       "metric": 0
     },
     {

@@ -1,6 +1,6 @@
 # Dashboard Contifico
 
-Dashboard estatico en `HTML + CSS + JS` alimentado desde snapshots JSON exportados desde PostgreSQL y complementado con una API local para la revision tecnica y la actualizacion bajo demanda.
+Dashboard estatico en `HTML + CSS + JS` alimentado desde snapshots JSON exportados desde Supabase Postgres y complementado con una API local sin estado para la revision tecnica y la actualizacion bajo demanda.
 
 ## Archivos principales
 
@@ -18,18 +18,15 @@ Dashboard estatico en `HTML + CSS + JS` alimentado desde snapshots JSON exportad
 - `dashboard/start_dashboard_full_refresh.ps1`
 - `dashboard/start_dashboard_full_refresh.bat`
 
-## Regenerar snapshot
+## Regenerar snapshot desde Supabase
 
 PowerShell:
 
 ```powershell
-$env:PGHOST = '127.0.0.1'
-$env:PGPORT = '5432'
-$env:PGUSER = 'postgres'
-$env:PGPASSWORD = 'postgres'
+$env:SUPABASE_DB_URL = 'postgresql://postgres.<ref>:<password>@aws-1-<region>.pooler.supabase.com:5432/postgres?sslmode=require'
 
 python .\export_dashboard_data.py `
-  --db-name contifico_backfill `
+  --db-name postgres `
   --out-dir .\dashboard\data
 ```
 
@@ -105,14 +102,14 @@ http://127.0.0.1:8123
 - Integracion nueva de `inventario/guia`, `banco/cuenta` y `banco/movimiento`, conectadas con `documentos`, `personas`, `bodegas`, `productos` y `cuentas_contables`
 - Tres graficos nuevos sobre las capas integradas: trazabilidad de guias, carga logistica por bodega y flujo bancario mensual
 - Conciliacion bancaria entre `documento_cobros` y `banco_movimientos`, visible por mes y por cuenta bancaria
-- Ruta de replica a Supabase documentada en `README_supabase_sync.md` y automatizada por `supabase_sync.py`
+- La base maestra del flujo actual vive en Supabase; el orquestador local solo dispara refresh y publica estado tecnico
 
 ## Notas
 
 - El dashboard usa `fetch`, por eso debe abrirse con servidor HTTP y no por `file://`.
 - Si abres `index.html` directo, la app muestra un aviso indicando que debes usar `http://127.0.0.1:8123`.
-- La API tecnica local no expone secretos ni filas crudas de PostgreSQL; solo estado agregado del pipeline.
-- El modo local conserva el ultimo snapshot estable; el modo vivo ejecuta un refresh rapido desde APIs y vuelve a publicar el snapshot en un solo clic.
-- Para una reconstruccion historica completa, ejecuta manualmente `python .\\contifico_pg_backfill.py --mode backfill --db-name contifico_backfill`.
+- La API tecnica local no expone secretos ni filas crudas de Supabase; solo estado agregado del pipeline.
+- El modo estable conserva el ultimo snapshot publicado; el modo vivo ejecuta un refresh rapido desde APIs y vuelve a publicar el snapshot en un solo clic.
+- Para una reconstruccion historica completa, ejecuta manualmente `python .\\contifico_pg_backfill.py --mode backfill --db-name postgres`.
 - La libreria de graficos se carga desde CDN de `ECharts`.
-- La fuente de verdad del snapshot es `contifico_backfill`.
+- La fuente de verdad del snapshot es Supabase Postgres.

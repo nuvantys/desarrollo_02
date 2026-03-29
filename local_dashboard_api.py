@@ -36,7 +36,7 @@ def read_json_file(path: Path) -> dict[str, Any] | None:
 
 def redact_text(text: str) -> str:
     redacted = text
-    for secret_name in ("CONTIFICO_AUTHORIZATION", "PGPASSWORD"):
+    for secret_name in ("CONTIFICO_AUTHORIZATION", "PGPASSWORD", "SUPABASE_DB_URL", "SUPABASE_DATABASE_URL", "DATABASE_URL"):
         secret = os.getenv(secret_name)
         if secret:
             redacted = redacted.replace(secret, f"[redacted:{secret_name.lower()}]")
@@ -224,7 +224,7 @@ class RefreshManager:
                 "--out-dir",
                 str(self.data_dir),
             ]
-            start_message = "Iniciando refresh rapido en PostgreSQL." if scope == "refresh" else "Iniciando refresh completo en PostgreSQL."
+            start_message = "Iniciando refresh rapido hacia Supabase." if scope == "refresh" else "Iniciando refresh completo hacia Supabase."
             self._run_process(job_id, pipeline_command, ROOT_DIR, "extrayendo", start_message)
             self._run_process(job_id, export_command, ROOT_DIR, "regenerando snapshot", "Regenerando snapshot analitico para el dashboard.")
             self._finish_job(job_id, "success", "Actualizacion finalizada correctamente.")
@@ -318,7 +318,7 @@ def build_handler(manager: RefreshManager):
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Local API for the Contifico technical dashboard")
+    parser = argparse.ArgumentParser(description="Local orchestrator API for the Contifico dashboard backed by Supabase")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8130)
     parser.add_argument("--db-name", default=DEFAULT_DB_NAME)

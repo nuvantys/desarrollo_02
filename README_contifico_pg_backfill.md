@@ -1,18 +1,15 @@
 # Contifico PostgreSQL Backfill
 
-Backfill historico completo de Contifico V2 hacia PostgreSQL local, con capa `raw`, modelo `core`, metadata en `meta` y vistas de validacion en `reporting`.
+Backfill historico completo de Contifico V2 hacia Supabase Postgres, con capa `raw`, modelo `core`, metadata en `meta` y vistas de validacion en `reporting`.
 
 ## Requisitos
 
 - Python 3.11+
-- PostgreSQL accesible
+- Supabase Postgres accesible
 - Variables de entorno:
   - `CONTIFICO_AUTHORIZATION`
-  - `PGUSER`
-  - `PGPASSWORD`
-  - `PGHOST` opcional, default `127.0.0.1`
-  - `PGPORT` opcional, default `5432`
-  - `PGMAINTENANCE_DB` opcional, default `postgres`
+  - `SUPABASE_DB_URL` o `DATABASE_URL`
+  - `PGUSER`, `PGPASSWORD`, `PGHOST`, `PGPORT`, `PGMAINTENANCE_DB` solo quedan como compatibilidad secundaria
 
 ## Ejecucion
 
@@ -20,12 +17,11 @@ PowerShell:
 
 ```powershell
 $env:CONTIFICO_AUTHORIZATION = 'tu_token'
-$env:PGUSER = 'postgres'
-$env:PGPASSWORD = 'tu_password'
+$env:SUPABASE_DB_URL = 'postgresql://postgres.<ref>:<password>@aws-1-<region>.pooler.supabase.com:5432/postgres?sslmode=require'
 
 python .\contifico_pg_backfill.py `
   --mode backfill `
-  --db-name contifico_backfill `
+  --db-name postgres `
   --report-out .\final_report.md `
   --save-raw
 ```
@@ -66,7 +62,7 @@ python .\contifico_pg_backfill.py `
 
 ## Salidas
 
-- Datos historicos dentro de PostgreSQL
+- Datos historicos dentro de Supabase Postgres
 - Vistas en `reporting` para resumen de carga, cobertura temporal y salud relacional
 - Informe Markdown en la ruta indicada por `--report-out`
 

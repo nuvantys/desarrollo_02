@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 from zoneinfo import ZoneInfo
 
 import psycopg2
@@ -30,7 +31,7 @@ from contifico_extractor import (
 
 APP_TZ = ZoneInfo("America/Guayaquil")
 UTC = dt.timezone.utc
-DEFAULT_DB_NAME = "contifico_backfill"
+DEFAULT_DB_NAME = "postgres"
 DEFAULT_PGHOST = "127.0.0.1"
 DEFAULT_PGPORT = 5432
 DEFAULT_PG_MAINTENANCE_DB = "postgres"
@@ -77,6 +78,7 @@ CATALOG_RESOURCES = {
 
 @dataclass(frozen=True)
 class PgConfig:
+    dsn: str | None
     host: str
     port: int
     user: str
@@ -198,7 +200,31 @@ def resource_metadata(run_id: str, ingested_at: dt.datetime) -> dict[str, Any]:
     return {"run_id": run_id, "ingested_at": ingested_at}
 
 
+def normalize_postgres_dsn(dsn: str) -> str:
+    parsed = urlparse(dsn)
+    if parsed.scheme in {"postgres", "postgresql"}:
+        query = dict(parse_qsl(parsed.query, keep_blank_values=True))
+        query.setdefault("sslmode", "require")
+        return urlunparse(parsed._replace(query=urlencode(query)))
+    if "sslmode=" not in dsn:
+        return f"{dsn} sslmode=require"
+    return dsn
+
+
 def pg_config_from_env(db_name: str) -> PgConfig:
+    dsn = os.getenv("SUPABASE_DB_URL") or os.getenv("SUPABASE_DATABASE_URL") or os.getenv("DATABASE_URL")
+    if dsn:
+        normalized_dsn = normalize_postgres_dsn(dsn)
+        parsed = urlparse(normalized_dsn)
+        return PgConfig(
+            dsn=normalized_dsn,
+            host=parsed.hostname or "",
+            port=parsed.port or DEFAULT_PGPORT,
+            user=parsed.username or "",
+            password=parsed.password or "",
+            maintenance_db=parsed.path.lstrip("/") or db_name,
+            db_name=parsed.path.lstrip("/") or db_name,
+        )
     user = os.getenv("PGUSER")
     password = os.getenv("PGPASSWORD")
     if not user:
@@ -206,6 +232,7 @@ def pg_config_from_env(db_name: str) -> PgConfig:
     if password is None:
         raise RuntimeError("Missing PGPASSWORD environment variable")
     return PgConfig(
+        dsn=None,
         host=os.getenv("PGHOST", DEFAULT_PGHOST),
         port=int(os.getenv("PGPORT", str(DEFAULT_PGPORT))),
         user=user,
@@ -216,18 +243,23 @@ def pg_config_from_env(db_name: str) -> PgConfig:
 
 
 def open_connection(config: PgConfig, database: str, autocommit: bool = False):
-    conn = psycopg2.connect(
-        host=config.host,
-        port=config.port,
-        user=config.user,
-        password=config.password,
-        dbname=database,
-    )
+    if config.dsn:
+        conn = psycopg2.connect(config.dsn)
+    else:
+        conn = psycopg2.connect(
+            host=config.host,
+            port=config.port,
+            user=config.user,
+            password=config.password,
+            dbname=database,
+        )
     conn.autocommit = autocommit
     return conn
 
 
 def ensure_database_exists(config: PgConfig) -> None:
+    if config.dsn:
+        return
     conn = open_connection(config, config.maintenance_db, autocommit=True)
     try:
         with conn.cursor() as cur:
@@ -2721,7 +2753,7 @@ def generate_final_report(conn, report_path: Path, run_id: str, args: argparse.N
         "## Infraestructura",
         "",
         f"- Fecha de corrida: {dt.date.today().isoformat()}",
-        f"- Base PostgreSQL: `{config.db_name}` en `{config.host}:{config.port}`",
+        f"- Base PostgreSQL destino: `{config.db_name}` en `{config.host}:{config.port}`",
         f"- Modo: `{args.mode}`",
         f"- API base: `{args.base_url}`",
         f"- Raw auditado: `{'si' if args.save_raw else 'no'}`",

@@ -1248,11 +1248,11 @@ function renderDatabase() {
 
   const summary = database.summary || {};
   renderMetricCards(elements.database.summaryMetrics, [
-    { label: "Tamano total BD", value: formatBytes(summary.database_total_size_bytes), caption: "Peso consolidado de tablas fisicas en PostgreSQL." },
+    { label: "Tamano total BD", value: formatBytes(summary.database_total_size_bytes), caption: "Peso consolidado de tablas fisicas en Supabase Postgres." },
     { label: "Snapshot frontend", value: formatBytes(summary.frontend_total_size_bytes), caption: "Peso total de los JSON publicados para la interfaz web." },
     { label: "Tablas base", value: formatPreciseNumber(summary.table_count || 0), caption: "Tablas fisicas entre meta, raw, core y reporting." },
     { label: "Relaciones FK", value: formatPreciseNumber(summary.relationship_count || 0), caption: "Enlaces foraneos materializados dentro del modelo." },
-    { label: "Filas backend", value: formatPreciseNumber(summary.backend_total_rows || 0), caption: "Volumen total preservado en PostgreSQL." },
+    { label: "Filas backend", value: formatPreciseNumber(summary.backend_total_rows || 0), caption: "Volumen total preservado en Supabase." },
     { label: "Registros frontend", value: formatPreciseNumber(summary.frontend_total_rows || 0), caption: "Puntos analiticos expuestos por el snapshot web." },
   ]);
   renderStoryCards(elements.database.storyCards, database.story_cards || []);
@@ -1465,7 +1465,7 @@ function renderTechnical() {
     { label: "Duracion ultima corrida", value: formatDuration(technical.last_refresh_duration_seconds), caption: "Tiempo total de la ultima actualizacion tecnica mas snapshot." },
     { label: "Modo ultima corrida", value: summary.run_mode_label || "--", caption: summary.read_scope_note || "Sin descripcion del alcance de la corrida." },
     { label: "Filas leidas en esta corrida", value: formatPreciseNumber(summary.source_rows_processed || 0), caption: "Filas recuperadas desde la API en esta ejecucion; puede bajar si el modo deja de releer todo el historico." },
-    { label: "Historico core almacenado", value: formatPreciseNumber(summary.historical_core_rows_stored || 0), caption: "Filas que siguen persistidas en PostgreSQL y disponibles para analitica aunque la corrida actual lea menos." },
+    { label: "Historico core almacenado", value: formatPreciseNumber(summary.historical_core_rows_stored || 0), caption: "Filas que siguen persistidas en Supabase y disponibles para analitica aunque la corrida actual lea menos." },
     { label: "Filas core actualizadas", value: formatPreciseNumber(summary.core_rows_updated || 0), caption: "Suma de filas materializadas o reconciliadas en tablas core por esta corrida." },
     { label: "Tablas actualizadas", value: formatPreciseNumber(summary.tables_updated || 0), caption: "Total de tablas impactadas por la ultima corrida." },
     { label: "Recursos procesados", value: formatPreciseNumber(summary.resources_processed || 0), caption: "Recursos de Contifico recorridos por el pipeline." },

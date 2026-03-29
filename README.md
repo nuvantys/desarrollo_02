@@ -1,6 +1,6 @@
 # Dashboard Analitico Contifico
 
-Proyecto de extraccion, normalizacion, backfill historico en PostgreSQL y dashboard analitico estatico para explorar datos de Contifico.
+Proyecto de extraccion, normalizacion, backfill historico directo a Supabase Postgres y dashboard analitico estatico para explorar datos de Contifico.
 
 ## Incluye
 
@@ -42,4 +42,4 @@ Tambien puedes usar:
 
 ## Fuente de datos
 
-La fuente de verdad para el dashboard es la base PostgreSQL `contifico_backfill`. El frontend consume snapshots JSON generados desde esa base.
+La fuente de verdad para el dashboard es Supabase Postgres. El frontend consume snapshots JSON generados desde esa base en la nube.
