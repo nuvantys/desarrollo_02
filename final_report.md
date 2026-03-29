@@ -4,59 +4,59 @@
 
 - Fecha de corrida: 2026-03-28
 - Base PostgreSQL: `contifico_backfill` en `127.0.0.1:5432`
-- Modo: `backfill`
+- Modo: `refresh`
 - API base: `https://api.contifico.com`
 - Raw auditado: `no`
-- Run ID: `20260328231906`
+- Run ID: `20260329010314`
 
 ## Recursos procesados
 
 | resource | status | source_count | pages_fetched | raw_row_count | started_at | finished_at |
 | --- | --- | --- | --- | --- | --- | --- |
-| cuenta-contable | success | 572 | 1 | 0 | 2026-03-28 18:19:06-05:00 | 2026-03-28 18:19:07-05:00 |
-| bodega | success | 21 | 1 | 0 | 2026-03-28 18:19:07-05:00 | 2026-03-28 18:19:08-05:00 |
-| categoria | success | 22 | 1 | 0 | 2026-03-28 18:19:07-05:00 | 2026-03-28 18:19:07-05:00 |
-| centro-costo | success | 2 | 1 | 0 | 2026-03-28 18:19:08-05:00 | 2026-03-28 18:19:08-05:00 |
-| contabilidad/periodo | success | 8 | 1 | 0 | 2026-03-28 18:19:08-05:00 | 2026-03-28 18:19:08-05:00 |
-| marca | success | 16 | 1 | 0 | 2026-03-28 18:19:08-05:00 | 2026-03-28 18:19:08-05:00 |
-| persona | success | 2060 | 21 | 0 | 2026-03-28 18:19:08-05:00 | 2026-03-28 18:19:12-05:00 |
-| unidad | success | 20 | 1 | 0 | 2026-03-28 18:19:08-05:00 | 2026-03-28 18:19:08-05:00 |
-| producto | success | 1237 | 13 | 0 | 2026-03-28 18:19:12-05:00 | 2026-03-28 18:19:25-05:00 |
-| movimiento-inventario | success | 14101 | 142 | 0 | 2026-03-28 18:19:25-05:00 | 2026-03-28 18:20:28-05:00 |
-| documento | success | 23911 | 240 | 0 | 2026-03-28 18:20:28-05:00 | 2026-03-28 18:24:24-05:00 |
-| documento/tickets | success | 23911 | 240 | 0 | 2026-03-28 18:24:24-05:00 | 2026-03-28 18:35:51-05:00 |
-| contabilidad/asiento | success | 67402 | 675 | 0 | 2026-03-28 18:35:51-05:00 | 2026-03-28 18:39:41-05:00 |
+| bodega | success | 21 | 1 | 0 | 2026-03-28 20:03:14-05:00 | 2026-03-28 20:03:15-05:00 |
+| categoria | success | 22 | 1 | 0 | 2026-03-28 20:03:14-05:00 | 2026-03-28 20:03:14-05:00 |
+| cuenta-contable | success | 572 | 1 | 0 | 2026-03-28 20:03:14-05:00 | 2026-03-28 20:03:14-05:00 |
+| centro-costo | success | 2 | 1 | 0 | 2026-03-28 20:03:15-05:00 | 2026-03-28 20:03:15-05:00 |
+| contabilidad/periodo | success | 8 | 1 | 0 | 2026-03-28 20:03:15-05:00 | 2026-03-28 20:03:15-05:00 |
+| marca | success | 16 | 1 | 0 | 2026-03-28 20:03:15-05:00 | 2026-03-28 20:03:15-05:00 |
+| persona | success | 2060 | 21 | 0 | 2026-03-28 20:03:15-05:00 | 2026-03-28 20:03:19-05:00 |
+| unidad | success | 20 | 1 | 0 | 2026-03-28 20:03:15-05:00 | 2026-03-28 20:03:15-05:00 |
+| producto | success | 1237 | 13 | 0 | 2026-03-28 20:03:19-05:00 | 2026-03-28 20:03:32-05:00 |
+| movimiento-inventario | success | 14101 | 142 | 0 | 2026-03-28 20:03:32-05:00 | 2026-03-28 20:04:28-05:00 |
+| documento | success | 23911 | 240 | 0 | 2026-03-28 20:04:28-05:00 | 2026-03-28 20:08:00-05:00 |
+| documento/tickets | success | 21 | 21 | 0 | 2026-03-28 20:08:00-05:00 | 2026-03-28 20:08:02-05:00 |
+| contabilidad/asiento | success | 58 | 1 | 0 | 2026-03-28 20:08:03-05:00 | 2026-03-28 20:08:03-05:00 |
 
 ## Filas cargadas por tabla
 
 | resource | stage | table_name | row_count |
 | --- | --- | --- | --- |
-| contabilidad/asiento | core | asiento_detalles | 279354 |
-| contabilidad/asiento | core | asientos | 67402 |
+| contabilidad/asiento | core | asiento_detalles | 175 |
+| contabilidad/asiento | core | asientos | 58 |
 | bodega | core | bodegas | 21 |
 | categoria | core | categorias | 22 |
 | centro-costo | core | centros_costo | 2 |
 | cuenta-contable | core | cuentas_contables | 572 |
-| documento | core | documento_cobros | 24039 |
-| documento | core | documento_detalles | 77447 |
-| documento | core | documentos | 23911 |
+| documento | core | documento_cobros | 6 |
+| documento | core | documento_detalles | 40 |
+| documento | core | documentos | 21 |
 | marca | core | marcas | 16 |
-| movimiento-inventario | core | movimiento_detalles | 37122 |
-| movimiento-inventario | core | movimientos | 9024 |
+| movimiento-inventario | core | movimiento_detalles | 29 |
+| movimiento-inventario | core | movimientos | 12 |
 | contabilidad/periodo | core | periodos | 8 |
-| persona | core | personas | 2060 |
-| producto | core | productos | 1237 |
-| documento/tickets | core | tickets_detalles | 77447 |
-| documento/tickets | core | tickets_documentos | 23911 |
+| persona | core | personas | 29 |
+| producto | core | productos | 1 |
+| documento/tickets | core | tickets_detalles | 40 |
+| documento/tickets | core | tickets_documentos | 21 |
 | unidad | core | unidades | 20 |
 
 ## Fuente vs tabla principal
 
 | resource | source_count | core_primary_count | difference |
 | --- | --- | --- | --- |
-| cuenta-contable | 572 | 572 | 0 |
 | bodega | 21 | 21 | 0 |
 | categoria | 22 | 23 | -1 |
+| cuenta-contable | 572 | 572 | 0 |
 | centro-costo | 2 | 2 | 0 |
 | contabilidad/periodo | 8 | 8 | 0 |
 | marca | 16 | 16 | 0 |
@@ -65,8 +65,8 @@
 | producto | 1237 | 1237 | 0 |
 | movimiento-inventario | 14101 | 9024 | 5077 |
 | documento | 23911 | 23911 | 0 |
-| documento/tickets | 23911 | 23911 | 0 |
-| contabilidad/asiento | 67402 | 67402 | 0 |
+| documento/tickets | 21 | 23911 | -23890 |
+| contabilidad/asiento | 58 | 67402 | -67344 |
 
 ## Cobertura temporal
 

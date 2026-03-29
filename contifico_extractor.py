@@ -343,6 +343,37 @@ class ApiClient:
                 time.sleep(1.5 * attempt)
         raise RuntimeError(f"Request failed for {url}: {last_error}") from last_error
 
+    def get_json_or_none(
+        self,
+        path_or_url: str,
+        params: dict[str, str] | None = None,
+        *,
+        not_found_statuses: tuple[int, ...] = (404,),
+    ) -> Any | None:
+        url = self._absolute_url(path_or_url)
+        last_error: Exception | None = None
+        for attempt in range(1, self.retries + 1):
+            try:
+                response = self.session.get(url, params=params, timeout=self.timeout)
+                if response.status_code in not_found_statuses or response.status_code == 204:
+                    return None
+                response.raise_for_status()
+                return response.json()
+            except requests.HTTPError as exc:  # pragma: no cover - network retry
+                last_error = exc
+                status_code = exc.response.status_code if exc.response is not None else None
+                if status_code in not_found_statuses:
+                    return None
+                if attempt == self.retries:
+                    break
+                time.sleep(1.5 * attempt)
+            except Exception as exc:  # pragma: no cover - network retry
+                last_error = exc
+                if attempt == self.retries:
+                    break
+                time.sleep(1.5 * attempt)
+        raise RuntimeError(f"Request failed for {url}: {last_error}") from last_error
+
     def iter_paginated(
         self,
         path_or_url: str,

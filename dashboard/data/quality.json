@@ -1,8 +1,8 @@
 {
-  "run_id": "20260328231906",
+  "run_id": "20260329010314",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-03-28T18:39:41-05:00",
+  "generated_at": "2026-03-28T20:08:03-05:00",
   "filters_available": {
     "document_types": [
       {
@@ -609,12 +609,6 @@
   },
   "source_vs_core": [
     {
-      "resource": "cuenta-contable",
-      "source_count": 572,
-      "core_primary_count": 572,
-      "difference": 0
-    },
-    {
       "resource": "bodega",
       "source_count": 21,
       "core_primary_count": 21,
@@ -625,6 +619,12 @@
       "source_count": 22,
       "core_primary_count": 23,
       "difference": -1
+    },
+    {
+      "resource": "cuenta-contable",
+      "source_count": 572,
+      "core_primary_count": 572,
+      "difference": 0
     },
     {
       "resource": "centro-costo",
@@ -676,15 +676,15 @@
     },
     {
       "resource": "documento/tickets",
-      "source_count": 23911,
+      "source_count": 21,
       "core_primary_count": 23911,
-      "difference": 0
+      "difference": -23890
     },
     {
       "resource": "contabilidad/asiento",
-      "source_count": 67402,
+      "source_count": 58,
       "core_primary_count": 67402,
-      "difference": 0
+      "difference": -67344
     }
   ],
   "fk_health": [

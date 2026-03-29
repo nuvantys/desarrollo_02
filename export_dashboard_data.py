@@ -1735,16 +1735,20 @@ def build_database(
     performance_rows = query_rows(
         conn,
         """
-        WITH latest_runs AS (
+        WITH successful_runs AS (
             SELECT run_id
-            FROM (
-                SELECT
-                    run_id,
-                    MAX(finished_at) AS finished_at
-                FROM meta.extract_runs
-                WHERE status = 'success'
-                GROUP BY run_id
-            ) ranked
+            FROM meta.extract_runs
+            GROUP BY run_id
+            HAVING SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) = 0
+               AND SUM(CASE WHEN status = 'success' THEN 1 ELSE 0 END) > 0
+        ),
+        latest_runs AS (
+            SELECT
+                er.run_id,
+                MAX(er.finished_at) AS finished_at
+            FROM meta.extract_runs er
+            JOIN successful_runs sr ON sr.run_id = er.run_id
+            GROUP BY er.run_id
             ORDER BY finished_at DESC
             LIMIT 5
         ),
@@ -1948,7 +1952,7 @@ def build_database(
         comparison_story_cards = [
             {
                 "title": "Comparativo entre corridas",
-                "body": f"La corrida {performance_runs[0]['run_id']} se compara contra {previous_run_summary['run_id']}. La variacion total es de {total_delta_seconds} segundos con el mismo orden de recursos y el mismo enfoque de backfill.",
+                "body": f"La corrida {performance_runs[0]['run_id']} se compara contra {previous_run_summary['run_id']}. La variacion total es de {total_delta_seconds} segundos sobre corridas exitosas completas del pipeline.",
             },
             {
                 "title": "Lectura de mejora",

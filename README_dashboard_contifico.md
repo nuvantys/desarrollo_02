@@ -61,7 +61,7 @@ El script levanta:
 
 - servidor estatico en `http://127.0.0.1:8123`
 - API tecnica local en `http://127.0.0.1:8130`
-- si usas `start_dashboard_live_refresh.ps1`, tambien dispara el refresh completo desde Contifico API
+- si usas `start_dashboard_live_refresh.ps1`, tambien dispara el refresh rapido desde Contifico API
 
 Opcion manual:
 
@@ -92,6 +92,7 @@ http://127.0.0.1:8123
 - El dashboard usa `fetch`, por eso debe abrirse con servidor HTTP y no por `file://`.
 - Si abres `index.html` directo, la app muestra un aviso indicando que debes usar `http://127.0.0.1:8123`.
 - La API tecnica local no expone secretos ni filas crudas de PostgreSQL; solo estado agregado del pipeline.
-- El modo local conserva el ultimo snapshot estable; el modo vivo reconstruye desde APIs y vuelve a publicar el snapshot en un solo clic.
+- El modo local conserva el ultimo snapshot estable; el modo vivo ejecuta un refresh rapido desde APIs y vuelve a publicar el snapshot en un solo clic.
+- Para una reconstruccion historica completa, ejecuta manualmente `python .\\contifico_pg_backfill.py --mode backfill --db-name contifico_backfill`.
 - La libreria de graficos se carga desde CDN de `ECharts`.
 - La fuente de verdad del snapshot es `contifico_backfill`.

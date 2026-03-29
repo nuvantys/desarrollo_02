@@ -102,12 +102,12 @@ class RefreshManager:
             self.current_job = {
                 "job_id": job_id,
                 "status": "running",
-                "scope": "backfill_plus_snapshot",
+                "scope": "refresh_plus_snapshot",
                 "stage": "extrayendo",
                 "started_at": iso_now(),
                 "finished_at": None,
                 "duration_seconds": None,
-                "message": "Inicializando actualizacion completa de Contifico.",
+                "message": "Inicializando actualizacion rapida de Contifico.",
                 "error_text": None,
                 "logs": [],
             }
@@ -197,7 +197,7 @@ class RefreshManager:
                 python_executable,
                 str(ROOT_DIR / "contifico_pg_backfill.py"),
                 "--mode",
-                "backfill",
+                "refresh",
                 "--db-name",
                 self.db_name,
                 "--report-out",
@@ -215,7 +215,7 @@ class RefreshManager:
                 "--out-dir",
                 str(self.data_dir),
             ]
-            self._run_process(job_id, backfill_command, ROOT_DIR, "extrayendo", "Iniciando backfill historico en PostgreSQL.")
+            self._run_process(job_id, backfill_command, ROOT_DIR, "extrayendo", "Iniciando refresh rapido en PostgreSQL.")
             self._run_process(job_id, export_command, ROOT_DIR, "regenerando snapshot", "Regenerando snapshot analitico para el dashboard.")
             self._finish_job(job_id, "success", "Actualizacion finalizada correctamente.")
         except Exception as exc:

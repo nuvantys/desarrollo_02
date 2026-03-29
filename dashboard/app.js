@@ -1270,7 +1270,7 @@ function renderTechnical() {
   const summary = technical.summary || {};
   renderMetricCards(elements.technical.summaryMetrics, [
     { label: "Ultima actualizacion", value: formatDateTime(technical.generated_at), caption: "Hora efectiva del snapshot tecnico publicado." },
-    { label: "Duracion ultima corrida", value: formatDuration(technical.last_refresh_duration_seconds), caption: "Tiempo total del ultimo backfill mas snapshot." },
+    { label: "Duracion ultima corrida", value: formatDuration(technical.last_refresh_duration_seconds), caption: "Tiempo total de la ultima actualizacion tecnica mas snapshot." },
     { label: "Filas core actualizadas", value: formatPreciseNumber(summary.core_rows_updated || 0), caption: "Suma de filas materializadas en tablas core." },
     { label: "Tablas actualizadas", value: formatPreciseNumber(summary.tables_updated || 0), caption: "Total de tablas impactadas por la ultima corrida." },
     { label: "Recursos procesados", value: formatPreciseNumber(summary.resources_processed || 0), caption: "Recursos de Contifico recorridos por el pipeline." },

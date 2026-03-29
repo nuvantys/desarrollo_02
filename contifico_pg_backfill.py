@@ -6,6 +6,7 @@ import json
 import os
 import sys
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -34,6 +35,8 @@ DEFAULT_PGHOST = "127.0.0.1"
 DEFAULT_PGPORT = 5432
 DEFAULT_PG_MAINTENANCE_DB = "postgres"
 BACKFILL_MODE = "backfill"
+REFRESH_MODE = "refresh"
+DEFAULT_OVERLAP_DAYS = 2
 INSERT_BATCH_SIZE = 2000
 
 
@@ -230,6 +233,73 @@ def ensure_database_exists(config: PgConfig) -> None:
             cur.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(config.db_name)))
     finally:
         conn.close()
+
+
+def parse_cli_date(value: str | None) -> dt.date | None:
+    if not value:
+        return None
+    return dt.date.fromisoformat(value)
+
+
+def format_window_date(value: dt.date, fmt: str | None) -> str:
+    if fmt == "%d/%m/%Y":
+        return value.strftime("%d/%m/%Y")
+    return value.strftime("%Y-%m-%d")
+
+
+def build_window_params(spec: ResourceSpec, from_date: dt.date, to_date: dt.date) -> dict[str, str]:
+    if not spec.date_format:
+        return {}
+    return {
+        spec.date_start_param: format_window_date(from_date, spec.date_format),
+        spec.date_end_param: format_window_date(to_date, spec.date_format),
+    }
+
+
+def read_watermarks(conn) -> dict[str, dict[str, dt.date | None]]:
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT resource, min_record_date, max_record_date
+            FROM meta.watermarks
+            """
+        )
+        rows = cur.fetchall()
+    return {
+        resource: {
+            "min_record_date": min_record_date,
+            "max_record_date": max_record_date,
+        }
+        for resource, min_record_date, max_record_date in rows
+    }
+
+
+def resolve_refresh_window(
+    spec: ResourceSpec,
+    from_date: dt.date | None,
+    to_date: dt.date | None,
+    overlap_days: int,
+    watermarks: dict[str, dict[str, dt.date | None]],
+) -> tuple[dt.date, dt.date] | None:
+    if spec.mode != "incremental":
+        return None
+    if from_date and to_date:
+        return from_date, to_date
+    if from_date:
+        return from_date, to_date or dt.date.today()
+    watermark = watermarks.get(spec.key)
+    if not watermark or not watermark.get("max_record_date"):
+        raise RuntimeError(
+            f"Refresh for '{spec.key}' requires --from-date/--to-date or an existing watermark"
+        )
+    max_record_date = watermark["max_record_date"]
+    assert isinstance(max_record_date, dt.date)
+    effective_to = to_date or dt.date.today()
+    anchor_date = min(max_record_date, effective_to)
+    effective_from = anchor_date - dt.timedelta(days=overlap_days)
+    if effective_from > effective_to:
+        effective_from = effective_to
+    return effective_from, effective_to
 
 
 CORE_TABLE_COLUMNS: dict[str, list[str]] = {
@@ -857,6 +927,31 @@ FK_HEALTH_CHECKS = [
     ("asiento_detalles.cuenta_id -> cuentas_contables.id", "core.asiento_detalles", "cuenta_id", "core.cuentas_contables", "id"),
     ("asiento_detalles.centro_costo_id -> centros_costo.id", "core.asiento_detalles", "centro_costo_id", "core.centros_costo", "id"),
 ]
+
+
+RESOURCE_MASTER_TABLES: dict[str, tuple[str, str]] = {
+    "persona": ("personas", "id"),
+    "producto": ("productos", "id"),
+    "movimiento-inventario": ("movimientos", "id"),
+    "documento": ("documentos", "id"),
+    "documento/tickets": ("tickets_documentos", "id"),
+    "contabilidad/asiento": ("asientos", "id"),
+}
+
+
+RESOURCE_CHILD_PURGES: dict[str, tuple[tuple[str, str], ...]] = {
+    "movimiento-inventario": (("movimiento_detalles", "movimiento_id"),),
+    "documento": (
+        ("documento_cobros", "documento_id"),
+        ("documento_detalles", "documento_id"),
+    ),
+    "documento/tickets": (
+        ("tickets_items", "documento_id"),
+        ("tickets_detalles", "documento_id"),
+        ("tickets_documentos", "id"),
+    ),
+    "contabilidad/asiento": (("asiento_detalles", "asiento_id"),),
+}
 
 
 def ensure_schema(conn) -> None:
@@ -1586,6 +1681,96 @@ def fetch_resource_pages(client: ApiClient, spec: ResourceSpec) -> tuple[list[tu
     return pages, source_count
 
 
+def fetch_refresh_pages(
+    client: ApiClient,
+    spec: ResourceSpec,
+    window: tuple[dt.date, dt.date] | None,
+) -> tuple[list[tuple[int, Any]], int]:
+    if spec.response_kind == "flat":
+        payload = client.get_json(spec.path)
+        if not isinstance(payload, list):
+            raise RuntimeError(f"Expected flat list for {spec.key}")
+        return [(1, payload)], len(payload)
+    params = build_window_params(spec, window[0], window[1]) if window else None
+    pages = client.fetch_paginated_pages(spec.path, params=params)
+    first_payload = pages[0][1] if pages else {}
+    source_count = int(first_payload.get("count", 0) or 0) if isinstance(first_payload, dict) else 0
+    return pages, source_count
+
+
+def filter_records_by_window(
+    spec: ResourceSpec,
+    records: list[dict[str, Any]],
+    window: tuple[dt.date, dt.date] | None,
+) -> list[dict[str, Any]]:
+    if not window or not spec.record_date_field or not spec.record_date_format:
+        return records
+    filtered: list[dict[str, Any]] = []
+    for record in records:
+        record_date = parse_date(record.get(spec.record_date_field))
+        if record_date and window[0] <= record_date <= window[1]:
+            filtered.append(record)
+    return filtered
+
+
+def fetch_ticket_documents_by_id(
+    client: ApiClient,
+    spec: ResourceSpec,
+    document_ids: list[str],
+) -> tuple[list[tuple[int, dict[str, Any]]], int]:
+    unique_ids = [document_id for document_id in dict.fromkeys(document_ids) if document_id]
+    if not unique_ids:
+        return [], 0
+    worker_count = min(max(client.max_workers * 2, 1), 16, len(unique_ids))
+    pages: list[tuple[int, dict[str, Any]]] = []
+
+    def fetch_single(index: int, document_id: str) -> tuple[int, dict[str, Any] | None]:
+        payload = client.get_json_or_none(f"{spec.path}{document_id}/")
+        return index, payload
+
+    with ThreadPoolExecutor(max_workers=worker_count) as executor:
+        futures = [
+            executor.submit(fetch_single, index, document_id)
+            for index, document_id in enumerate(unique_ids, start=1)
+        ]
+        for future in as_completed(futures):
+            index, payload = future.result()
+            if isinstance(payload, dict):
+                pages.append((index, payload))
+    pages.sort(key=lambda item: item[0])
+    return pages, len(unique_ids)
+
+
+def delete_rows_by_ids(cur, table_name: str, column_name: str, ids: set[str]) -> None:
+    if not ids:
+        return
+    cur.execute(
+        sql.SQL("DELETE FROM {}.{} WHERE {} = ANY(%s)").format(
+            sql.Identifier("core"),
+            sql.Identifier(table_name),
+            sql.Identifier(column_name),
+        ),
+        (list(ids),),
+    )
+
+
+def purge_resource_rows(cur, resource_key: str, parent_ids: set[str]) -> None:
+    for table_name, column_name in RESOURCE_CHILD_PURGES.get(resource_key, ()):
+        delete_rows_by_ids(cur, table_name, column_name, parent_ids)
+
+
+def collect_parent_ids(spec: ResourceSpec, aggregated_core_rows: dict[str, list[dict[str, Any]]]) -> set[str]:
+    master_mapping = RESOURCE_MASTER_TABLES.get(spec.key)
+    if not master_mapping:
+        return set()
+    table_name, column_name = master_mapping
+    return {
+        str(row.get(column_name))
+        for row in aggregated_core_rows.get(table_name, [])
+        if row.get(column_name) is not None
+    }
+
+
 def process_resource(conn, client: ApiClient, spec: ResourceSpec, run_id: str, ingested_at: dt.datetime, save_raw: bool) -> None:
     started_at = parse_iso_timestamp(iso_now())
     pages_fetched = 0
@@ -1653,6 +1838,112 @@ def process_resource(conn, client: ApiClient, spec: ResourceSpec, run_id: str, i
                 "run_id": run_id,
                 "resource": spec.key,
                 "mode": BACKFILL_MODE,
+                "status": "failed",
+                "started_at": started_at,
+                "finished_at": parse_iso_timestamp(iso_now()),
+                "source_count": source_count,
+                "pages_fetched": pages_fetched,
+                "raw_row_count": raw_row_count,
+                "table_counts_jsonb": jsonb_value(table_counts),
+                "error_text": str(exc),
+                "created_at": parse_iso_timestamp(iso_now()),
+            })
+        conn.commit()
+        raise
+
+
+def process_resource_refresh(
+    conn,
+    client: ApiClient,
+    spec: ResourceSpec,
+    run_id: str,
+    ingested_at: dt.datetime,
+    save_raw: bool,
+    window: tuple[dt.date, dt.date] | None = None,
+    changed_document_ids: list[str] | None = None,
+) -> set[str]:
+    started_at = parse_iso_timestamp(iso_now())
+    pages_fetched = 0
+    source_count = 0
+    raw_row_count = 0
+    table_counts: dict[str, int] = defaultdict(int)
+    affected_parent_ids: set[str] = set()
+    try:
+        if spec.key == "documento/tickets":
+            pages, source_count = fetch_ticket_documents_by_id(client, spec, changed_document_ids or [])
+            pages_fetched = len(changed_document_ids or [])
+            affected_parent_ids = {document_id for document_id in (changed_document_ids or []) if document_id}
+        else:
+            pages, source_count = fetch_refresh_pages(client, spec, window)
+            pages_fetched = len(pages)
+
+        aggregated_raw_rows: list[dict[str, Any]] = []
+        aggregated_core_rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        request_params = build_window_params(spec, window[0], window[1]) if window else {}
+
+        for page_number, payload in pages:
+            fetched_at = parse_iso_timestamp(iso_now())
+            page_records = payload if spec.response_kind == "flat" else payload.get("results", [])
+            if spec.key == "documento/tickets":
+                page_records = [payload]
+            if not isinstance(page_records, list):
+                raise RuntimeError(f"Expected list of records for {spec.key}")
+            page_records = filter_records_by_window(spec, page_records, window)
+            raw_rows, core_rows = normalize_records(spec, page_records, run_id, ingested_at, page_number, request_params, fetched_at)
+            if save_raw:
+                aggregated_raw_rows.extend(raw_rows)
+            for table_name, rows in core_rows.items():
+                aggregated_core_rows[table_name].extend(rows)
+
+        if spec.key != "documento/tickets":
+            affected_parent_ids = collect_parent_ids(spec, aggregated_core_rows)
+
+        with conn.cursor() as cur:
+            cur.execute("SET CONSTRAINTS ALL DEFERRED")
+            purge_resource_rows(cur, spec.key, affected_parent_ids)
+            ensure_batch_references(cur, aggregated_core_rows, run_id, ingested_at)
+            if save_raw:
+                raw_row_count += insert_rows(cur, "raw.resource_rows", RAW_RESOURCE_ROW_COLUMNS, aggregated_raw_rows)
+            for table_name, rows in aggregated_core_rows.items():
+                deduped_rows = dedupe_core_rows(table_name, rows)
+                table_counts[table_name] += insert_rows(
+                    cur,
+                    f"core.{table_name}",
+                    CORE_TABLE_COLUMNS[table_name],
+                    deduped_rows,
+                    conflict_clause=build_upsert_clause(table_name),
+                )
+            finished_at = parse_iso_timestamp(iso_now())
+            metrics = [
+                {"run_id": run_id, "resource": spec.key, "stage": "core", "table_name": name, "row_count": count, "measured_at": finished_at}
+                for name, count in sorted(table_counts.items())
+            ]
+            if save_raw:
+                metrics.append({"run_id": run_id, "resource": spec.key, "stage": "raw", "table_name": "resource_rows", "row_count": raw_row_count, "measured_at": finished_at})
+            insert_load_metrics(cur, metrics)
+            insert_extract_run(cur, {
+                "run_id": run_id,
+                "resource": spec.key,
+                "mode": REFRESH_MODE,
+                "status": "success",
+                "started_at": started_at,
+                "finished_at": finished_at,
+                "source_count": source_count,
+                "pages_fetched": pages_fetched,
+                "raw_row_count": raw_row_count,
+                "table_counts_jsonb": jsonb_value(table_counts),
+                "error_text": None,
+                "created_at": finished_at,
+            })
+        conn.commit()
+        return affected_parent_ids
+    except Exception as exc:
+        conn.rollback()
+        with conn.cursor() as cur:
+            insert_extract_run(cur, {
+                "run_id": run_id,
+                "resource": spec.key,
+                "mode": REFRESH_MODE,
                 "status": "failed",
                 "started_at": started_at,
                 "finished_at": parse_iso_timestamp(iso_now()),
@@ -2000,13 +2291,16 @@ def generate_final_report(conn, report_path: Path, run_id: str, args: argparse.N
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Contifico historical backfill to PostgreSQL")
-    parser.add_argument("--mode", choices=(BACKFILL_MODE,), required=True)
+    parser = argparse.ArgumentParser(description="Contifico backfill and refresh pipeline to PostgreSQL")
+    parser.add_argument("--mode", choices=(BACKFILL_MODE, REFRESH_MODE), required=True)
     parser.add_argument("--db-name", default=DEFAULT_DB_NAME)
     parser.add_argument("--report-out", default="final_report.md")
     parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
     parser.add_argument("--save-raw", action="store_true")
     parser.add_argument("--max-workers", type=int, default=DEFAULT_MAX_WORKERS)
+    parser.add_argument("--from-date")
+    parser.add_argument("--to-date")
+    parser.add_argument("--overlap-days", type=int, default=DEFAULT_OVERLAP_DAYS)
     return parser
 
 
@@ -2039,10 +2333,71 @@ def run_backfill(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_refresh(args: argparse.Namespace) -> int:
+    authorization = os.getenv("CONTIFICO_AUTHORIZATION")
+    if not authorization:
+        raise RuntimeError("Missing CONTIFICO_AUTHORIZATION environment variable")
+    config = pg_config_from_env(args.db_name)
+    ensure_database_exists(config)
+    client = ApiClient(args.base_url, authorization, max_workers=args.max_workers)
+    print_progress("Validating API access...")
+    validate_status(client)
+    from_date = parse_cli_date(args.from_date)
+    to_date = parse_cli_date(args.to_date)
+    with open_connection(config, config.db_name) as conn:
+        print_progress("Ensuring PostgreSQL schema...")
+        ensure_schema(conn)
+        watermarks = read_watermarks(conn)
+        run_id = dt.datetime.now(UTC).strftime("%Y%m%d%H%M%S")
+        ingested_at = parse_iso_timestamp(iso_now())
+        changed_document_ids: list[str] = []
+        for resource_key in RESOURCE_ORDER:
+            spec = RESOURCE_SPECS_BY_KEY[resource_key]
+            if spec.key == "documento/tickets":
+                print_progress(f"Loading {resource_key} into PostgreSQL for {len(changed_document_ids)} changed document ids...")
+                changed_ids = process_resource_refresh(
+                    conn,
+                    client,
+                    spec,
+                    run_id,
+                    ingested_at,
+                    args.save_raw,
+                    changed_document_ids=changed_document_ids,
+                )
+            else:
+                window = resolve_refresh_window(spec, from_date, to_date, args.overlap_days, watermarks)
+                if window:
+                    print_progress(
+                        f"Loading {resource_key} into PostgreSQL for window {window[0].isoformat()}..{window[1].isoformat()}..."
+                    )
+                else:
+                    print_progress(f"Loading {resource_key} into PostgreSQL...")
+                changed_ids = process_resource_refresh(
+                    conn,
+                    client,
+                    spec,
+                    run_id,
+                    ingested_at,
+                    args.save_raw,
+                    window=window,
+                )
+            if spec.key == "documento":
+                changed_document_ids = sorted(changed_ids)
+        print_progress("Refreshing watermarks and reporting views...")
+        refresh_watermarks(conn, run_id)
+        create_reporting_views(conn)
+        report_path = Path(args.report_out).resolve()
+        generate_final_report(conn, report_path, run_id, args, config)
+        print_progress(f"Final report generated at {report_path}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
-    return run_backfill(args)
+    if args.mode == BACKFILL_MODE:
+        return run_backfill(args)
+    return run_refresh(args)
 
 
 if __name__ == "__main__":
