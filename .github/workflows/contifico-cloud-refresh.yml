@@ -1,5 +1,5 @@
 name: contifico-cloud-refresh
-run-name: Contifico ${{ inputs.scope || 'refresh' }} cloud refresh
+run-name: Contifico ${{ inputs.scope || 'refresh' }} cloud refresh ${{ inputs.requested_at || '' }}
 
 on:
   workflow_dispatch:

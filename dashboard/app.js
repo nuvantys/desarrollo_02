@@ -262,6 +262,17 @@ function renderTable(targetId, rows, columns) {
   target.innerHTML = `<table><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table>`;
 }
 
+function normalizeCloudError(message) {
+  const text = String(message || "");
+  if (text.includes("404")) {
+    return "Las funciones cloud de refresh todavia no estan desplegadas en Supabase. El dashboard sigue usando el ultimo snapshot estable.";
+  }
+  if (text.includes("401") || text.includes("403")) {
+    return "La capa cloud respondio sin autorizacion. Revisa secrets y permisos del despliegue.";
+  }
+  return text || "La capa cloud no esta disponible en este momento.";
+}
+
 function registerTableExport(key, rows, columns) {
   tableExports.set(key, { rows, columns });
 }
@@ -1065,7 +1076,7 @@ function renderTechnicalAlerts(alerts, runtime) {
       level: "warning",
       title: "API tecnica no disponible",
       message:
-        technicalState.apiError ||
+        normalizeCloudError(technicalState.apiError) ||
         "Se muestra el ultimo technical.json estable. La vista analitica sigue operativa, pero el refresh bajo demanda no puede ejecutarse.",
       metric: 0,
     });
@@ -1662,7 +1673,7 @@ async function loadTechnicalState() {
     technicalState.runtime = payload.runtime || { current_job: null, last_job: null };
   } catch (error) {
     technicalState.apiAvailable = false;
-    technicalState.apiError = error.message;
+    technicalState.apiError = normalizeCloudError(error.message);
     technicalState.runtime = { current_job: null, last_job: null };
   }
 }
@@ -1722,7 +1733,7 @@ async function startTechnicalRefresh(scope = "refresh") {
     renderTechnical();
     await pollRefreshJob(payload.job.job_id);
   } catch (error) {
-    technicalState.apiError = error.message;
+    technicalState.apiError = normalizeCloudError(error.message);
     renderTechnical();
   }
 }

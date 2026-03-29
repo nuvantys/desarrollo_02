@@ -21,6 +21,10 @@ function scopeLabel(scope: RefreshScope): string {
   return scope === "backfill" ? "Refresh completo" : "Refresh rapido";
 }
 
+function jobId(scope: RefreshScope, requestedAt: string): string {
+  return `${scope}:${requestedAt}`;
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -39,6 +43,8 @@ Deno.serve(async (request) => {
     const workflowFile = Deno.env.get("GITHUB_WORKFLOW_FILE") || "contifico-cloud-refresh.yml";
     const workflowRef = Deno.env.get("GITHUB_REF") || "main";
 
+    const requestedAt = new Date().toISOString();
+
     const dispatchResponse = await fetch(
       `https://api.github.com/repos/${githubOwner}/${githubRepo}/actions/workflows/${workflowFile}/dispatches`,
       {
@@ -54,7 +60,7 @@ Deno.serve(async (request) => {
           inputs: {
             scope,
             trigger_source: "dashboard",
-            requested_at: new Date().toISOString(),
+            requested_at: requestedAt,
           },
         }),
       },
@@ -71,17 +77,16 @@ Deno.serve(async (request) => {
       );
     }
 
-    const jobId = `${scope}-${Date.now()}`;
     return json(
       {
         job: {
-          job_id: jobId,
+          job_id: jobId(scope, requestedAt),
           status: "running",
           scope: `${scope}_plus_snapshot`,
           scope_key: scope,
           scope_label: scopeLabel(scope),
           stage: "queued",
-          started_at: new Date().toISOString(),
+          started_at: requestedAt,
           finished_at: null,
           duration_seconds: null,
           message: `${scopeLabel(scope)} despachado a GitHub Actions para actualizar Supabase y republicar el snapshot.`,

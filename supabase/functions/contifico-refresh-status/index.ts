@@ -44,6 +44,26 @@ function mapWorkflowStatus(run: Record<string, unknown> | null) {
   return { current_job: baseJob, last_job: null, selected_job: baseJob };
 }
 
+function selectWorkflowRun(payload: Record<string, unknown>, requestedJobId: string | null) {
+  const runs = Array.isArray(payload.workflow_runs) ? payload.workflow_runs as Array<Record<string, unknown>> : [];
+  if (!requestedJobId || !requestedJobId.includes(":")) {
+    return runs[0] ?? null;
+  }
+
+  const [, requestedAt] = requestedJobId.split(":", 2);
+  const normalizedRequestedAt = requestedAt.trim();
+  if (!normalizedRequestedAt) {
+    return runs[0] ?? null;
+  }
+
+  const exact = runs.find((run) => String(run.display_title ?? "").includes(normalizedRequestedAt));
+  if (exact) {
+    return exact;
+  }
+
+  return runs.find((run) => String(run.created_at ?? "") >= normalizedRequestedAt) ?? runs[0] ?? null;
+}
+
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -79,7 +99,7 @@ Deno.serve(async (request) => {
     }
 
     const payload = await response.json();
-    const run = Array.isArray(payload.workflow_runs) ? payload.workflow_runs[0] : payload;
+    const run = Array.isArray(payload.workflow_runs) ? selectWorkflowRun(payload as Record<string, unknown>, runId) : payload;
     const mapped = mapWorkflowStatus(run);
     return json({
       api_available: true,
