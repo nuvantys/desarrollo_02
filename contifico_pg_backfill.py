@@ -1961,9 +1961,9 @@ def process_resource_refresh(
             if not window:
                 raise RuntimeError("Refresh for 'documento' requires a resolved date window")
             pages, source_count, pages_fetched = fetch_document_pages_for_refresh(conn, client, spec, window)
-        elif spec.key == "movimiento-inventario":
+        elif spec.key in {"movimiento-inventario", "producto"}:
             if not window:
-                raise RuntimeError("Refresh for 'movimiento-inventario' requires a resolved date window")
+                raise RuntimeError(f"Refresh for '{spec.key}' requires a resolved date window")
             pages, source_count, pages_fetched = fetch_ordered_pages_for_window(client, spec, window)
         else:
             pages, source_count = fetch_refresh_pages(client, spec, window)
