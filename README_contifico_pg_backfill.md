@@ -9,7 +9,6 @@ Backfill historico completo de Contifico V2 hacia Supabase Postgres, con capa `r
 - Variables de entorno:
   - `CONTIFICO_AUTHORIZATION`
   - `SUPABASE_DB_URL` o `DATABASE_URL`
-  - `PGUSER`, `PGPASSWORD`, `PGHOST`, `PGPORT`, `PGMAINTENANCE_DB` solo quedan como compatibilidad secundaria
 
 ## Ejecucion
 

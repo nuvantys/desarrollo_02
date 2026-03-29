@@ -1,115 +1,62 @@
 # Dashboard Contifico
 
-Dashboard estatico en `HTML + CSS + JS` alimentado desde snapshots JSON exportados desde Supabase Postgres y complementado con una API local sin estado para la revision tecnica y la actualizacion bajo demanda.
+Dashboard estatico en `HTML + CSS + JS` alimentado desde snapshots JSON publicados en la nube. El refresh ya no depende de `localhost`: la pagina dispara funciones cloud en Supabase, esas funciones despachan un workflow de GitHub Actions, el workflow actualiza Supabase y republlica `dashboard/data/*.json`.
+
+## Arquitectura operativa
+
+1. La pagina carga `dashboard/data/*.json`
+2. El usuario pulsa `Refresh rapido` o `Refresh completo`
+3. `dashboard/app.js` llama a `contifico-refresh` en Supabase Edge Functions
+4. La funcion dispara `.github/workflows/contifico-cloud-refresh.yml`
+5. GitHub Actions ejecuta:
+   - `contifico_pg_backfill.py`
+   - `export_dashboard_data.py`
+6. El workflow escribe en Supabase y hace commit de `dashboard/data/*.json`
+7. El hosting estatico publica el snapshot nuevo
 
 ## Archivos principales
 
-- `export_dashboard_data.py`
-- `local_dashboard_api.py`
 - `dashboard/index.html`
 - `dashboard/styles.css`
 - `dashboard/app.js`
 - `dashboard/charts.js`
+- `dashboard/config.js`
 - `dashboard/data/*.json`
-- `dashboard/start_dashboard_server.ps1`
-- `dashboard/start_dashboard_server.bat`
-- `dashboard/start_dashboard_live_refresh.ps1`
-- `dashboard/start_dashboard_live_refresh.bat`
-- `dashboard/start_dashboard_full_refresh.ps1`
-- `dashboard/start_dashboard_full_refresh.bat`
+- `supabase/functions/contifico-refresh/index.ts`
+- `supabase/functions/contifico-refresh-status/index.ts`
+- `.github/workflows/contifico-cloud-refresh.yml`
 
-## Regenerar snapshot desde Supabase
+## Configuracion cloud del frontend
 
-PowerShell:
+El frontend lee [config.js](d:/Temp/Trabajos/manual/desarrollo_02/dashboard/config.js):
 
-```powershell
-$env:SUPABASE_DB_URL = 'postgresql://postgres.<ref>:<password>@aws-1-<region>.pooler.supabase.com:5432/postgres?sslmode=require'
-
-python .\export_dashboard_data.py `
-  --db-name postgres `
-  --out-dir .\dashboard\data
+```js
+window.CONTIFICO_CONFIG = {
+  snapshotBase: "./data",
+  refreshApiUrl: "https://<project-ref>.supabase.co/functions/v1/contifico-refresh",
+  refreshStatusUrl: "https://<project-ref>.supabase.co/functions/v1/contifico-refresh-status",
+};
 ```
 
-## Levantar el dashboard local
+## Secrets necesarios
 
-Opcion rapida:
+### En GitHub Actions
 
-```powershell
-.\dashboard\start_dashboard_server.ps1
-```
+- `CONTIFICO_AUTHORIZATION`
+- `SUPABASE_DB_URL`
 
-Opcion por doble clic:
+### En Supabase Edge Functions
 
-```text
-dashboard\start_dashboard_server.bat
-```
+- `GITHUB_WORKFLOW_TOKEN`
+- `GITHUB_OWNER`
+- `GITHUB_REPO`
+- `GITHUB_WORKFLOW_FILE`
+- `GITHUB_REF`
 
-Modo vivo desde APIs en un clic:
+## Publicacion
 
-```powershell
-.\dashboard\start_dashboard_live_refresh.ps1
-```
+Publica `dashboard/` en GitHub Pages, Netlify o Vercel. No abras `index.html` con `file://`.
 
-O por doble clic:
+## Nota
 
-```text
-dashboard\start_dashboard_live_refresh.bat
-```
-
-Modo completo desde APIs en un clic:
-
-```powershell
-.\dashboard\start_dashboard_full_refresh.ps1
-```
-
-O por doble clic:
-
-```text
-dashboard\start_dashboard_full_refresh.bat
-```
-
-El script levanta:
-
-- servidor estatico en `http://127.0.0.1:8123`
-- API tecnica local en `http://127.0.0.1:8130`
-- si usas `start_dashboard_live_refresh.ps1`, tambien dispara el refresh rapido desde Contifico API
-- si usas `start_dashboard_full_refresh.ps1`, dispara el refresh completo o backfill historico desde Contifico API
-
-Opcion manual:
-
-```powershell
-cd .\dashboard
-python -m http.server 8123
-```
-
-En otra consola:
-
-```powershell
-python .\local_dashboard_api.py --port 8130
-```
-
-Luego abrir:
-
-```text
-http://127.0.0.1:8123
-```
-
-## Que expone
-
-- Tab `Revision tecnica` con estado del dataset, bitacora de corridas, volumen actualizado, salud relacional, watermarks y boton de refresh real
-- La bitacora distingue entre `filas leidas en esta corrida` y `historico almacenado`, para no confundir optimizacion de lectura con perdida de datos.
-- Tab `Vista analitica` con hero, comercial, clientes, inventario, logistica, tesoreria, contabilidad, calidad y tablas exportables
-- Integracion nueva de `inventario/guia`, `banco/cuenta` y `banco/movimiento`, conectadas con `documentos`, `personas`, `bodegas`, `productos` y `cuentas_contables`
-- Tres graficos nuevos sobre las capas integradas: trazabilidad de guias, carga logistica por bodega y flujo bancario mensual
-- Conciliacion bancaria entre `documento_cobros` y `banco_movimientos`, visible por mes y por cuenta bancaria
-- La base maestra del flujo actual vive en Supabase; el orquestador local solo dispara refresh y publica estado tecnico
-
-## Notas
-
-- El dashboard usa `fetch`, por eso debe abrirse con servidor HTTP y no por `file://`.
-- Si abres `index.html` directo, la app muestra un aviso indicando que debes usar `http://127.0.0.1:8123`.
-- La API tecnica local no expone secretos ni filas crudas de Supabase; solo estado agregado del pipeline.
-- El modo estable conserva el ultimo snapshot publicado; el modo vivo ejecuta un refresh rapido desde APIs y vuelve a publicar el snapshot en un solo clic.
-- Para una reconstruccion historica completa, ejecuta manualmente `python .\\contifico_pg_backfill.py --mode backfill --db-name postgres`.
-- La libreria de graficos se carga desde CDN de `ECharts`.
-- La fuente de verdad del snapshot es Supabase Postgres.
+- La base maestra del sistema es Supabase Postgres.

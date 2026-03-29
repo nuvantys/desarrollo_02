@@ -14,6 +14,11 @@ import {
   stackedBarOption,
 } from "./charts.js";
 
+const appConfig = window.CONTIFICO_CONFIG || {};
+const snapshotBase = (appConfig.snapshotBase || "./data").replace(/\/$/, "");
+const refreshApiUrl = appConfig.refreshApiUrl || "";
+const refreshStatusUrl = appConfig.refreshStatusUrl || "";
+
 const fileNames = [
   "manifest.json",
   "overview.json",
@@ -26,8 +31,6 @@ const fileNames = [
   "database.json",
   "tables.json",
 ];
-
-const apiBase = `${window.location.protocol}//${window.location.hostname || "127.0.0.1"}:8130/api/technical`;
 
 const state = {
   global: {
@@ -1570,14 +1573,18 @@ function renderTechnical() {
 }
 
 function showServerHelp() {
+  showHostingHelp();
+}
+
+function showHostingHelp() {
   elements.heroText.textContent =
-    "El dashboard no puede cargarse correctamente si abres index.html directo con file://. Levántalo con servidor local y entra por http://127.0.0.1:8123.";
+    "El dashboard no puede cargarse correctamente si abres index.html directo con file://. Publicalo en un hosting estatico o sirvelo por HTTP.";
   elements.technical.subtitle.textContent =
-    "El frontend requiere servidor HTTP local para leer snapshots JSON y conectarse a la API tecnica.";
+    "El frontend requiere HTTP para leer snapshots JSON y conectarse a la capa cloud de refresh.";
   elements.heroAlerts.innerHTML = `
     <article class="alert-card warning">
-      <h3>Servidor requerido</h3>
-      <p>Ejecuta <strong>python -m http.server 8123</strong> dentro de la carpeta <strong>dashboard</strong> y abre luego <strong>http://127.0.0.1:8123</strong>.</p>
+      <h3>Hosting requerido</h3>
+      <p>${appConfig.hostedHint || "Publica esta carpeta en GitHub Pages, Netlify, Vercel o cualquier hosting estatico. Evita abrir index.html con file://."}</p>
     </article>
   `;
 }
@@ -1641,17 +1648,22 @@ async function fetchJson(url, options = {}) {
 }
 
 async function loadTechnicalState() {
+  technicalState.data = await fetchJson(`${snapshotBase}/technical.json`);
+  if (!refreshStatusUrl) {
+    technicalState.apiAvailable = false;
+    technicalState.apiError = "No hay endpoint cloud configurado para refresh.";
+    technicalState.runtime = { current_job: null, last_job: null };
+    return;
+  }
   try {
-    const payload = await fetchJson(`${apiBase}/status`);
+    const payload = await fetchJson(refreshStatusUrl);
     technicalState.apiAvailable = true;
     technicalState.apiError = "";
     technicalState.runtime = payload.runtime || { current_job: null, last_job: null };
-    technicalState.data = payload.technical;
   } catch (error) {
     technicalState.apiAvailable = false;
     technicalState.apiError = error.message;
     technicalState.runtime = { current_job: null, last_job: null };
-    technicalState.data = await fetchJson("./data/technical.json");
   }
 }
 
@@ -1678,7 +1690,7 @@ async function pollRefreshJob(jobId) {
   clearPolling();
   technicalState.pollHandle = window.setInterval(async () => {
     try {
-      const payload = await fetchJson(`${apiBase}/refresh/${jobId}`);
+      const payload = await fetchJson(`${refreshStatusUrl}?run_id=${encodeURIComponent(jobId)}`);
       technicalState.runtime.current_job = payload.job?.status === "running" ? payload.job : null;
       technicalState.runtime.last_job = payload.job?.status === "running" ? technicalState.runtime.last_job : payload.job;
       renderTechnical();
@@ -1700,7 +1712,7 @@ async function startTechnicalRefresh(scope = "refresh") {
     return;
   }
   try {
-    const payload = await fetchJson(`${apiBase}/refresh`, {
+    const payload = await fetchJson(refreshApiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ scope }),
@@ -1716,9 +1728,6 @@ async function startTechnicalRefresh(scope = "refresh") {
 }
 
 async function reloadTechnicalSnapshotOnly() {
-  if (technicalState.apiAvailable) {
-    await fetchJson(`${apiBase}/reload`, { method: "POST" });
-  }
   await reloadTechnicalStatus(true);
 }
 
@@ -1799,14 +1808,14 @@ function bindEvents() {
 }
 
 async function loadSnapshot() {
-  const responses = await Promise.all(fileNames.map((file) => fetchJson(`./data/${file}`)));
+  const responses = await Promise.all(fileNames.map((file) => fetchJson(`${snapshotBase}/${file}`)));
   const [manifest, overview, commercial, customers, products, inventory, accounting, quality, database, tables] = responses;
   return { manifest, overview, commercial, customers, products, inventory, accounting, quality, database, tables };
 }
 
 async function init() {
   if (window.location.protocol === "file:") {
-    showServerHelp();
+    showHostingHelp();
     return;
   }
   try {
@@ -1824,7 +1833,7 @@ async function init() {
   } catch (error) {
     elements.heroText.textContent = `No fue posible cargar el snapshot del dashboard. ${error.message}`;
     elements.technical.subtitle.textContent = `No fue posible cargar la revision tecnica. ${error.message}`;
-    showServerHelp();
+    showHostingHelp();
     console.error(error);
   }
 }

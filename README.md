@@ -1,45 +1,28 @@
 # Dashboard Analitico Contifico
 
-Proyecto de extraccion, normalizacion, backfill historico directo a Supabase Postgres y dashboard analitico estatico para explorar datos de Contifico.
+Proyecto de extraccion, normalizacion, refresh cloud hacia Supabase Postgres y dashboard analitico estatico para explorar datos de Contifico sin depender de localhost.
 
 ## Incluye
 
 - Extractor API y exportacion tabular
-- Backfill historico a PostgreSQL con relaciones y reporte final
+- Backfill historico a Supabase Postgres con relaciones y reporte final
 - Exportador de snapshots JSON para analitica web
 - Dashboard en `HTML`, `CSS` y `JavaScript`
-- Scripts de arranque rapido para levantar el dashboard en servidor local
+- Funciones cloud y workflow para actualizar Supabase desde la pagina sin localhost
 
 ## Estructura
 
 - `contifico_extractor.py`
 - `contifico_pg_backfill.py`
 - `export_dashboard_data.py`
+- `supabase/functions/`
+- `.github/workflows/contifico-cloud-refresh.yml`
 - `dashboard/`
 - `final_report.md`
 - `README_contifico_extractor.md`
 - `README_contifico_pg_backfill.md`
 - `README_dashboard_contifico.md`
 
-## Arranque rapido del dashboard
-
-```powershell
-cd dashboard
-python -m http.server 8123
-```
-
-Abrir luego:
-
-```text
-http://127.0.0.1:8123
-```
-
-Tambien puedes usar:
-
-```powershell
-.\dashboard\start_dashboard_server.ps1
-```
-
 ## Fuente de datos
 
-La fuente de verdad para el dashboard es Supabase Postgres. El frontend consume snapshots JSON generados desde esa base en la nube.
+La fuente de verdad para el dashboard es Supabase Postgres. El frontend consume snapshots JSON publicados desde esa base en la nube y el refresh se dispara mediante funciones cloud y GitHub Actions.

@@ -1,0 +1,7 @@
+project_id = "anaeoorbwnpstuievcwr"
+
+[functions.contifico-refresh]
+verify_jwt = false
+
+[functions.contifico-refresh-status]
+verify_jwt = false

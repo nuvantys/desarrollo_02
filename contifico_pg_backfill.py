@@ -32,9 +32,7 @@ from contifico_extractor import (
 APP_TZ = ZoneInfo("America/Guayaquil")
 UTC = dt.timezone.utc
 DEFAULT_DB_NAME = "postgres"
-DEFAULT_PGHOST = "127.0.0.1"
 DEFAULT_PGPORT = 5432
-DEFAULT_PG_MAINTENANCE_DB = "postgres"
 BACKFILL_MODE = "backfill"
 REFRESH_MODE = "refresh"
 DEFAULT_OVERLAP_DAYS = 2
@@ -213,32 +211,18 @@ def normalize_postgres_dsn(dsn: str) -> str:
 
 def pg_config_from_env(db_name: str) -> PgConfig:
     dsn = os.getenv("SUPABASE_DB_URL") or os.getenv("SUPABASE_DATABASE_URL") or os.getenv("DATABASE_URL")
-    if dsn:
-        normalized_dsn = normalize_postgres_dsn(dsn)
-        parsed = urlparse(normalized_dsn)
-        return PgConfig(
-            dsn=normalized_dsn,
-            host=parsed.hostname or "",
-            port=parsed.port or DEFAULT_PGPORT,
-            user=parsed.username or "",
-            password=parsed.password or "",
-            maintenance_db=parsed.path.lstrip("/") or db_name,
-            db_name=parsed.path.lstrip("/") or db_name,
-        )
-    user = os.getenv("PGUSER")
-    password = os.getenv("PGPASSWORD")
-    if not user:
-        raise RuntimeError("Missing PGUSER environment variable")
-    if password is None:
-        raise RuntimeError("Missing PGPASSWORD environment variable")
+    if not dsn:
+        raise RuntimeError("Missing Supabase target connection. Use SUPABASE_DB_URL or DATABASE_URL.")
+    normalized_dsn = normalize_postgres_dsn(dsn)
+    parsed = urlparse(normalized_dsn)
     return PgConfig(
-        dsn=None,
-        host=os.getenv("PGHOST", DEFAULT_PGHOST),
-        port=int(os.getenv("PGPORT", str(DEFAULT_PGPORT))),
-        user=user,
-        password=password,
-        maintenance_db=os.getenv("PGMAINTENANCE_DB", DEFAULT_PG_MAINTENANCE_DB),
-        db_name=db_name,
+        dsn=normalized_dsn,
+        host=parsed.hostname or "",
+        port=parsed.port or DEFAULT_PGPORT,
+        user=parsed.username or "",
+        password=parsed.password or "",
+        maintenance_db=parsed.path.lstrip("/") or db_name,
+        db_name=parsed.path.lstrip("/") or db_name,
     )
 
 
