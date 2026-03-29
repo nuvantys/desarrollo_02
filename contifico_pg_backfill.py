@@ -1117,10 +1117,26 @@ RESOURCE_CHILD_PURGES: dict[str, tuple[tuple[str, str], ...]] = {
 
 
 def ensure_schema(conn) -> None:
-    with conn.cursor() as cur:
-        for statement in DDL_STATEMENTS:
-            cur.execute(statement)
-    conn.commit()
+    pending = list(DDL_STATEMENTS)
+    while pending:
+        next_pending: list[str] = []
+        executed_in_pass = 0
+        with conn.cursor() as cur:
+            for index, statement in enumerate(pending):
+                savepoint_name = f"ddl_step_{index}"
+                cur.execute(sql.SQL("SAVEPOINT {}").format(sql.Identifier(savepoint_name)))
+                try:
+                    cur.execute(statement)
+                    cur.execute(sql.SQL("RELEASE SAVEPOINT {}").format(sql.Identifier(savepoint_name)))
+                    executed_in_pass += 1
+                except Exception:
+                    cur.execute(sql.SQL("ROLLBACK TO SAVEPOINT {}").format(sql.Identifier(savepoint_name)))
+                    next_pending.append(statement)
+        if executed_in_pass == 0:
+            conn.rollback()
+            raise RuntimeError("Could not resolve PostgreSQL DDL dependencies while creating schema")
+        conn.commit()
+        pending = next_pending
 
 
 def truncate_backfill_tables(conn) -> None:

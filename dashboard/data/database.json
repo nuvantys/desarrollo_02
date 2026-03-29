@@ -617,9 +617,9 @@
     "core_rows": 629733,
     "raw_rows": 7083,
     "meta_rows": 818,
-    "frontend_total_rows": 163704,
-    "database_total_size_bytes": 142802944,
-    "frontend_total_size_bytes": 42811099,
+    "frontend_total_rows": 163889,
+    "database_total_size_bytes": 142827520,
+    "frontend_total_size_bytes": 42864436,
     "optional_relationships": 45,
     "total_orphans": 0
   },
@@ -634,7 +634,7 @@
     },
     {
       "title": "Back versus front",
-      "body": "El backend conserva 637634 filas entre meta, raw y core, mientras el snapshot web expone 163704 registros agregados en 10 archivos JSON para exploracion rapida sin abrir la base al navegador."
+      "body": "El backend conserva 637634 filas entre meta, raw y core, mientras el snapshot web expone 163889 registros agregados en 10 archivos JSON para exploracion rapida sin abrir la base al navegador."
     },
     {
       "title": "Puntos de mayor acoplamiento",
@@ -647,14 +647,14 @@
       "table_count": 25,
       "view_count": 0,
       "total_rows": 629733,
-      "total_size_bytes": 139132928
+      "total_size_bytes": 139149312
     },
     {
       "schema_name": "raw",
       "table_count": 1,
       "view_count": 0,
       "total_rows": 7083,
-      "total_size_bytes": 3334144
+      "total_size_bytes": 3342336
     },
     {
       "schema_name": "meta",
@@ -788,7 +788,7 @@
       "column_count": 8,
       "nullable_columns": 1,
       "pk_columns": "run_id, resource, entity_id",
-      "total_size_bytes": 3334144,
+      "total_size_bytes": 3342336,
       "data_size_bytes": 2170880,
       "index_size_bytes": 1048576
     },
@@ -812,7 +812,7 @@
       "column_count": 9,
       "nullable_columns": 6,
       "pk_columns": "id",
-      "total_size_bytes": 565248,
+      "total_size_bytes": 573440,
       "data_size_bytes": 360448,
       "index_size_bytes": 172032
     },
@@ -824,7 +824,7 @@
       "column_count": 7,
       "nullable_columns": 3,
       "pk_columns": "movimiento_id, detalle_index",
-      "total_size_bytes": 499712,
+      "total_size_bytes": 507904,
       "data_size_bytes": 278528,
       "index_size_bytes": 188416
     },
@@ -2028,16 +2028,16 @@
     },
     {
       "file_name": "accounting.json",
-      "rows_exposed": 15104,
-      "size_bytes": 3590414,
-      "collection_count": 6,
+      "rows_exposed": 15289,
+      "size_bytes": 3643749,
+      "collection_count": 8,
       "largest_collection": "monthly_facts",
       "largest_collection_rows": 12231
     },
     {
       "file_name": "technical.json",
       "rows_exposed": 181,
-      "size_bytes": 55083,
+      "size_bytes": 55085,
       "collection_count": 13,
       "largest_collection": "fk_health",
       "largest_collection_rows": 54
@@ -2115,14 +2115,14 @@
     {
       "domain": "Contabilidad",
       "backend_rows": 346756,
-      "frontend_rows": 15104,
+      "frontend_rows": 15289,
       "frontend_file": "accounting.json",
       "backend_scope": "asientos, asiento_detalles"
     },
     {
       "domain": "Tesoreria",
       "backend_rows": 5969,
-      "frontend_rows": 15104,
+      "frontend_rows": 15289,
       "frontend_file": "accounting.json",
       "backend_scope": "banco_cuentas, banco_movimientos, banco_movimiento_detalles"
     },

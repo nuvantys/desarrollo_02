@@ -643,6 +643,95 @@ def build_accounting(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dic
             LIMIT 20
             """
         ),
+        "bank_reconciliation_monthly": query_rows(
+            conn,
+            """
+            WITH cobros AS (
+                SELECT
+                    date_trunc('month', dc.fecha)::date AS period,
+                    dc.cuenta_bancaria_id,
+                    COALESCE(bc.nombre, 'Sin cuenta bancaria') AS cuenta_bancaria_nombre,
+                    COUNT(*)::bigint AS cobros_registrados,
+                    COALESCE(SUM(dc.monto), 0)::numeric(18,2) AS monto_cobros
+                FROM core.documento_cobros dc
+                LEFT JOIN core.banco_cuentas bc ON bc.id = dc.cuenta_bancaria_id
+                WHERE dc.cuenta_bancaria_id IS NOT NULL
+                GROUP BY 1, 2, 3
+            ),
+            bancos AS (
+                SELECT
+                    date_trunc('month', bm.fecha_emision)::date AS period,
+                    bm.cuenta_bancaria_id,
+                    COALESCE(bc.nombre, 'Sin cuenta bancaria') AS cuenta_bancaria_nombre,
+                    COUNT(DISTINCT bm.id)::bigint AS movimientos_bancarios,
+                    COALESCE(SUM(CASE WHEN bm.tipo_registro = 'I' THEN bmd.monto ELSE 0 END), 0)::numeric(18,2) AS ingresos_bancarios,
+                    COALESCE(SUM(CASE WHEN bm.tipo_registro = 'E' THEN bmd.monto ELSE 0 END), 0)::numeric(18,2) AS egresos_bancarios
+                FROM core.banco_movimientos bm
+                LEFT JOIN core.banco_cuentas bc ON bc.id = bm.cuenta_bancaria_id
+                LEFT JOIN core.banco_movimiento_detalles bmd ON bmd.movimiento_id = bm.id
+                GROUP BY 1, 2, 3
+            )
+            SELECT
+                COALESCE(c.period, b.period) AS period,
+                COALESCE(c.cuenta_bancaria_id, b.cuenta_bancaria_id) AS cuenta_bancaria_id,
+                COALESCE(c.cuenta_bancaria_nombre, b.cuenta_bancaria_nombre, 'Sin cuenta bancaria') AS cuenta_bancaria_nombre,
+                COALESCE(c.cobros_registrados, 0)::bigint AS cobros_registrados,
+                COALESCE(c.monto_cobros, 0)::numeric(18,2) AS monto_cobros,
+                COALESCE(b.movimientos_bancarios, 0)::bigint AS movimientos_bancarios,
+                COALESCE(b.ingresos_bancarios, 0)::numeric(18,2) AS ingresos_bancarios,
+                COALESCE(b.egresos_bancarios, 0)::numeric(18,2) AS egresos_bancarios,
+                (COALESCE(b.ingresos_bancarios, 0) - COALESCE(c.monto_cobros, 0))::numeric(18,2) AS brecha_ingresos_vs_cobros
+            FROM cobros c
+            FULL OUTER JOIN bancos b
+              ON b.period = c.period
+             AND b.cuenta_bancaria_id = c.cuenta_bancaria_id
+            ORDER BY 1, 3
+            """
+        ),
+        "bank_reconciliation_accounts": query_rows(
+            conn,
+            """
+            WITH monthly AS (
+                WITH cobros AS (
+                    SELECT
+                        date_trunc('month', dc.fecha)::date AS period,
+                        dc.cuenta_bancaria_id,
+                        COALESCE(SUM(dc.monto), 0)::numeric(18,2) AS monto_cobros
+                    FROM core.documento_cobros dc
+                    WHERE dc.cuenta_bancaria_id IS NOT NULL
+                    GROUP BY 1, 2
+                ),
+                bancos AS (
+                    SELECT
+                        date_trunc('month', bm.fecha_emision)::date AS period,
+                        bm.cuenta_bancaria_id,
+                        COALESCE(SUM(CASE WHEN bm.tipo_registro = 'I' THEN bmd.monto ELSE 0 END), 0)::numeric(18,2) AS ingresos_bancarios
+                    FROM core.banco_movimientos bm
+                    LEFT JOIN core.banco_movimiento_detalles bmd ON bmd.movimiento_id = bm.id
+                    GROUP BY 1, 2
+                )
+                SELECT
+                    COALESCE(c.cuenta_bancaria_id, b.cuenta_bancaria_id) AS cuenta_bancaria_id,
+                    COALESCE(c.monto_cobros, 0)::numeric(18,2) AS monto_cobros,
+                    COALESCE(b.ingresos_bancarios, 0)::numeric(18,2) AS ingresos_bancarios,
+                    ABS(COALESCE(b.ingresos_bancarios, 0) - COALESCE(c.monto_cobros, 0))::numeric(18,2) AS brecha_absoluta
+                FROM cobros c
+                FULL OUTER JOIN bancos b
+                  ON b.period = c.period
+                 AND b.cuenta_bancaria_id = c.cuenta_bancaria_id
+            )
+            SELECT
+                COALESCE(bc.nombre, 'Sin cuenta bancaria') AS cuenta_bancaria_nombre,
+                COUNT(*)::bigint AS meses_observados,
+                COALESCE(SUM(m.monto_cobros), 0)::numeric(18,2) AS monto_cobros,
+                COALESCE(SUM(m.ingresos_bancarios), 0)::numeric(18,2) AS ingresos_bancarios,
+                COALESCE(SUM(m.brecha_absoluta), 0)::numeric(18,2) AS brecha_absoluta
+            FROM monthly m
+            LEFT JOIN core.banco_cuentas bc ON bc.id = m.cuenta_bancaria_id
+            GROUP BY 1
+            ORDER BY brecha_absoluta DESC, cuenta_bancaria_nombre
+            """
+        ),
     }
 
 

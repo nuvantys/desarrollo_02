@@ -34,12 +34,12 @@
       "value": 67402
     },
     {
-      "key": "documento_detalles",
-      "value": 77447
-    },
-    {
       "key": "asiento_detalles",
       "value": 279354
+    },
+    {
+      "key": "documento_detalles",
+      "value": 77447
     }
   ],
   "alerts": [

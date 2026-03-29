@@ -104,6 +104,8 @@ http://127.0.0.1:8123
 - Tab `Vista analitica` con hero, comercial, clientes, inventario, logistica, tesoreria, contabilidad, calidad y tablas exportables
 - Integracion nueva de `inventario/guia`, `banco/cuenta` y `banco/movimiento`, conectadas con `documentos`, `personas`, `bodegas`, `productos` y `cuentas_contables`
 - Tres graficos nuevos sobre las capas integradas: trazabilidad de guias, carga logistica por bodega y flujo bancario mensual
+- Conciliacion bancaria entre `documento_cobros` y `banco_movimientos`, visible por mes y por cuenta bancaria
+- Ruta de replica a Supabase documentada en `README_supabase_sync.md` y automatizada por `supabase_sync.py`
 
 ## Notas
 

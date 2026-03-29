@@ -738,6 +738,8 @@ function renderOperations() {
 function renderAccounting() {
   const monthlySummary = filteredAccountingSummary();
   const accountingFacts = filteredAccountingFacts();
+  const { from, to } = currentDateBounds();
+  const reconciliationRows = (snapshot.accounting.bank_reconciliation_monthly || []).filter((row) => inDateRange(row.period, from, to));
 
   setOption(
     "accounting-monthly-chart",
@@ -792,6 +794,48 @@ function renderAccounting() {
       labels: months.map((period) => formatDate(period)),
       debe: months.map((period) => balanceByMonth.find((row) => row.period === period && row.tipo === "D")?.value || 0),
       haber: months.map((period) => balanceByMonth.find((row) => row.period === period && row.tipo === "H")?.value || 0),
+    }),
+  );
+
+  const reconciliationByMonth = aggregateBy(
+    reconciliationRows,
+    (row) => row.period,
+    (row) => ({
+      period: row.period,
+      monto_cobros: toNumber(row.monto_cobros),
+      ingresos_bancarios: toNumber(row.ingresos_bancarios),
+    }),
+    (acc, row) => {
+      acc.monto_cobros += toNumber(row.monto_cobros);
+      acc.ingresos_bancarios += toNumber(row.ingresos_bancarios);
+    },
+  ).sort((a, b) => a.period.localeCompare(b.period));
+  setOption(
+    "accounting-reconciliation-chart",
+    lineComboOption({
+      categories: reconciliationByMonth.map((row) => formatDate(row.period)),
+      bars: reconciliationByMonth.map((row) => row.monto_cobros),
+      line: reconciliationByMonth.map((row) => row.ingresos_bancarios),
+      barName: "Cobros",
+      lineName: "Ingresos bancarios",
+      barFormatter: formatCurrency,
+      lineFormatter: formatCurrency,
+    }),
+  );
+
+  const accountGapRows = sortByValueDescending(
+    (snapshot.accounting.bank_reconciliation_accounts || []).map((row) => ({
+      label: row.cuenta_bancaria_nombre,
+      value: toNumber(row.brecha_absoluta),
+    })),
+  ).slice(0, 12);
+  setOption(
+    "accounting-bank-gap-chart",
+    horizontalBarOption({
+      labels: accountGapRows.map((row) => row.label),
+      values: accountGapRows.map((row) => row.value),
+      formatter: formatCurrency,
+      color: "#b94f44",
     }),
   );
 }
