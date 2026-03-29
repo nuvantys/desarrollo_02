@@ -960,7 +960,7 @@ def build_source_overview(conn, meta: dict[str, Any], recent_runs: list[dict[str
         },
         {
             "title": "Modo local versus modo vivo",
-            "body": "El modo local mantiene estabilidad porque sirve el ultimo snapshot ya consolidado. El modo vivo dispara de un clic la reconstruccion desde APIs y republica el snapshot, lo que conserva control operativo sin sacrificar frescura.",
+            "body": "El modo local mantiene estabilidad porque sirve el ultimo snapshot ya consolidado. El modo vivo ahora separa refresh rapido y refresh completo: el rapido lee cambios recientes y el completo relee todo el historico para reconciliacion profunda.",
         },
         {
             "title": "Historial reciente del pipeline",
@@ -1000,9 +1000,14 @@ def build_source_overview(conn, meta: dict[str, Any], recent_runs: list[dict[str
             "description": "Levanta dashboard + API tecnica y conserva el ultimo snapshot materializado sin ejecutar refresco automatico.",
         },
         {
-            "mode": "API en un clic",
+            "mode": "Refresh rapido",
             "script": "dashboard/start_dashboard_live_refresh.ps1",
-            "description": "Levanta dashboard + API tecnica y dispara automaticamente el refresh completo desde Contifico API hacia PostgreSQL y JSON.",
+            "description": "Levanta dashboard + API tecnica y dispara el modo operacional: lee cambios recientes, actualiza IDs impactados y republica el snapshot.",
+        },
+        {
+            "mode": "Refresh completo",
+            "script": "dashboard/start_dashboard_full_refresh.ps1",
+            "description": "Levanta dashboard + API tecnica y dispara un backfill historico completo desde Contifico API hacia PostgreSQL y JSON.",
         },
     ]
     return {
@@ -1195,6 +1200,11 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
             SUM(source_count)::bigint AS source_rows,
             SUM(raw_row_count)::bigint AS raw_rows,
             CASE
+                WHEN SUM(CASE WHEN mode = 'backfill' THEN 1 ELSE 0 END) > 0 THEN 'backfill'
+                WHEN SUM(CASE WHEN mode = 'refresh' THEN 1 ELSE 0 END) > 0 THEN 'refresh'
+                ELSE COALESCE(MIN(mode), 'desconocido')
+            END AS run_mode,
+            CASE
                 WHEN SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) > 0 THEN 'error'
                 WHEN SUM(CASE WHEN status = 'success' THEN 1 ELSE 0 END) = COUNT(*) THEN 'success'
                 ELSE 'partial'
@@ -1207,6 +1217,33 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
     )
     last_run = recent_runs[0] if recent_runs else {}
     latest_run_id = last_run.get("run_id") or meta.get("run_id")
+    historical_core_rows_stored = query_value(
+        conn,
+        """
+        SELECT
+            (SELECT COUNT(*) FROM core.categorias)
+          + (SELECT COUNT(*) FROM core.bodegas)
+          + (SELECT COUNT(*) FROM core.marcas)
+          + (SELECT COUNT(*) FROM core.unidades)
+          + (SELECT COUNT(*) FROM core.cuentas_contables)
+          + (SELECT COUNT(*) FROM core.centros_costo)
+          + (SELECT COUNT(*) FROM core.periodos)
+          + (SELECT COUNT(*) FROM core.personas)
+          + (SELECT COUNT(*) FROM core.productos)
+          + (SELECT COUNT(*) FROM core.movimientos)
+          + (SELECT COUNT(*) FROM core.movimiento_detalles)
+          + (SELECT COUNT(*) FROM core.documentos)
+          + (SELECT COUNT(*) FROM core.documento_detalles)
+          + (SELECT COUNT(*) FROM core.documento_cobros)
+          + (SELECT COUNT(*) FROM core.tickets_documentos)
+          + (SELECT COUNT(*) FROM core.tickets_detalles)
+          + (SELECT COUNT(*) FROM core.tickets_items)
+          + (SELECT COUNT(*) FROM core.asientos)
+          + (SELECT COUNT(*) FROM core.asiento_detalles)
+          AS total_core_rows
+        """,
+        default=0,
+    )
     resource_metrics = (
         query_rows(
             conn,
@@ -1267,6 +1304,15 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
     total_core_rows = sum(int(row.get("row_count") or 0) for row in load_metrics if row.get("stage") == "core")
     orphan_total = sum(int(row.get("orphan_count") or 0) for row in fk_health)
     movement_anomaly = next((row for row in source_vs_core if row.get("resource") == "movimiento-inventario"), None)
+    last_run_mode = last_run.get("run_mode") or "desconocido"
+    last_run_mode_label = "Refresh completo" if last_run_mode == "backfill" else "Refresh rapido" if last_run_mode == "refresh" else "Modo desconocido"
+    read_scope_note = (
+        "Lee cambios recientes e IDs impactados; mantiene el historico ya almacenado."
+        if last_run_mode == "refresh"
+        else "Relee todo el historico y reconstruye completamente la base local."
+        if last_run_mode == "backfill"
+        else "No hay suficiente informacion para clasificar el alcance de la corrida."
+    )
     generated_at_value = meta.get("generated_at")
     generated_at_dt = None
     if isinstance(generated_at_value, dt.datetime):
@@ -1298,12 +1344,34 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
     ]
     narrative = [
         f"El snapshot tecnico vigente corresponde al run_id {latest_run_id or 'sin_corrida'} y cubre desde {meta.get('coverage_min')} hasta {meta.get('coverage_max')}.",
-        f"La ultima corrida proceso {int(last_run.get('resources_processed') or 0)} recursos, actualizo {updated_tables} tablas y materializo {total_core_rows} filas core.",
+        f"La ultima corrida fue {last_run_mode_label.lower()}, proceso {int(last_run.get('resources_processed') or 0)} recursos, actualizo {updated_tables} tablas y materializo {total_core_rows} filas core.",
+        f"Las filas leidas en esta corrida fueron {int(last_run.get('source_rows') or 0)}, mientras que la base mantiene {int(historical_core_rows_stored or 0)} filas historicas en tablas core.",
         f"La diferencia fuente vs core mas visible sigue en movimiento-inventario con {int(movement_anomaly.get('difference') or 0) if movement_anomaly else 0} filas de brecha despues de deduplicacion.",
         f"La salud referencial consolidada registra {orphan_total} huerfanos y {sum(int(row.get('placeholder_count') or 0) for row in placeholders)} placeholders controlados.",
     ]
+    refresh_guidance = [
+        {
+            "title": "Filas leidas en esta corrida",
+            "body": f"El valor {int(last_run.get('source_rows') or 0)} mide lo que el pipeline leyo hoy desde la API. Puede bajar cuando el refresh deja de releer historico completo y pasa a leer solo cambios recientes.",
+        },
+        {
+            "title": "Historico almacenado",
+            "body": f"La base local conserva {int(historical_core_rows_stored or 0)} filas en tablas core. Esa cifra representa lo que ya esta persistido y disponible para analitica, aunque la corrida actual haya leido menos filas desde origen.",
+        },
+        {
+            "title": "Garantia del refresh rapido",
+            "body": "El modo rapido captura nuevos registros y actualizaciones recientes en los recursos optimizados. Es el modo operacional recomendado para el dia a dia porque reduce tiempo sin vaciar el historico local.",
+        },
+        {
+            "title": "Cuando usar refresh completo",
+            "body": "El modo completo relee todo el historico y reconstruye la base local. Conviene para conciliacion profunda, cierres, validaciones de integridad o cuando se sospechan cambios historicos fuera de la ventana reciente.",
+        },
+    ]
     summary = {
         "status": last_run.get("status", "unknown"),
+        "run_mode": last_run_mode,
+        "run_mode_label": last_run_mode_label,
+        "read_scope_note": read_scope_note,
         "resources_processed": int(last_run.get("resources_processed") or 0),
         "resources_success": resources_success,
         "resources_failed": resources_failed,
@@ -1311,6 +1379,7 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         "core_rows_updated": total_core_rows,
         "source_rows_processed": int(last_run.get("source_rows") or 0),
         "raw_rows_processed": int(last_run.get("raw_rows") or 0),
+        "historical_core_rows_stored": int(historical_core_rows_stored or 0),
     }
     source_overview = build_source_overview(conn, meta, recent_runs, summary)
     priority_matrix = build_priority_matrix(consistency_review)
@@ -1326,6 +1395,7 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         "coverage_min": meta.get("coverage_min"),
         "coverage_max": meta.get("coverage_max"),
         "summary": summary,
+        "refresh_guidance": refresh_guidance,
         "resource_metrics": resource_metrics,
         "load_metrics": load_metrics,
         "watermarks": watermarks,

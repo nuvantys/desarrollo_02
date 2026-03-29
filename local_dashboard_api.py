@@ -11,7 +11,7 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 from contifico_pg_backfill import DEFAULT_DB_NAME, open_connection, pg_config_from_env
 from export_dashboard_data import base_metadata, build_technical, filters_available, json_default
@@ -71,6 +71,12 @@ class RefreshManager:
             last_job = dict(self.last_job) if self.last_job else None
         return {
             "api_available": True,
+            "capabilities": {
+                "refresh_scopes": [
+                    {"key": "refresh", "label": "Refresh rapido"},
+                    {"key": "backfill", "label": "Refresh completo"},
+                ]
+            },
             "runtime": {
                 "current_job": current_job,
                 "last_job": last_job,
@@ -94,7 +100,8 @@ class RefreshManager:
     def reload_status(self) -> dict[str, Any]:
         return self._status_payload()
 
-    def start_refresh(self) -> dict[str, Any]:
+    def start_refresh(self, scope: str = "refresh") -> dict[str, Any]:
+        scope_key = normalize_scope(scope)
         with API_STATE_LOCK:
             if self.current_job and self.current_job.get("status") == "running":
                 raise RuntimeError("Ya existe una actualizacion en curso")
@@ -102,16 +109,18 @@ class RefreshManager:
             self.current_job = {
                 "job_id": job_id,
                 "status": "running",
-                "scope": "refresh_plus_snapshot",
+                "scope": f"{scope_key}_plus_snapshot",
+                "scope_key": scope_key,
+                "scope_label": "Refresh rapido" if scope_key == "refresh" else "Refresh completo",
                 "stage": "extrayendo",
                 "started_at": iso_now(),
                 "finished_at": None,
                 "duration_seconds": None,
-                "message": "Inicializando actualizacion rapida de Contifico.",
+                "message": "Inicializando actualizacion rapida de Contifico." if scope_key == "refresh" else "Inicializando actualizacion completa de Contifico.",
                 "error_text": None,
                 "logs": [],
             }
-            worker = threading.Thread(target=self._run_job, args=(job_id,), daemon=True)
+            worker = threading.Thread(target=self._run_job, args=(job_id, scope_key), daemon=True)
             worker.start()
             return dict(self.current_job)
 
@@ -163,7 +172,7 @@ class RefreshManager:
         if "refreshing watermarks and reporting views" in lowered:
             return "cargando PostgreSQL", "Refrescando watermarks y vistas de reporte."
         if "final report generated" in lowered:
-            return current_stage, "Backfill finalizado. Preparando regeneracion del snapshot."
+            return current_stage, "Pipeline finalizado. Preparando regeneracion del snapshot."
         return current_stage, line.strip()
 
     def _run_process(self, job_id: str, command: list[str], cwd: Path, initial_stage: str, initial_message: str) -> None:
@@ -190,14 +199,14 @@ class RefreshManager:
         if return_code != 0:
             raise RuntimeError(f"El proceso fallo con codigo {return_code}: {' '.join(command)}")
 
-    def _run_job(self, job_id: str) -> None:
+    def _run_job(self, job_id: str, scope: str) -> None:
         python_executable = sys.executable
         try:
-            backfill_command = [
+            pipeline_command = [
                 python_executable,
                 str(ROOT_DIR / "contifico_pg_backfill.py"),
                 "--mode",
-                "refresh",
+                scope,
                 "--db-name",
                 self.db_name,
                 "--report-out",
@@ -215,12 +224,35 @@ class RefreshManager:
                 "--out-dir",
                 str(self.data_dir),
             ]
-            self._run_process(job_id, backfill_command, ROOT_DIR, "extrayendo", "Iniciando refresh rapido en PostgreSQL.")
+            start_message = "Iniciando refresh rapido en PostgreSQL." if scope == "refresh" else "Iniciando refresh completo en PostgreSQL."
+            self._run_process(job_id, pipeline_command, ROOT_DIR, "extrayendo", start_message)
             self._run_process(job_id, export_command, ROOT_DIR, "regenerando snapshot", "Regenerando snapshot analitico para el dashboard.")
             self._finish_job(job_id, "success", "Actualizacion finalizada correctamente.")
         except Exception as exc:
             self._append_log(job_id, str(exc))
             self._finish_job(job_id, "error", "La actualizacion tecnica fallo.", redact_text(str(exc)))
+
+
+def normalize_scope(scope: str | None) -> str:
+    value = (scope or "").strip().lower()
+    if value in {"", "refresh", "rapido", "rápido", "quick", "fast"}:
+        return "refresh"
+    if value in {"backfill", "completo", "full", "complete"}:
+        return "backfill"
+    raise RuntimeError("Scope invalido. Usa 'refresh' o 'backfill'.")
+
+
+def parse_json_body(handler: BaseHTTPRequestHandler) -> dict[str, Any]:
+    content_length = int(handler.headers.get("Content-Length", "0") or 0)
+    if content_length <= 0:
+        return {}
+    raw_body = handler.rfile.read(content_length)
+    if not raw_body:
+        return {}
+    try:
+        return json.loads(raw_body.decode("utf-8"))
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"JSON invalido en el cuerpo del request: {exc}") from exc
 
 
 def json_response(handler: BaseHTTPRequestHandler, status: int, payload: dict[str, Any]) -> None:
@@ -265,11 +297,15 @@ def build_handler(manager: RefreshManager):
 
         def do_POST(self) -> None:
             parsed = urlparse(self.path)
+            query = parse_qs(parsed.query)
             try:
                 if parsed.path == "/api/technical/refresh":
-                    json_response(self, HTTPStatus.ACCEPTED, {"job": manager.start_refresh()})
+                    payload = parse_json_body(self)
+                    requested_scope = payload.get("scope") or query.get("scope", [None])[0]
+                    json_response(self, HTTPStatus.ACCEPTED, {"job": manager.start_refresh(requested_scope or "refresh")})
                     return
                 if parsed.path == "/api/technical/reload":
+                    _ = parse_json_body(self)
                     json_response(self, HTTPStatus.OK, manager.reload_status())
                     return
                 json_response(self, HTTPStatus.NOT_FOUND, {"error": "Ruta no encontrada"})

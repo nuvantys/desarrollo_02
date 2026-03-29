@@ -75,13 +75,15 @@ const elements = {
   tabViews: document.querySelectorAll(".tab-view"),
   technical: {
     subtitle: document.getElementById("technical-subtitle"),
-    refreshButton: document.getElementById("technical-refresh-button"),
+    refreshQuickButton: document.getElementById("technical-refresh-quick-button"),
+    refreshFullButton: document.getElementById("technical-refresh-full-button"),
     reloadButton: document.getElementById("technical-reload-button"),
     runtimeBadge: document.getElementById("technical-runtime-badge"),
     summaryMetrics: document.getElementById("technical-summary-metrics"),
     runtimeMessage: document.getElementById("technical-runtime-message"),
     progressBar: document.getElementById("technical-progress-bar"),
     runtimeMeta: document.getElementById("technical-runtime-meta"),
+    refreshGuide: document.getElementById("technical-refresh-guide"),
     alerts: document.getElementById("technical-alerts"),
     runsTable: document.getElementById("technical-runs-table"),
     loadTable: document.getElementById("technical-load-table"),
@@ -1036,6 +1038,17 @@ function yesNoLabel(value, yes = "Si", no = "No") {
   return value ? yes : no;
 }
 
+function runModeBadge(value) {
+  const normalized = String(value || "").toLowerCase();
+  if (normalized === "backfill" || normalized === "completo") {
+    return `<span class="area-pill">Completo</span>`;
+  }
+  if (normalized === "refresh" || normalized === "rapido" || normalized === "rápido") {
+    return `<span class="area-pill">Rapido</span>`;
+  }
+  return value || "--";
+}
+
 function formatSeconds(value) {
   return `${formatNumber(value)} s`;
 }
@@ -1258,20 +1271,24 @@ function renderTechnical() {
   const technical = technicalState.data;
   const runtime = technicalState.runtime.current_job || technicalState.runtime.last_job;
   const runtimeStatus = runtime?.status || technical.summary?.status || "success";
+  const summary = technical.summary || {};
+  const runtimeScopeLabel = runtime?.scope_label || summary.run_mode_label || "Modo no disponible";
 
-  elements.technical.subtitle.textContent = `Cobertura ${technical.coverage_min || "--"} a ${technical.coverage_max || "--"} con run_id ${technical.run_id || "--"}.`;
+  elements.technical.subtitle.textContent = `Cobertura ${technical.coverage_min || "--"} a ${technical.coverage_max || "--"} con run_id ${technical.run_id || "--"} y ultimo modo ${summary.run_mode_label || "--"}.`;
   elements.technical.runtimeBadge.className = runtimeBadgeClass(runtimeStatus);
   elements.technical.runtimeBadge.textContent = runtimeStatus === "running" ? "Actualizando" : runtimeStatus === "error" ? "Con error" : "Estable";
   elements.technical.runtimeMessage.textContent =
     runtime?.message || "No hay procesos activos. El estado expuesto corresponde al ultimo snapshot tecnico disponible.";
   elements.technical.progressBar.style.width = `${stageProgress(runtime?.stage, runtimeStatus)}%`;
-  elements.technical.refreshButton.disabled = !technicalState.apiAvailable || runtimeStatus === "running";
-
-  const summary = technical.summary || {};
+  elements.technical.refreshQuickButton.disabled = !technicalState.apiAvailable || runtimeStatus === "running";
+  elements.technical.refreshFullButton.disabled = !technicalState.apiAvailable || runtimeStatus === "running";
   renderMetricCards(elements.technical.summaryMetrics, [
     { label: "Ultima actualizacion", value: formatDateTime(technical.generated_at), caption: "Hora efectiva del snapshot tecnico publicado." },
     { label: "Duracion ultima corrida", value: formatDuration(technical.last_refresh_duration_seconds), caption: "Tiempo total de la ultima actualizacion tecnica mas snapshot." },
-    { label: "Filas core actualizadas", value: formatPreciseNumber(summary.core_rows_updated || 0), caption: "Suma de filas materializadas en tablas core." },
+    { label: "Modo ultima corrida", value: summary.run_mode_label || "--", caption: summary.read_scope_note || "Sin descripcion del alcance de la corrida." },
+    { label: "Filas leidas en esta corrida", value: formatPreciseNumber(summary.source_rows_processed || 0), caption: "Filas recuperadas desde la API en esta ejecucion; puede bajar si el modo deja de releer todo el historico." },
+    { label: "Historico core almacenado", value: formatPreciseNumber(summary.historical_core_rows_stored || 0), caption: "Filas que siguen persistidas en PostgreSQL y disponibles para analitica aunque la corrida actual lea menos." },
+    { label: "Filas core actualizadas", value: formatPreciseNumber(summary.core_rows_updated || 0), caption: "Suma de filas materializadas o reconciliadas en tablas core por esta corrida." },
     { label: "Tablas actualizadas", value: formatPreciseNumber(summary.tables_updated || 0), caption: "Total de tablas impactadas por la ultima corrida." },
     { label: "Recursos procesados", value: formatPreciseNumber(summary.resources_processed || 0), caption: "Recursos de Contifico recorridos por el pipeline." },
     { label: "Freshness", value: freshnessLabel(technical.freshness_seconds), caption: "Tiempo transcurrido desde la ultima generacion del snapshot." },
@@ -1279,14 +1296,17 @@ function renderTechnical() {
 
   const metaPills = [
     `Run ID: ${technical.run_id || "--"}`,
+    `Modo: ${runtimeScopeLabel}`,
     `Inicio: ${formatDateTime(technical.last_refresh_started_at)}`,
     `Fin: ${formatDateTime(technical.last_refresh_finished_at)}`,
     `Exitosos: ${summary.resources_success || 0}`,
     `Fallidos: ${summary.resources_failed || 0}`,
-    `Filas origen: ${formatCompact(summary.source_rows_processed || 0)}`,
+    `Filas leidas: ${formatCompact(summary.source_rows_processed || 0)}`,
+    `Historico core: ${formatCompact(summary.historical_core_rows_stored || 0)}`,
   ];
   elements.technical.runtimeMeta.innerHTML = metaPills.map((item) => `<span class="technical-meta-pill">${item}</span>`).join("");
   renderTechnicalAlerts(technical.alerts || [], runtime);
+  renderStoryCards(elements.technical.refreshGuide, technical.refresh_guidance || []);
 
   const resourceRows = sortByValueDescending(
     (technical.resource_metrics || []).map((row) => ({
@@ -1306,11 +1326,12 @@ function renderTechnical() {
 
   renderTable("technical-runs-table", technical.recent_runs || [], [
     { key: "run_id", label: "Run ID" },
+    { key: "run_mode", label: "Modo", formatter: runModeBadge },
     { key: "status", label: "Estado" },
     { key: "started_at", label: "Inicio", formatter: formatDateTime },
     { key: "duration_seconds", label: "Duracion", formatter: formatDuration },
     { key: "resources_processed", label: "Recursos", formatter: formatNumber },
-    { key: "source_rows", label: "Filas origen", formatter: formatNumber },
+    { key: "source_rows", label: "Filas leidas", formatter: formatNumber },
   ]);
   renderTable("technical-load-table", (technical.load_metrics || []).slice(0, 20), [
     { key: "stage", label: "Stage" },
@@ -1494,13 +1515,17 @@ async function pollRefreshJob(jobId) {
   }, 4000);
 }
 
-async function startTechnicalRefresh() {
+async function startTechnicalRefresh(scope = "refresh") {
   if (!technicalState.apiAvailable) {
     renderTechnical();
     return;
   }
   try {
-    const payload = await fetchJson(`${apiBase}/refresh`, { method: "POST" });
+    const payload = await fetchJson(`${apiBase}/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ scope }),
+    });
     technicalState.runtime.current_job = payload.job;
     setActiveTab("technical-view");
     renderTechnical();
@@ -1522,7 +1547,8 @@ function bindEvents() {
   elements.tabs.forEach((button) => {
     button.addEventListener("click", () => setActiveTab(button.dataset.tabTarget));
   });
-  elements.technical.refreshButton.addEventListener("click", startTechnicalRefresh);
+  elements.technical.refreshQuickButton.addEventListener("click", () => startTechnicalRefresh("refresh"));
+  elements.technical.refreshFullButton.addEventListener("click", () => startTechnicalRefresh("backfill"));
   elements.technical.reloadButton.addEventListener("click", reloadTechnicalSnapshotOnly);
 
   elements.filters.dateFrom.addEventListener("input", (event) => {

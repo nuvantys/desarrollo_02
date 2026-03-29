@@ -15,6 +15,8 @@ Dashboard estatico en `HTML + CSS + JS` alimentado desde snapshots JSON exportad
 - `dashboard/start_dashboard_server.bat`
 - `dashboard/start_dashboard_live_refresh.ps1`
 - `dashboard/start_dashboard_live_refresh.bat`
+- `dashboard/start_dashboard_full_refresh.ps1`
+- `dashboard/start_dashboard_full_refresh.bat`
 
 ## Regenerar snapshot
 
@@ -57,11 +59,24 @@ O por doble clic:
 dashboard\start_dashboard_live_refresh.bat
 ```
 
+Modo completo desde APIs en un clic:
+
+```powershell
+.\dashboard\start_dashboard_full_refresh.ps1
+```
+
+O por doble clic:
+
+```text
+dashboard\start_dashboard_full_refresh.bat
+```
+
 El script levanta:
 
 - servidor estatico en `http://127.0.0.1:8123`
 - API tecnica local en `http://127.0.0.1:8130`
 - si usas `start_dashboard_live_refresh.ps1`, tambien dispara el refresh rapido desde Contifico API
+- si usas `start_dashboard_full_refresh.ps1`, dispara el refresh completo o backfill historico desde Contifico API
 
 Opcion manual:
 
@@ -85,6 +100,7 @@ http://127.0.0.1:8123
 ## Que expone
 
 - Tab `Revision tecnica` con estado del dataset, bitacora de corridas, volumen actualizado, salud relacional, watermarks y boton de refresh real
+- La bitacora distingue entre `filas leidas en esta corrida` y `historico almacenado`, para no confundir optimizacion de lectura con perdida de datos.
 - Tab `Vista analitica` con hero, comercial, clientes, inventario, contabilidad, calidad y tablas exportables
 
 ## Notas

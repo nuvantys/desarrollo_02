@@ -85,6 +85,23 @@ body {
   box-shadow: 0 10px 24px rgba(13, 108, 95, 0.24);
 }
 
+.primary-button {
+  color: #ffffff;
+  background: var(--accent);
+  box-shadow: 0 10px 24px rgba(13, 108, 95, 0.18);
+}
+
+.secondary-button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgba(13, 108, 95, 0.18);
+  border-radius: 999px;
+  font-weight: 700;
+  color: var(--text);
+  background: rgba(216, 239, 232, 0.86);
+  cursor: pointer;
+}
+
 .tab-view {
   display: none;
 }
@@ -319,6 +336,12 @@ select:focus {
 .technical-runtime-panel {
   display: grid;
   gap: 20px;
+}
+
+.technical-refresh-guide {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .technical-summary-grid {
@@ -851,6 +874,7 @@ th {
 
   .tab-button,
   .primary-button,
+  .secondary-button,
   .ghost-button {
     width: 100%;
   }
@@ -858,6 +882,10 @@ th {
 
 @media (max-width: 620px) {
   .technical-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .technical-refresh-guide {
     grid-template-columns: 1fr;
   }
 }

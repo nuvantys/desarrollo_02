@@ -1,5 +1,7 @@
 param(
-  [switch]$RunLiveRefresh
+  [switch]$RunLiveRefresh,
+  [ValidateSet("refresh", "backfill")]
+  [string]$RefreshScope = "refresh"
 )
 
 $ErrorActionPreference = "Stop"
@@ -40,8 +42,10 @@ if ($RunLiveRefresh) {
   }
   if ($ready) {
     try {
-      Invoke-WebRequest -UseBasicParsing -Method Post "$apiUrl/refresh" | Out-Null
-      Write-Host "Refresh completo disparado desde APIs. El dashboard seguira mostrando progreso en Revision tecnica." -ForegroundColor Green
+      $body = @{ scope = $RefreshScope } | ConvertTo-Json -Compress
+      Invoke-WebRequest -UseBasicParsing -Method Post "$apiUrl/refresh" -ContentType "application/json" -Body $body | Out-Null
+      $scopeLabel = if ($RefreshScope -eq "backfill") { "completo" } else { "rapido" }
+      Write-Host "Refresh $scopeLabel disparado desde APIs. El dashboard seguira mostrando progreso en Revision tecnica." -ForegroundColor Green
     } catch {
       Write-Host "No fue posible disparar el refresh automatico. Revisa CONTIFICO_AUTHORIZATION y el estado de la API tecnica." -ForegroundColor Red
     }

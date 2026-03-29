@@ -32,7 +32,8 @@
               <p id="technical-subtitle">Cargando estado tecnico del snapshot y del backend local...</p>
             </div>
             <div class="technical-actions">
-              <button id="technical-refresh-button" class="primary-button" type="button">Actualizar datos</button>
+              <button id="technical-refresh-quick-button" class="primary-button" type="button">Refresh rapido</button>
+              <button id="technical-refresh-full-button" class="secondary-button" type="button">Refresh completo</button>
               <button id="technical-reload-button" class="ghost-button" type="button">Recargar estado</button>
             </div>
           </div>
@@ -59,6 +60,7 @@
                 <div id="technical-alerts" class="technical-alert-stack"></div>
               </div>
             </div>
+            <div class="technical-refresh-guide" id="technical-refresh-guide"></div>
           </div>
         </section>
 
@@ -92,7 +94,7 @@
               <div class="panel-header">
                 <div>
                   <h3>Bitacora del refresh</h3>
-                  <p>Ultimas corridas con duracion, recursos procesados y resultado.</p>
+                  <p>Ultimas corridas con modo, duracion, recursos procesados y filas leidas desde la API.</p>
                 </div>
               </div>
               <div id="technical-runs-table" class="table-wrap"></div>
