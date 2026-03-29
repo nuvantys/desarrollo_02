@@ -1,8 +1,8 @@
 {
-  "run_id": "20260329015106",
+  "run_id": "20260329202349",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-03-28T20:52:18-05:00",
+  "generated_at": "2026-03-29T15:25:16-05:00",
   "filters_available": {
     "document_types": [
       {
@@ -610,31 +610,31 @@
   "summary": {
     "database_name": "contifico_backfill",
     "schema_count": 4,
-    "table_count": 23,
-    "view_count": 8,
-    "relationship_count": 41,
-    "backend_total_rows": 624127,
-    "core_rows": 623616,
-    "raw_rows": 0,
-    "meta_rows": 511,
-    "frontend_total_rows": 160849,
-    "database_total_size_bytes": 138387456,
-    "frontend_total_size_bytes": 41964746,
-    "optional_relationships": 34,
+    "table_count": 29,
+    "view_count": 10,
+    "relationship_count": 55,
+    "backend_total_rows": 637634,
+    "core_rows": 629733,
+    "raw_rows": 7083,
+    "meta_rows": 818,
+    "frontend_total_rows": 163704,
+    "database_total_size_bytes": 142802944,
+    "frontend_total_size_bytes": 42811099,
+    "optional_relationships": 45,
     "total_orphans": 0
   },
   "story_cards": [
     {
       "title": "Base maestra relacional",
-      "body": "La base contifico_backfill concentra 23 tablas base, 8 vistas y 41 relaciones FK materializadas. El esquema core domina el volumen con 623616 filas y soporta toda la capa analitica."
+      "body": "La base contifico_backfill concentra 29 tablas base, 10 vistas y 55 relaciones FK materializadas. El esquema core domina el volumen con 629733 filas y soporta toda la capa analitica."
     },
     {
       "title": "Enfoque en relaciones",
-      "body": "El modelo privilegia relaciones 1:N normalizadas. Hay 34 relaciones opcionales, 6 autorrelaciones y 1 relaciones compuestas. El conteo de huerfanos observado hoy es 0."
+      "body": "El modelo privilegia relaciones 1:N normalizadas. Hay 45 relaciones opcionales, 6 autorrelaciones y 1 relaciones compuestas. El conteo de huerfanos observado hoy es 0."
     },
     {
       "title": "Back versus front",
-      "body": "El backend conserva 624127 filas entre meta, raw y core, mientras el snapshot web expone 160849 registros agregados en 10 archivos JSON para exploracion rapida sin abrir la base al navegador."
+      "body": "El backend conserva 637634 filas entre meta, raw y core, mientras el snapshot web expone 163704 registros agregados en 10 archivos JSON para exploracion rapida sin abrir la base al navegador."
     },
     {
       "title": "Puntos de mayor acoplamiento",
@@ -644,29 +644,29 @@
   "schema_storage": [
     {
       "schema_name": "core",
-      "table_count": 19,
+      "table_count": 25,
       "view_count": 0,
-      "total_rows": 623616,
-      "total_size_bytes": 138076160
-    },
-    {
-      "schema_name": "meta",
-      "table_count": 3,
-      "view_count": 0,
-      "total_rows": 511,
-      "total_size_bytes": 278528
+      "total_rows": 629733,
+      "total_size_bytes": 139132928
     },
     {
       "schema_name": "raw",
       "table_count": 1,
       "view_count": 0,
-      "total_rows": 0,
-      "total_size_bytes": 32768
+      "total_rows": 7083,
+      "total_size_bytes": 3334144
+    },
+    {
+      "schema_name": "meta",
+      "table_count": 3,
+      "view_count": 0,
+      "total_rows": 818,
+      "total_size_bytes": 335872
     },
     {
       "schema_name": "reporting",
       "table_count": 0,
-      "view_count": 8,
+      "view_count": 10,
       "total_rows": 0,
       "total_size_bytes": 0
     }
@@ -680,8 +680,8 @@
       "column_count": 8,
       "nullable_columns": 4,
       "pk_columns": "asiento_id, detalle_index",
-      "total_size_bytes": 47202304,
-      "data_size_bytes": 31301632,
+      "total_size_bytes": 47120384,
+      "data_size_bytes": 31219712,
       "index_size_bytes": 15859712
     },
     {
@@ -704,8 +704,8 @@
       "column_count": 30,
       "nullable_columns": 26,
       "pk_columns": "documento_id, detalle_index",
-      "total_size_bytes": 19546112,
-      "data_size_bytes": 15122432,
+      "total_size_bytes": 19521536,
+      "data_size_bytes": 15097856,
       "index_size_bytes": 4382720
     },
     {
@@ -716,8 +716,8 @@
       "column_count": 10,
       "nullable_columns": 6,
       "pk_columns": "documento_id, detalle_index",
-      "total_size_bytes": 14811136,
-      "data_size_bytes": 10387456,
+      "total_size_bytes": 14794752,
+      "data_size_bytes": 10371072,
       "index_size_bytes": 4382720
     },
     {
@@ -781,6 +781,18 @@
       "index_size_bytes": 729088
     },
     {
+      "schema_name": "raw",
+      "table_name": "resource_rows",
+      "qualified_name": "raw.resource_rows",
+      "row_count": 7083,
+      "column_count": 8,
+      "nullable_columns": 1,
+      "pk_columns": "run_id, resource, entity_id",
+      "total_size_bytes": 3334144,
+      "data_size_bytes": 2170880,
+      "index_size_bytes": 1048576
+    },
+    {
       "schema_name": "core",
       "table_name": "personas",
       "qualified_name": "core.personas",
@@ -788,9 +800,33 @@
       "column_count": 43,
       "nullable_columns": 40,
       "pk_columns": "id",
-      "total_size_bytes": 745472,
-      "data_size_bytes": 557056,
+      "total_size_bytes": 737280,
+      "data_size_bytes": 548864,
       "index_size_bytes": 147456
+    },
+    {
+      "schema_name": "core",
+      "table_name": "banco_movimientos",
+      "qualified_name": "core.banco_movimientos",
+      "row_count": 2751,
+      "column_count": 9,
+      "nullable_columns": 6,
+      "pk_columns": "id",
+      "total_size_bytes": 565248,
+      "data_size_bytes": 360448,
+      "index_size_bytes": 172032
+    },
+    {
+      "schema_name": "core",
+      "table_name": "banco_movimiento_detalles",
+      "qualified_name": "core.banco_movimiento_detalles",
+      "row_count": 3213,
+      "column_count": 7,
+      "nullable_columns": 3,
+      "pk_columns": "movimiento_id, detalle_index",
+      "total_size_bytes": 499712,
+      "data_size_bytes": 278528,
+      "index_size_bytes": 188416
     },
     {
       "schema_name": "core",
@@ -812,33 +848,33 @@
       "column_count": 6,
       "nullable_columns": 3,
       "pk_columns": "id",
-      "total_size_bytes": 237568,
-      "data_size_bytes": 139264,
+      "total_size_bytes": 229376,
+      "data_size_bytes": 131072,
+      "index_size_bytes": 57344
+    },
+    {
+      "schema_name": "meta",
+      "table_name": "load_metrics",
+      "qualified_name": "meta.load_metrics",
+      "row_count": 479,
+      "column_count": 6,
+      "nullable_columns": 0,
+      "pk_columns": "run_id, resource, stage, table_name",
+      "total_size_bytes": 139264,
+      "data_size_bytes": 49152,
       "index_size_bytes": 57344
     },
     {
       "schema_name": "meta",
       "table_name": "extract_runs",
       "qualified_name": "meta.extract_runs",
-      "row_count": 203,
+      "row_count": 323,
       "column_count": 12,
       "nullable_columns": 2,
       "pk_columns": "run_id, resource",
-      "total_size_bytes": 106496,
-      "data_size_bytes": 40960,
+      "total_size_bytes": 131072,
+      "data_size_bytes": 65536,
       "index_size_bytes": 32768
-    },
-    {
-      "schema_name": "meta",
-      "table_name": "load_metrics",
-      "qualified_name": "meta.load_metrics",
-      "row_count": 295,
-      "column_count": 6,
-      "nullable_columns": 0,
-      "pk_columns": "run_id, resource, stage, table_name",
-      "total_size_bytes": 106496,
-      "data_size_bytes": 32768,
-      "index_size_bytes": 40960
     },
     {
       "schema_name": "core",
@@ -866,23 +902,23 @@
     },
     {
       "schema_name": "core",
+      "table_name": "guias",
+      "qualified_name": "core.guias",
+      "row_count": 38,
+      "column_count": 23,
+      "nullable_columns": 20,
+      "pk_columns": "id",
+      "total_size_bytes": 65536,
+      "data_size_bytes": 16384,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "core",
       "table_name": "marcas",
       "qualified_name": "core.marcas",
       "row_count": 16,
       "column_count": 4,
       "nullable_columns": 1,
-      "pk_columns": "id",
-      "total_size_bytes": 65536,
-      "data_size_bytes": 8192,
-      "index_size_bytes": 16384
-    },
-    {
-      "schema_name": "core",
-      "table_name": "periodos",
-      "qualified_name": "core.periodos",
-      "row_count": 8,
-      "column_count": 7,
-      "nullable_columns": 4,
       "pk_columns": "id",
       "total_size_bytes": 65536,
       "data_size_bytes": 8192,
@@ -904,11 +940,23 @@
       "schema_name": "meta",
       "table_name": "watermarks",
       "qualified_name": "meta.watermarks",
-      "row_count": 13,
+      "row_count": 16,
       "column_count": 5,
       "nullable_columns": 2,
       "pk_columns": "resource",
       "total_size_bytes": 65536,
+      "data_size_bytes": 8192,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "core",
+      "table_name": "banco_cuentas",
+      "qualified_name": "core.banco_cuentas",
+      "row_count": 5,
+      "column_count": 10,
+      "nullable_columns": 7,
+      "pk_columns": "id",
+      "total_size_bytes": 32768,
       "data_size_bytes": 8192,
       "index_size_bytes": 16384
     },
@@ -925,16 +973,40 @@
       "index_size_bytes": 16384
     },
     {
-      "schema_name": "raw",
-      "table_name": "resource_rows",
-      "qualified_name": "raw.resource_rows",
-      "row_count": 0,
-      "column_count": 8,
-      "nullable_columns": 1,
-      "pk_columns": "run_id, resource, entity_id",
+      "schema_name": "core",
+      "table_name": "guia_destinatarios",
+      "qualified_name": "core.guia_destinatarios",
+      "row_count": 38,
+      "column_count": 9,
+      "nullable_columns": 6,
+      "pk_columns": "guia_id",
       "total_size_bytes": 32768,
-      "data_size_bytes": 0,
-      "index_size_bytes": 24576
+      "data_size_bytes": 8192,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "core",
+      "table_name": "guia_detalles",
+      "qualified_name": "core.guia_detalles",
+      "row_count": 72,
+      "column_count": 10,
+      "nullable_columns": 6,
+      "pk_columns": "guia_id, detalle_index",
+      "total_size_bytes": 32768,
+      "data_size_bytes": 8192,
+      "index_size_bytes": 16384
+    },
+    {
+      "schema_name": "core",
+      "table_name": "periodos",
+      "qualified_name": "core.periodos",
+      "row_count": 8,
+      "column_count": 7,
+      "nullable_columns": 4,
+      "pk_columns": "id",
+      "total_size_bytes": 32768,
+      "data_size_bytes": 8192,
+      "index_size_bytes": 16384
     },
     {
       "schema_name": "core",
@@ -956,11 +1028,19 @@
     },
     {
       "schema_name": "reporting",
+      "view_name": "v_banco_movimientos_resumen"
+    },
+    {
+      "schema_name": "reporting",
       "view_name": "v_documentos_resumen"
     },
     {
       "schema_name": "reporting",
       "view_name": "v_fk_health"
+    },
+    {
+      "schema_name": "reporting",
+      "view_name": "v_guias_resumen"
     },
     {
       "schema_name": "reporting",
@@ -986,11 +1066,11 @@
   "relationship_types": [
     {
       "relation_type": "1:0..N",
-      "relation_count": 28
+      "relation_count": 39
     },
     {
       "relation_type": "1:N",
-      "relation_count": 6
+      "relation_count": 9
     },
     {
       "relation_type": "Autorrelacion 1:N",
@@ -1031,6 +1111,78 @@
       "source_table": "core.asiento_detalles",
       "source_columns": "cuenta_id",
       "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "banco_cuentas_cuenta_contable_id_fkey",
+      "source_table": "core.banco_cuentas",
+      "source_columns": "cuenta_contable_id",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "banco_movimiento_detalles_centro_costo_id_fkey",
+      "source_table": "core.banco_movimiento_detalles",
+      "source_columns": "centro_costo_id",
+      "target_table": "core.centros_costo",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "banco_movimiento_detalles_cuenta_id_fkey",
+      "source_table": "core.banco_movimiento_detalles",
+      "source_columns": "cuenta_id",
+      "target_table": "core.cuentas_contables",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "banco_movimiento_detalles_movimiento_id_fkey",
+      "source_table": "core.banco_movimiento_detalles",
+      "source_columns": "movimiento_id",
+      "target_table": "core.banco_movimientos",
+      "target_columns": "id",
+      "relation_type": "1:N",
+      "nullable_child": false,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "banco_movimientos_cuenta_bancaria_id_fkey",
+      "source_table": "core.banco_movimientos",
+      "source_columns": "cuenta_bancaria_id",
+      "target_table": "core.banco_cuentas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "banco_movimientos_persona_id_fkey",
+      "source_table": "core.banco_movimientos",
+      "source_columns": "persona_id",
+      "target_table": "core.personas",
       "target_columns": "id",
       "relation_type": "1:0..N",
       "nullable_child": true,
@@ -1106,6 +1258,18 @@
       "target_columns": "id",
       "relation_type": "1:N",
       "nullable_child": false,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "fk_documento_cobros_cuenta_bancaria",
+      "source_table": "core.documento_cobros",
+      "source_columns": "cuenta_bancaria_id",
+      "target_table": "core.banco_cuentas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
       "deferrable": false,
       "initially_deferred": false,
       "orphan_count": 0
@@ -1210,6 +1374,90 @@
       "constraint_name": "documentos_vendedor_id_fkey",
       "source_table": "core.documentos",
       "source_columns": "vendedor_id",
+      "target_table": "core.personas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "guia_destinatarios_destinatario_id_fkey",
+      "source_table": "core.guia_destinatarios",
+      "source_columns": "destinatario_id",
+      "target_table": "core.personas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "guia_destinatarios_documento_id_fkey",
+      "source_table": "core.guia_destinatarios",
+      "source_columns": "documento_id",
+      "target_table": "core.documentos",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "guia_destinatarios_guia_id_fkey",
+      "source_table": "core.guia_destinatarios",
+      "source_columns": "guia_id",
+      "target_table": "core.guias",
+      "target_columns": "id",
+      "relation_type": "1:N",
+      "nullable_child": false,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "guia_detalles_guia_id_fkey",
+      "source_table": "core.guia_detalles",
+      "source_columns": "guia_id",
+      "target_table": "core.guias",
+      "target_columns": "id",
+      "relation_type": "1:N",
+      "nullable_child": false,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "guia_detalles_producto_id_fkey",
+      "source_table": "core.guia_detalles",
+      "source_columns": "producto_id",
+      "target_table": "core.productos",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "guias_bodega_id_fkey",
+      "source_table": "core.guias",
+      "source_columns": "bodega_id",
+      "target_table": "core.bodegas",
+      "target_columns": "id",
+      "relation_type": "1:0..N",
+      "nullable_child": true,
+      "deferrable": false,
+      "initially_deferred": false,
+      "orphan_count": 0
+    },
+    {
+      "constraint_name": "guias_transportista_id_fkey",
+      "source_table": "core.guias",
+      "source_columns": "transportista_id",
       "target_table": "core.personas",
       "target_columns": "id",
       "relation_type": "1:0..N",
@@ -1499,25 +1747,25 @@
     {
       "table_name": "core.personas",
       "outgoing_fks": 5,
-      "incoming_fks": 6,
+      "incoming_fks": 9,
       "row_count": 2060
-    },
-    {
-      "table_name": "core.productos",
-      "outgoing_fks": 7,
-      "incoming_fks": 4,
-      "row_count": 1237
     },
     {
       "table_name": "core.cuentas_contables",
       "outgoing_fks": 0,
-      "incoming_fks": 11,
+      "incoming_fks": 13,
       "row_count": 572
+    },
+    {
+      "table_name": "core.productos",
+      "outgoing_fks": 7,
+      "incoming_fks": 5,
+      "row_count": 1237
     },
     {
       "table_name": "core.documentos",
       "outgoing_fks": 5,
-      "incoming_fks": 4,
+      "incoming_fks": 5,
       "row_count": 23911
     },
     {
@@ -1529,7 +1777,7 @@
     {
       "table_name": "core.centros_costo",
       "outgoing_fks": 1,
-      "incoming_fks": 4,
+      "incoming_fks": 5,
       "row_count": 2
     },
     {
@@ -1551,6 +1799,12 @@
       "row_count": 9024
     },
     {
+      "table_name": "core.guias",
+      "outgoing_fks": 2,
+      "incoming_fks": 2,
+      "row_count": 38
+    },
+    {
       "table_name": "core.asiento_detalles",
       "outgoing_fks": 3,
       "incoming_fks": 0,
@@ -1563,16 +1817,52 @@
       "row_count": 37122
     },
     {
+      "table_name": "core.banco_movimiento_detalles",
+      "outgoing_fks": 3,
+      "incoming_fks": 0,
+      "row_count": 3213
+    },
+    {
+      "table_name": "core.banco_movimientos",
+      "outgoing_fks": 2,
+      "incoming_fks": 1,
+      "row_count": 2751
+    },
+    {
+      "table_name": "core.guia_destinatarios",
+      "outgoing_fks": 3,
+      "incoming_fks": 0,
+      "row_count": 38
+    },
+    {
+      "table_name": "core.bodegas",
+      "outgoing_fks": 0,
+      "incoming_fks": 3,
+      "row_count": 21
+    },
+    {
+      "table_name": "core.banco_cuentas",
+      "outgoing_fks": 1,
+      "incoming_fks": 2,
+      "row_count": 5
+    },
+    {
+      "table_name": "core.documento_cobros",
+      "outgoing_fks": 2,
+      "incoming_fks": 0,
+      "row_count": 24039
+    },
+    {
       "table_name": "core.tickets_documentos",
       "outgoing_fks": 1,
       "incoming_fks": 1,
       "row_count": 23911
     },
     {
-      "table_name": "core.bodegas",
-      "outgoing_fks": 0,
-      "incoming_fks": 2,
-      "row_count": 21
+      "table_name": "core.guia_detalles",
+      "outgoing_fks": 2,
+      "incoming_fks": 0,
+      "row_count": 72
     },
     {
       "table_name": "core.unidades",
@@ -1585,12 +1875,6 @@
       "outgoing_fks": 0,
       "incoming_fks": 1,
       "row_count": 67402
-    },
-    {
-      "table_name": "core.documento_cobros",
-      "outgoing_fks": 1,
-      "incoming_fks": 0,
-      "row_count": 24039
     },
     {
       "table_name": "core.marcas",
@@ -1609,37 +1893,37 @@
     {
       "schema_name": "core",
       "data_type": "text",
-      "column_count": 191
+      "column_count": 241
     },
     {
       "schema_name": "core",
       "data_type": "numeric",
-      "column_count": 46
+      "column_count": 49
     },
     {
       "schema_name": "core",
       "data_type": "boolean",
-      "column_count": 31
+      "column_count": 32
     },
     {
       "schema_name": "core",
       "data_type": "timestamp with time zone",
-      "column_count": 22
+      "column_count": 28
     },
     {
       "schema_name": "reporting",
       "data_type": "text",
-      "column_count": 15
-    },
-    {
-      "schema_name": "core",
-      "data_type": "integer",
-      "column_count": 13
+      "column_count": 19
     },
     {
       "schema_name": "core",
       "data_type": "date",
-      "column_count": 12
+      "column_count": 18
+    },
+    {
+      "schema_name": "core",
+      "data_type": "integer",
+      "column_count": 15
     },
     {
       "schema_name": "meta",
@@ -1649,11 +1933,16 @@
     {
       "schema_name": "reporting",
       "data_type": "bigint",
-      "column_count": 8
+      "column_count": 11
     },
     {
       "schema_name": "meta",
       "data_type": "timestamp with time zone",
+      "column_count": 5
+    },
+    {
+      "schema_name": "reporting",
+      "data_type": "numeric",
       "column_count": 5
     },
     {
@@ -1674,11 +1963,6 @@
     {
       "schema_name": "reporting",
       "data_type": "date",
-      "column_count": 3
-    },
-    {
-      "schema_name": "reporting",
-      "data_type": "numeric",
       "column_count": 3
     },
     {
@@ -1728,9 +2012,9 @@
     },
     {
       "file_name": "inventory.json",
-      "rows_exposed": 46163,
-      "size_bytes": 10321788,
-      "collection_count": 3,
+      "rows_exposed": 46204,
+      "size_bytes": 10339668,
+      "collection_count": 5,
       "largest_collection": "movement_line_facts",
       "largest_collection_rows": 37122
     },
@@ -1744,19 +2028,19 @@
     },
     {
       "file_name": "accounting.json",
-      "rows_exposed": 12348,
-      "size_bytes": 2768226,
-      "collection_count": 4,
+      "rows_exposed": 15104,
+      "size_bytes": 3590414,
+      "collection_count": 6,
       "largest_collection": "monthly_facts",
       "largest_collection_rows": 12231
     },
     {
       "file_name": "technical.json",
-      "rows_exposed": 145,
-      "size_bytes": 50715,
+      "rows_exposed": 181,
+      "size_bytes": 55083,
       "collection_count": 13,
       "largest_collection": "fk_health",
-      "largest_collection_rows": 40
+      "largest_collection_rows": 54
     },
     {
       "file_name": "customers.json",
@@ -1784,16 +2068,16 @@
     },
     {
       "file_name": "quality.json",
-      "rows_exposed": 68,
-      "size_bytes": 14719,
+      "rows_exposed": 88,
+      "size_bytes": 16560,
       "collection_count": 5,
       "largest_collection": "fk_health",
-      "largest_collection_rows": 40
+      "largest_collection_rows": 54
     },
     {
       "file_name": "manifest.json",
-      "rows_exposed": 20,
-      "size_bytes": 9779,
+      "rows_exposed": 22,
+      "size_bytes": 9855,
       "collection_count": 3,
       "largest_collection": "data_files",
       "largest_collection_rows": 10
@@ -1823,29 +2107,36 @@
     },
     {
       "domain": "Inventario",
-      "backend_rows": 46146,
-      "frontend_rows": 46163,
+      "backend_rows": 46294,
+      "frontend_rows": 46204,
       "frontend_file": "inventory.json",
-      "backend_scope": "movimientos, movimiento_detalles"
+      "backend_scope": "movimientos, movimiento_detalles, guias, guia_destinatarios, guia_detalles"
     },
     {
       "domain": "Contabilidad",
       "backend_rows": 346756,
-      "frontend_rows": 12348,
+      "frontend_rows": 15104,
       "frontend_file": "accounting.json",
       "backend_scope": "asientos, asiento_detalles"
     },
     {
+      "domain": "Tesoreria",
+      "backend_rows": 5969,
+      "frontend_rows": 15104,
+      "frontend_file": "accounting.json",
+      "backend_scope": "banco_cuentas, banco_movimientos, banco_movimiento_detalles"
+    },
+    {
       "domain": "Calidad",
-      "backend_rows": 511,
-      "frontend_rows": 68,
+      "backend_rows": 818,
+      "frontend_rows": 88,
       "frontend_file": "quality.json",
       "backend_scope": "extract_runs, watermarks, load_metrics"
     },
     {
       "domain": "Tecnica",
-      "backend_rows": 511,
-      "frontend_rows": 145,
+      "backend_rows": 818,
+      "frontend_rows": 181,
       "frontend_file": "technical.json",
       "backend_scope": "extract_runs, watermarks, load_metrics"
     },
@@ -1858,151 +2149,231 @@
     }
   ],
   "performance_summary": {
-    "latest_run_id": "20260329015106",
-    "latest_total_duration_seconds": 72,
-    "latest_total_pages": 118,
-    "latest_total_source_rows": 2867,
-    "latest_total_core_rows": 1093,
+    "latest_run_id": "20260329202349",
+    "latest_total_duration_seconds": 87,
+    "latest_total_pages": 121,
+    "latest_total_source_rows": 5629,
+    "latest_total_core_rows": 7083,
     "slowest_resource": "documento",
     "slowest_duration_seconds": 50,
     "highest_fanout_resource": "contabilidad/asiento",
-    "highest_fanout_ratio": 4.02,
+    "highest_fanout_ratio": 4.08,
     "highest_pages_resource": "documento",
     "highest_pages_fetched": 64
   },
   "performance_story_cards": [
     {
       "title": "Recurso mas costoso del refresh",
-      "body": "El recurso mas lento hoy es documento con 50 segundos. Consume 69.44% del tiempo de extraccion y carga del ultimo run."
+      "body": "El recurso mas lento hoy es documento con 50 segundos. Consume 57.47% del tiempo de extraccion y carga del ultimo run."
     },
     {
       "title": "Principal driver tecnico",
-      "body": "El mayor recorrido por paginas esta en documento con 64 paginas. El mayor fanout lo presenta contabilidad/asiento con una expansion de 4.02 filas core por fila fuente."
+      "body": "El mayor recorrido por paginas esta en documento con 64 paginas. El mayor fanout lo presenta contabilidad/asiento con una expansion de 4.08 filas core por fila fuente."
     },
     {
       "title": "Lectura operativa",
-      "body": "En el ultimo run se recorrieron 118 paginas, se recuperaron 2867 filas fuente y se materializaron 1093 filas core. El punto critico no es solo el volumen, sino la combinacion entre paginacion remota y expansion a detalles."
+      "body": "En el ultimo run se recorrieron 121 paginas, se recuperaron 5629 filas fuente y se materializaron 7083 filas core. El punto critico no es solo el volumen, sino la combinacion entre paginacion remota y expansion a detalles."
     }
   ],
   "performance_resources": [
     {
       "resource": "documento",
-      "latest_run_id": "20260329015106",
+      "latest_run_id": "20260329202349",
       "latest_duration_seconds": 50,
-      "avg_duration_seconds": 50.4,
-      "max_duration_seconds": 52,
+      "avg_duration_seconds": 51.0,
+      "max_duration_seconds": 58,
       "latest_pages_fetched": 64,
       "latest_source_count": 54,
       "latest_core_rows_loaded": 67,
       "source_rows_per_second": 1.08,
       "core_rows_per_second": 1.34,
       "fanout_ratio": 1.24,
-      "duration_share_pct": 69.44,
+      "duration_share_pct": 57.47,
+      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
+      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
+    },
+    {
+      "resource": "banco/movimiento",
+      "latest_run_id": "20260329202349",
+      "latest_duration_seconds": 16,
+      "avg_duration_seconds": 16.0,
+      "max_duration_seconds": 16,
+      "latest_pages_fetched": 1,
+      "latest_source_count": 2751,
+      "latest_core_rows_loaded": 5964,
+      "source_rows_per_second": 171.94,
+      "core_rows_per_second": 372.75,
+      "fanout_ratio": 2.17,
+      "duration_share_pct": 18.39,
       "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
       "resource": "producto",
-      "latest_run_id": "20260329015106",
+      "latest_run_id": "20260329202349",
       "latest_duration_seconds": 8,
-      "avg_duration_seconds": 11.2,
-      "max_duration_seconds": 14,
+      "avg_duration_seconds": 8.6,
+      "max_duration_seconds": 10,
       "latest_pages_fetched": 2,
       "latest_source_count": 1,
       "latest_core_rows_loaded": 1,
       "source_rows_per_second": 0.12,
       "core_rows_per_second": 0.12,
       "fanout_ratio": 1.0,
-      "duration_share_pct": 11.11,
+      "duration_share_pct": 9.2,
       "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
       "resource": "movimiento-inventario",
-      "latest_run_id": "20260329015106",
-      "latest_duration_seconds": 6,
-      "avg_duration_seconds": 15.8,
-      "max_duration_seconds": 57,
+      "latest_run_id": "20260329202349",
+      "latest_duration_seconds": 5,
+      "avg_duration_seconds": 5.0,
+      "max_duration_seconds": 5,
       "latest_pages_fetched": 2,
       "latest_source_count": 12,
       "latest_core_rows_loaded": 41,
-      "source_rows_per_second": 2.0,
-      "core_rows_per_second": 6.83,
+      "source_rows_per_second": 2.4,
+      "core_rows_per_second": 8.2,
       "fanout_ratio": 3.42,
-      "duration_share_pct": 8.33,
+      "duration_share_pct": 5.75,
       "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
       "resource": "persona",
-      "latest_run_id": "20260329015106",
-      "latest_duration_seconds": 4,
-      "avg_duration_seconds": 3.8,
-      "max_duration_seconds": 5,
+      "latest_run_id": "20260329202349",
+      "latest_duration_seconds": 3,
+      "avg_duration_seconds": 3.2,
+      "max_duration_seconds": 4,
       "latest_pages_fetched": 21,
       "latest_source_count": 2060,
       "latest_core_rows_loaded": 29,
-      "source_rows_per_second": 515.0,
-      "core_rows_per_second": 7.25,
+      "source_rows_per_second": 686.67,
+      "core_rows_per_second": 9.67,
       "fanout_ratio": 0.01,
-      "duration_share_pct": 5.56,
-      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
-      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
-    },
-    {
-      "resource": "documento/tickets",
-      "latest_run_id": "20260329015106",
-      "latest_duration_seconds": 2,
-      "avg_duration_seconds": 3.0,
-      "max_duration_seconds": 7,
-      "latest_pages_fetched": 21,
-      "latest_source_count": 21,
-      "latest_core_rows_loaded": 61,
-      "source_rows_per_second": 10.5,
-      "core_rows_per_second": 30.5,
-      "fanout_ratio": 2.9,
-      "duration_share_pct": 2.78,
-      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
-      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
-    },
-    {
-      "resource": "bodega",
-      "latest_run_id": "20260329015106",
-      "latest_duration_seconds": 1,
-      "avg_duration_seconds": 0.2,
-      "max_duration_seconds": 1,
-      "latest_pages_fetched": 1,
-      "latest_source_count": 21,
-      "latest_core_rows_loaded": 21,
-      "source_rows_per_second": 21.0,
-      "core_rows_per_second": 21.0,
-      "fanout_ratio": 1.0,
-      "duration_share_pct": 1.39,
+      "duration_share_pct": 3.45,
       "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
       "resource": "contabilidad/asiento",
-      "latest_run_id": "20260329015106",
+      "latest_run_id": "20260329202349",
       "latest_duration_seconds": 1,
       "avg_duration_seconds": 0.6,
       "max_duration_seconds": 1,
       "latest_pages_fetched": 1,
-      "latest_source_count": 58,
-      "latest_core_rows_loaded": 233,
-      "source_rows_per_second": 58.0,
-      "core_rows_per_second": 233.0,
-      "fanout_ratio": 4.02,
-      "duration_share_pct": 1.39,
+      "latest_source_count": 26,
+      "latest_core_rows_loaded": 106,
+      "source_rows_per_second": 26.0,
+      "core_rows_per_second": 106.0,
+      "fanout_ratio": 4.08,
+      "duration_share_pct": 1.15,
       "reason": "Cada entidad base genera multiples filas hijas, lo que amplifica el costo de carga.",
       "optimization_hint": "Separar cabeceras y detalles en lotes dedicados y monitorear fanout esperado por recurso."
     },
     {
-      "resource": "categoria",
-      "latest_run_id": "20260329015106",
-      "latest_duration_seconds": 0,
-      "avg_duration_seconds": 0.4,
+      "resource": "contabilidad/periodo",
+      "latest_run_id": "20260329202349",
+      "latest_duration_seconds": 1,
+      "avg_duration_seconds": 0.2,
       "max_duration_seconds": 1,
+      "latest_pages_fetched": 1,
+      "latest_source_count": 8,
+      "latest_core_rows_loaded": 8,
+      "source_rows_per_second": 8.0,
+      "core_rows_per_second": 8.0,
+      "fanout_ratio": 1.0,
+      "duration_share_pct": 1.15,
+      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
+      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
+    },
+    {
+      "resource": "cuenta-contable",
+      "latest_run_id": "20260329202349",
+      "latest_duration_seconds": 1,
+      "avg_duration_seconds": 0.8,
+      "max_duration_seconds": 1,
+      "latest_pages_fetched": 1,
+      "latest_source_count": 572,
+      "latest_core_rows_loaded": 572,
+      "source_rows_per_second": 572.0,
+      "core_rows_per_second": 572.0,
+      "fanout_ratio": 1.0,
+      "duration_share_pct": 1.15,
+      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
+      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
+    },
+    {
+      "resource": "documento/tickets",
+      "latest_run_id": "20260329202349",
+      "latest_duration_seconds": 1,
+      "avg_duration_seconds": 1.6,
+      "max_duration_seconds": 2,
+      "latest_pages_fetched": 21,
+      "latest_source_count": 21,
+      "latest_core_rows_loaded": 61,
+      "source_rows_per_second": 21.0,
+      "core_rows_per_second": 61.0,
+      "fanout_ratio": 2.9,
+      "duration_share_pct": 1.15,
+      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
+      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
+    },
+    {
+      "resource": "inventario/guia",
+      "latest_run_id": "20260329202349",
+      "latest_duration_seconds": 1,
+      "avg_duration_seconds": 1.0,
+      "max_duration_seconds": 1,
+      "latest_pages_fetched": 1,
+      "latest_source_count": 38,
+      "latest_core_rows_loaded": 148,
+      "source_rows_per_second": 38.0,
+      "core_rows_per_second": 148.0,
+      "fanout_ratio": 3.89,
+      "duration_share_pct": 1.15,
+      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
+      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
+    },
+    {
+      "resource": "banco/cuenta",
+      "latest_run_id": "20260329202349",
+      "latest_duration_seconds": 0,
+      "avg_duration_seconds": 0.0,
+      "max_duration_seconds": 0,
+      "latest_pages_fetched": 1,
+      "latest_source_count": 5,
+      "latest_core_rows_loaded": 5,
+      "source_rows_per_second": 0,
+      "core_rows_per_second": 0,
+      "fanout_ratio": 1.0,
+      "duration_share_pct": 0.0,
+      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
+      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
+    },
+    {
+      "resource": "bodega",
+      "latest_run_id": "20260329202349",
+      "latest_duration_seconds": 0,
+      "avg_duration_seconds": 0.0,
+      "max_duration_seconds": 0,
+      "latest_pages_fetched": 1,
+      "latest_source_count": 21,
+      "latest_core_rows_loaded": 21,
+      "source_rows_per_second": 0,
+      "core_rows_per_second": 0,
+      "fanout_ratio": 1.0,
+      "duration_share_pct": 0.0,
+      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
+      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
+    },
+    {
+      "resource": "categoria",
+      "latest_run_id": "20260329202349",
+      "latest_duration_seconds": 0,
+      "avg_duration_seconds": 0.0,
+      "max_duration_seconds": 0,
       "latest_pages_fetched": 1,
       "latest_source_count": 22,
       "latest_core_rows_loaded": 22,
@@ -2015,10 +2386,10 @@
     },
     {
       "resource": "centro-costo",
-      "latest_run_id": "20260329015106",
+      "latest_run_id": "20260329202349",
       "latest_duration_seconds": 0,
-      "avg_duration_seconds": 0.0,
-      "max_duration_seconds": 0,
+      "avg_duration_seconds": 0.2,
+      "max_duration_seconds": 1,
       "latest_pages_fetched": 1,
       "latest_source_count": 2,
       "latest_core_rows_loaded": 2,
@@ -2030,40 +2401,8 @@
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
-      "resource": "contabilidad/periodo",
-      "latest_run_id": "20260329015106",
-      "latest_duration_seconds": 0,
-      "avg_duration_seconds": 0.4,
-      "max_duration_seconds": 1,
-      "latest_pages_fetched": 1,
-      "latest_source_count": 8,
-      "latest_core_rows_loaded": 8,
-      "source_rows_per_second": 0,
-      "core_rows_per_second": 0,
-      "fanout_ratio": 1.0,
-      "duration_share_pct": 0.0,
-      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
-      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
-    },
-    {
-      "resource": "cuenta-contable",
-      "latest_run_id": "20260329015106",
-      "latest_duration_seconds": 0,
-      "avg_duration_seconds": 0.2,
-      "max_duration_seconds": 1,
-      "latest_pages_fetched": 1,
-      "latest_source_count": 572,
-      "latest_core_rows_loaded": 572,
-      "source_rows_per_second": 0,
-      "core_rows_per_second": 0,
-      "fanout_ratio": 1.0,
-      "duration_share_pct": 0.0,
-      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
-      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
-    },
-    {
       "resource": "marca",
-      "latest_run_id": "20260329015106",
+      "latest_run_id": "20260329202349",
       "latest_duration_seconds": 0,
       "avg_duration_seconds": 0.2,
       "max_duration_seconds": 1,
@@ -2079,9 +2418,9 @@
     },
     {
       "resource": "unidad",
-      "latest_run_id": "20260329015106",
+      "latest_run_id": "20260329202349",
       "latest_duration_seconds": 0,
-      "avg_duration_seconds": 0.2,
+      "avg_duration_seconds": 0.4,
       "max_duration_seconds": 1,
       "latest_pages_fetched": 1,
       "latest_source_count": 20,
@@ -2096,83 +2435,83 @@
   ],
   "performance_runs": [
     {
-      "run_id": "20260329015106",
-      "resources_processed": 13,
-      "total_duration_seconds": 72,
-      "total_pages_fetched": 118,
-      "total_source_rows": 2867,
-      "total_core_rows": 1093,
+      "run_id": "20260329202349",
+      "resources_processed": 16,
+      "total_duration_seconds": 87,
+      "total_pages_fetched": 121,
+      "total_source_rows": 5629,
+      "total_core_rows": 7083,
       "slowest_resource": "documento",
       "slowest_duration_seconds": 50
     },
     {
-      "run_id": "20260329014250",
+      "run_id": "20260329190413",
+      "resources_processed": 13,
+      "total_duration_seconds": 80,
+      "total_pages_fetched": 118,
+      "total_source_rows": 2835,
+      "total_core_rows": 966,
+      "slowest_resource": "documento",
+      "slowest_duration_seconds": 58
+    },
+    {
+      "run_id": "20260329190051",
+      "resources_processed": 13,
+      "total_duration_seconds": 71,
+      "total_pages_fetched": 118,
+      "total_source_rows": 2835,
+      "total_core_rows": 966,
+      "slowest_resource": "documento",
+      "slowest_duration_seconds": 50
+    },
+    {
+      "run_id": "20260329182433",
       "resources_processed": 13,
       "total_duration_seconds": 70,
       "total_pages_fetched": 118,
-      "total_source_rows": 2867,
-      "total_core_rows": 1093,
+      "total_source_rows": 2835,
+      "total_core_rows": 966,
       "slowest_resource": "documento",
       "slowest_duration_seconds": 49
     },
     {
-      "run_id": "20260329014134",
+      "run_id": "20260329175842",
       "resources_processed": 13,
-      "total_duration_seconds": 87,
-      "total_pages_fetched": 129,
-      "total_source_rows": 4103,
-      "total_core_rows": 1093,
+      "total_duration_seconds": 68,
+      "total_pages_fetched": 118,
+      "total_source_rows": 2835,
+      "total_core_rows": 966,
       "slowest_resource": "documento",
-      "slowest_duration_seconds": 52
-    },
-    {
-      "run_id": "20260329013420",
-      "resources_processed": 13,
-      "total_duration_seconds": 75,
-      "total_pages_fetched": 129,
-      "total_source_rows": 4103,
-      "total_core_rows": 1093,
-      "slowest_resource": "documento",
-      "slowest_duration_seconds": 51
-    },
-    {
-      "run_id": "20260329013338",
-      "resources_processed": 13,
-      "total_duration_seconds": 128,
-      "total_pages_fetched": 269,
-      "total_source_rows": 18192,
-      "total_core_rows": 1093,
-      "slowest_resource": "movimiento-inventario",
-      "slowest_duration_seconds": 57
+      "slowest_duration_seconds": 48
     }
   ],
   "performance_comparison": {
-    "latest_run_id": "20260329015106",
-    "previous_run_id": "20260329014250",
-    "latest_total_duration_seconds": 72,
-    "previous_total_duration_seconds": 70,
-    "total_delta_seconds": 2,
-    "total_delta_pct": 2.86,
-    "improved_resources": 2,
-    "regressed_resources": 4,
-    "unchanged_resources": 7,
+    "latest_run_id": "20260329202349",
+    "previous_run_id": "20260329190413",
+    "latest_total_duration_seconds": 87,
+    "previous_total_duration_seconds": 80,
+    "total_delta_seconds": 7,
+    "total_delta_pct": 8.75,
+    "improved_resources": 4,
+    "regressed_resources": 1,
+    "unchanged_resources": 8,
     "latest_slowest_resource": "documento",
     "previous_slowest_resource": "documento",
-    "latest_pages_fetched": 118,
+    "latest_pages_fetched": 121,
     "previous_pages_fetched": 118,
-    "latest_source_rows": 2867,
-    "previous_source_rows": 2867,
-    "latest_core_rows": 1093,
-    "previous_core_rows": 1093
+    "latest_source_rows": 5629,
+    "previous_source_rows": 2835,
+    "latest_core_rows": 7083,
+    "previous_core_rows": 966
   },
   "performance_comparison_story_cards": [
     {
       "title": "Comparativo entre corridas",
-      "body": "La corrida 20260329015106 se compara contra 20260329014250. La variacion total es de 2 segundos sobre corridas exitosas completas del pipeline."
+      "body": "La corrida 20260329202349 se compara contra 20260329190413. La variacion total es de 7 segundos sobre corridas exitosas completas del pipeline."
     },
     {
       "title": "Lectura de mejora",
-      "body": "Recursos con mejora: 2. Recursos con regresion: 4. Recursos sin cambio material: 7."
+      "body": "Recursos con mejora: 4. Recursos con regresion: 1. Recursos sin cambio material: 8."
     },
     {
       "title": "Interpretacion tecnica",
@@ -2183,95 +2522,15 @@
     {
       "resource": "documento",
       "latest_duration_seconds": 50,
-      "previous_duration_seconds": 49,
-      "delta_seconds": 1,
-      "delta_pct": 2.04,
+      "previous_duration_seconds": 58,
+      "delta_seconds": -8,
+      "delta_pct": -13.79,
       "latest_pages_fetched": 64,
       "previous_pages_fetched": 64,
       "latest_source_count": 54,
       "previous_source_count": 54,
       "latest_core_rows_loaded": 67,
       "previous_core_rows_loaded": 67,
-      "status": "regresion",
-      "same_volume": true,
-      "explanation": "Mismo volumen pero mayor tiempo: revisar variacion de red, API o presion del motor."
-    },
-    {
-      "resource": "movimiento-inventario",
-      "latest_duration_seconds": 6,
-      "previous_duration_seconds": 5,
-      "delta_seconds": 1,
-      "delta_pct": 20.0,
-      "latest_pages_fetched": 2,
-      "previous_pages_fetched": 2,
-      "latest_source_count": 12,
-      "previous_source_count": 12,
-      "latest_core_rows_loaded": 41,
-      "previous_core_rows_loaded": 41,
-      "status": "regresion",
-      "same_volume": true,
-      "explanation": "Mismo volumen pero mayor tiempo: revisar variacion de red, API o presion del motor."
-    },
-    {
-      "resource": "persona",
-      "latest_duration_seconds": 4,
-      "previous_duration_seconds": 5,
-      "delta_seconds": -1,
-      "delta_pct": -20.0,
-      "latest_pages_fetched": 21,
-      "previous_pages_fetched": 21,
-      "latest_source_count": 2060,
-      "previous_source_count": 2060,
-      "latest_core_rows_loaded": 29,
-      "previous_core_rows_loaded": 29,
-      "status": "mejora",
-      "same_volume": true,
-      "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
-    },
-    {
-      "resource": "documento/tickets",
-      "latest_duration_seconds": 2,
-      "previous_duration_seconds": 1,
-      "delta_seconds": 1,
-      "delta_pct": 100.0,
-      "latest_pages_fetched": 21,
-      "previous_pages_fetched": 21,
-      "latest_source_count": 21,
-      "previous_source_count": 21,
-      "latest_core_rows_loaded": 61,
-      "previous_core_rows_loaded": 61,
-      "status": "regresion",
-      "same_volume": true,
-      "explanation": "Mismo volumen pero mayor tiempo: revisar variacion de red, API o presion del motor."
-    },
-    {
-      "resource": "bodega",
-      "latest_duration_seconds": 1,
-      "previous_duration_seconds": 0,
-      "delta_seconds": 1,
-      "delta_pct": 0,
-      "latest_pages_fetched": 1,
-      "previous_pages_fetched": 1,
-      "latest_source_count": 21,
-      "previous_source_count": 21,
-      "latest_core_rows_loaded": 21,
-      "previous_core_rows_loaded": 21,
-      "status": "regresion",
-      "same_volume": true,
-      "explanation": "Mismo volumen pero mayor tiempo: revisar variacion de red, API o presion del motor."
-    },
-    {
-      "resource": "unidad",
-      "latest_duration_seconds": 0,
-      "previous_duration_seconds": 1,
-      "delta_seconds": -1,
-      "delta_pct": -100.0,
-      "latest_pages_fetched": 1,
-      "previous_pages_fetched": 1,
-      "latest_source_count": 20,
-      "previous_source_count": 20,
-      "latest_core_rows_loaded": 20,
-      "previous_core_rows_loaded": 20,
       "status": "mejora",
       "same_volume": true,
       "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
@@ -2279,15 +2538,95 @@
     {
       "resource": "producto",
       "latest_duration_seconds": 8,
-      "previous_duration_seconds": 8,
-      "delta_seconds": 0,
-      "delta_pct": 0.0,
+      "previous_duration_seconds": 9,
+      "delta_seconds": -1,
+      "delta_pct": -11.11,
       "latest_pages_fetched": 2,
       "previous_pages_fetched": 2,
       "latest_source_count": 1,
       "previous_source_count": 1,
       "latest_core_rows_loaded": 1,
       "previous_core_rows_loaded": 1,
+      "status": "mejora",
+      "same_volume": true,
+      "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
+    },
+    {
+      "resource": "contabilidad/periodo",
+      "latest_duration_seconds": 1,
+      "previous_duration_seconds": 0,
+      "delta_seconds": 1,
+      "delta_pct": 0,
+      "latest_pages_fetched": 1,
+      "previous_pages_fetched": 1,
+      "latest_source_count": 8,
+      "previous_source_count": 8,
+      "latest_core_rows_loaded": 8,
+      "previous_core_rows_loaded": 8,
+      "status": "regresion",
+      "same_volume": true,
+      "explanation": "Mismo volumen pero mayor tiempo: revisar variacion de red, API o presion del motor."
+    },
+    {
+      "resource": "documento/tickets",
+      "latest_duration_seconds": 1,
+      "previous_duration_seconds": 2,
+      "delta_seconds": -1,
+      "delta_pct": -50.0,
+      "latest_pages_fetched": 21,
+      "previous_pages_fetched": 21,
+      "latest_source_count": 21,
+      "previous_source_count": 21,
+      "latest_core_rows_loaded": 61,
+      "previous_core_rows_loaded": 61,
+      "status": "mejora",
+      "same_volume": true,
+      "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
+    },
+    {
+      "resource": "centro-costo",
+      "latest_duration_seconds": 0,
+      "previous_duration_seconds": 1,
+      "delta_seconds": -1,
+      "delta_pct": -100.0,
+      "latest_pages_fetched": 1,
+      "previous_pages_fetched": 1,
+      "latest_source_count": 2,
+      "previous_source_count": 2,
+      "latest_core_rows_loaded": 2,
+      "previous_core_rows_loaded": 2,
+      "status": "mejora",
+      "same_volume": true,
+      "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
+    },
+    {
+      "resource": "movimiento-inventario",
+      "latest_duration_seconds": 5,
+      "previous_duration_seconds": 5,
+      "delta_seconds": 0,
+      "delta_pct": 0.0,
+      "latest_pages_fetched": 2,
+      "previous_pages_fetched": 2,
+      "latest_source_count": 12,
+      "previous_source_count": 12,
+      "latest_core_rows_loaded": 41,
+      "previous_core_rows_loaded": 41,
+      "status": "sin_cambio",
+      "same_volume": true,
+      "explanation": "Sin cambio material frente al run anterior."
+    },
+    {
+      "resource": "persona",
+      "latest_duration_seconds": 3,
+      "previous_duration_seconds": 3,
+      "delta_seconds": 0,
+      "delta_pct": 0.0,
+      "latest_pages_fetched": 21,
+      "previous_pages_fetched": 21,
+      "latest_source_count": 2060,
+      "previous_source_count": 2060,
+      "latest_core_rows_loaded": 29,
+      "previous_core_rows_loaded": 29,
       "status": "sin_cambio",
       "same_volume": true,
       "explanation": "Sin cambio material frente al run anterior."
@@ -2300,10 +2639,42 @@
       "delta_pct": 0.0,
       "latest_pages_fetched": 1,
       "previous_pages_fetched": 1,
-      "latest_source_count": 58,
-      "previous_source_count": 58,
-      "latest_core_rows_loaded": 233,
-      "previous_core_rows_loaded": 233,
+      "latest_source_count": 26,
+      "previous_source_count": 26,
+      "latest_core_rows_loaded": 106,
+      "previous_core_rows_loaded": 106,
+      "status": "sin_cambio",
+      "same_volume": true,
+      "explanation": "Sin cambio material frente al run anterior."
+    },
+    {
+      "resource": "cuenta-contable",
+      "latest_duration_seconds": 1,
+      "previous_duration_seconds": 1,
+      "delta_seconds": 0,
+      "delta_pct": 0.0,
+      "latest_pages_fetched": 1,
+      "previous_pages_fetched": 1,
+      "latest_source_count": 572,
+      "previous_source_count": 572,
+      "latest_core_rows_loaded": 572,
+      "previous_core_rows_loaded": 572,
+      "status": "sin_cambio",
+      "same_volume": true,
+      "explanation": "Sin cambio material frente al run anterior."
+    },
+    {
+      "resource": "bodega",
+      "latest_duration_seconds": 0,
+      "previous_duration_seconds": 0,
+      "delta_seconds": 0,
+      "delta_pct": 0,
+      "latest_pages_fetched": 1,
+      "previous_pages_fetched": 1,
+      "latest_source_count": 21,
+      "previous_source_count": 21,
+      "latest_core_rows_loaded": 21,
+      "previous_core_rows_loaded": 21,
       "status": "sin_cambio",
       "same_volume": true,
       "explanation": "Sin cambio material frente al run anterior."
@@ -2325,54 +2696,6 @@
       "explanation": "Sin cambio material frente al run anterior."
     },
     {
-      "resource": "centro-costo",
-      "latest_duration_seconds": 0,
-      "previous_duration_seconds": 0,
-      "delta_seconds": 0,
-      "delta_pct": 0,
-      "latest_pages_fetched": 1,
-      "previous_pages_fetched": 1,
-      "latest_source_count": 2,
-      "previous_source_count": 2,
-      "latest_core_rows_loaded": 2,
-      "previous_core_rows_loaded": 2,
-      "status": "sin_cambio",
-      "same_volume": true,
-      "explanation": "Sin cambio material frente al run anterior."
-    },
-    {
-      "resource": "contabilidad/periodo",
-      "latest_duration_seconds": 0,
-      "previous_duration_seconds": 0,
-      "delta_seconds": 0,
-      "delta_pct": 0,
-      "latest_pages_fetched": 1,
-      "previous_pages_fetched": 1,
-      "latest_source_count": 8,
-      "previous_source_count": 8,
-      "latest_core_rows_loaded": 8,
-      "previous_core_rows_loaded": 8,
-      "status": "sin_cambio",
-      "same_volume": true,
-      "explanation": "Sin cambio material frente al run anterior."
-    },
-    {
-      "resource": "cuenta-contable",
-      "latest_duration_seconds": 0,
-      "previous_duration_seconds": 0,
-      "delta_seconds": 0,
-      "delta_pct": 0,
-      "latest_pages_fetched": 1,
-      "previous_pages_fetched": 1,
-      "latest_source_count": 572,
-      "previous_source_count": 572,
-      "latest_core_rows_loaded": 572,
-      "previous_core_rows_loaded": 572,
-      "status": "sin_cambio",
-      "same_volume": true,
-      "explanation": "Sin cambio material frente al run anterior."
-    },
-    {
       "resource": "marca",
       "latest_duration_seconds": 0,
       "previous_duration_seconds": 0,
@@ -2384,6 +2707,22 @@
       "previous_source_count": 16,
       "latest_core_rows_loaded": 16,
       "previous_core_rows_loaded": 16,
+      "status": "sin_cambio",
+      "same_volume": true,
+      "explanation": "Sin cambio material frente al run anterior."
+    },
+    {
+      "resource": "unidad",
+      "latest_duration_seconds": 0,
+      "previous_duration_seconds": 0,
+      "delta_seconds": 0,
+      "delta_pct": 0,
+      "latest_pages_fetched": 1,
+      "previous_pages_fetched": 1,
+      "latest_source_count": 20,
+      "previous_source_count": 20,
+      "latest_core_rows_loaded": 20,
+      "previous_core_rows_loaded": 20,
       "status": "sin_cambio",
       "same_volume": true,
       "explanation": "Sin cambio material frente al run anterior."

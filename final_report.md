@@ -2,37 +2,43 @@
 
 ## Infraestructura
 
-- Fecha de corrida: 2026-03-28
+- Fecha de corrida: 2026-03-29
 - Base PostgreSQL: `contifico_backfill` en `127.0.0.1:5432`
 - Modo: `refresh`
 - API base: `https://api.contifico.com`
-- Raw auditado: `no`
-- Run ID: `20260329015106`
+- Raw auditado: `si`
+- Run ID: `20260329202349`
 
 ## Recursos procesados
 
 | resource | status | source_count | pages_fetched | raw_row_count | started_at | finished_at |
 | --- | --- | --- | --- | --- | --- | --- |
-| bodega | success | 21 | 1 | 0 | 2026-03-28 20:51:06-05:00 | 2026-03-28 20:51:07-05:00 |
-| categoria | success | 22 | 1 | 0 | 2026-03-28 20:51:06-05:00 | 2026-03-28 20:51:06-05:00 |
-| cuenta-contable | success | 572 | 1 | 0 | 2026-03-28 20:51:06-05:00 | 2026-03-28 20:51:06-05:00 |
-| centro-costo | success | 2 | 1 | 0 | 2026-03-28 20:51:07-05:00 | 2026-03-28 20:51:07-05:00 |
-| contabilidad/periodo | success | 8 | 1 | 0 | 2026-03-28 20:51:07-05:00 | 2026-03-28 20:51:07-05:00 |
-| marca | success | 16 | 1 | 0 | 2026-03-28 20:51:07-05:00 | 2026-03-28 20:51:07-05:00 |
-| persona | success | 2060 | 21 | 0 | 2026-03-28 20:51:07-05:00 | 2026-03-28 20:51:11-05:00 |
-| unidad | success | 20 | 1 | 0 | 2026-03-28 20:51:07-05:00 | 2026-03-28 20:51:07-05:00 |
-| producto | success | 1 | 2 | 0 | 2026-03-28 20:51:11-05:00 | 2026-03-28 20:51:19-05:00 |
-| movimiento-inventario | success | 12 | 2 | 0 | 2026-03-28 20:51:19-05:00 | 2026-03-28 20:51:25-05:00 |
-| documento | success | 54 | 64 | 0 | 2026-03-28 20:51:25-05:00 | 2026-03-28 20:52:15-05:00 |
-| documento/tickets | success | 21 | 21 | 0 | 2026-03-28 20:52:15-05:00 | 2026-03-28 20:52:17-05:00 |
-| contabilidad/asiento | success | 58 | 1 | 0 | 2026-03-28 20:52:17-05:00 | 2026-03-28 20:52:18-05:00 |
+| cuenta-contable | success | 572 | 1 | 572 | 2026-03-29 15:23:49-05:00 | 2026-03-29 15:23:50-05:00 |
+| bodega | success | 21 | 1 | 21 | 2026-03-29 15:23:50-05:00 | 2026-03-29 15:23:50-05:00 |
+| categoria | success | 22 | 1 | 22 | 2026-03-29 15:23:50-05:00 | 2026-03-29 15:23:50-05:00 |
+| centro-costo | success | 2 | 1 | 2 | 2026-03-29 15:23:50-05:00 | 2026-03-29 15:23:50-05:00 |
+| contabilidad/periodo | success | 8 | 1 | 8 | 2026-03-29 15:23:50-05:00 | 2026-03-29 15:23:51-05:00 |
+| marca | success | 16 | 1 | 16 | 2026-03-29 15:23:50-05:00 | 2026-03-29 15:23:50-05:00 |
+| unidad | success | 20 | 1 | 20 | 2026-03-29 15:23:50-05:00 | 2026-03-29 15:23:50-05:00 |
+| banco/cuenta | success | 5 | 1 | 5 | 2026-03-29 15:23:51-05:00 | 2026-03-29 15:23:51-05:00 |
+| persona | success | 2060 | 21 | 29 | 2026-03-29 15:23:51-05:00 | 2026-03-29 15:23:54-05:00 |
+| producto | success | 1 | 2 | 1 | 2026-03-29 15:23:54-05:00 | 2026-03-29 15:24:02-05:00 |
+| movimiento-inventario | success | 12 | 2 | 41 | 2026-03-29 15:24:02-05:00 | 2026-03-29 15:24:07-05:00 |
+| documento | success | 54 | 64 | 67 | 2026-03-29 15:24:07-05:00 | 2026-03-29 15:24:57-05:00 |
+| inventario/guia | success | 38 | 1 | 148 | 2026-03-29 15:24:57-05:00 | 2026-03-29 15:24:58-05:00 |
+| banco/movimiento | success | 2751 | 1 | 5964 | 2026-03-29 15:24:58-05:00 | 2026-03-29 15:25:14-05:00 |
+| documento/tickets | success | 21 | 21 | 61 | 2026-03-29 15:25:14-05:00 | 2026-03-29 15:25:15-05:00 |
+| contabilidad/asiento | success | 26 | 1 | 106 | 2026-03-29 15:25:15-05:00 | 2026-03-29 15:25:16-05:00 |
 
 ## Filas cargadas por tabla
 
 | resource | stage | table_name | row_count |
 | --- | --- | --- | --- |
-| contabilidad/asiento | core | asiento_detalles | 175 |
-| contabilidad/asiento | core | asientos | 58 |
+| contabilidad/asiento | core | asiento_detalles | 80 |
+| contabilidad/asiento | core | asientos | 26 |
+| banco/cuenta | core | banco_cuentas | 5 |
+| banco/movimiento | core | banco_movimiento_detalles | 3213 |
+| banco/movimiento | core | banco_movimientos | 2751 |
 | bodega | core | bodegas | 21 |
 | categoria | core | categorias | 22 |
 | centro-costo | core | centros_costo | 2 |
@@ -40,6 +46,9 @@
 | documento | core | documento_cobros | 6 |
 | documento | core | documento_detalles | 40 |
 | documento | core | documentos | 21 |
+| inventario/guia | core | guia_destinatarios | 38 |
+| inventario/guia | core | guia_detalles | 72 |
+| inventario/guia | core | guias | 38 |
 | marca | core | marcas | 16 |
 | movimiento-inventario | core | movimiento_detalles | 29 |
 | movimiento-inventario | core | movimientos | 12 |
@@ -49,31 +58,53 @@
 | documento/tickets | core | tickets_detalles | 40 |
 | documento/tickets | core | tickets_documentos | 21 |
 | unidad | core | unidades | 20 |
+| unidad | raw | resource_rows | 20 |
+| inventario/guia | raw | resource_rows | 148 |
+| marca | raw | resource_rows | 16 |
+| bodega | raw | resource_rows | 21 |
+| banco/movimiento | raw | resource_rows | 5964 |
+| documento/tickets | raw | resource_rows | 61 |
+| categoria | raw | resource_rows | 22 |
+| cuenta-contable | raw | resource_rows | 572 |
+| persona | raw | resource_rows | 29 |
+| contabilidad/asiento | raw | resource_rows | 106 |
+| producto | raw | resource_rows | 1 |
+| movimiento-inventario | raw | resource_rows | 41 |
+| banco/cuenta | raw | resource_rows | 5 |
+| contabilidad/periodo | raw | resource_rows | 8 |
+| documento | raw | resource_rows | 67 |
+| centro-costo | raw | resource_rows | 2 |
 
 ## Fuente vs tabla principal
 
 | resource | source_count | core_primary_count | difference |
 | --- | --- | --- | --- |
+| cuenta-contable | 572 | 572 | 0 |
 | bodega | 21 | 21 | 0 |
 | categoria | 22 | 23 | -1 |
-| cuenta-contable | 572 | 572 | 0 |
 | centro-costo | 2 | 2 | 0 |
 | contabilidad/periodo | 8 | 8 | 0 |
 | marca | 16 | 16 | 0 |
-| persona | 2060 | 2060 | 0 |
 | unidad | 20 | 20 | 0 |
+| banco/cuenta | 5 | 5 | 0 |
+| persona | 2060 | 2060 | 0 |
 | producto | 1 | 1237 | -1236 |
 | movimiento-inventario | 12 | 9024 | -9012 |
 | documento | 54 | 23911 | -23857 |
+| inventario/guia | 38 | 38 | 0 |
+| banco/movimiento | 2751 | 2751 | 0 |
 | documento/tickets | 21 | 23911 | -23890 |
-| contabilidad/asiento | 58 | 67402 | -67344 |
+| contabilidad/asiento | 26 | 67402 | -67376 |
 
 ## Cobertura temporal
 
 | resource | row_count | min_date | max_date |
 | --- | --- | --- | --- |
 | asientos | 67402 | 2019-03-12 | 2026-07-08 |
+| banco_cuentas | 5 | 2021-02-17 | 2025-09-03 |
+| banco_movimientos | 2751 | 2019-12-20 | 2026-03-24 |
 | documentos | 23911 | 2019-03-12 | 2026-03-28 |
+| guias | 38 | 2020-11-26 | 2026-02-13 |
 | movimientos | 9024 | 2022-05-16 | 2026-03-28 |
 | periodos | 8 | 2019-01-01 | 2026-12-31 |
 | personas | 2060 | 2019-11-20 | 2026-03-27 |
@@ -87,11 +118,18 @@
 | asiento_detalles.asiento_id -> asientos.id | 0 |
 | asiento_detalles.centro_costo_id -> centros_costo.id | 0 |
 | asiento_detalles.cuenta_id -> cuentas_contables.id | 0 |
+| banco_cuentas.cuenta_contable_id -> cuentas_contables.id | 0 |
+| banco_movimiento_detalles.centro_costo_id -> centros_costo.id | 0 |
+| banco_movimiento_detalles.cuenta_id -> cuentas_contables.id | 0 |
+| banco_movimiento_detalles.movimiento_id -> banco_movimientos.id | 0 |
+| banco_movimientos.cuenta_bancaria_id -> banco_cuentas.id | 0 |
+| banco_movimientos.persona_id -> personas.id | 0 |
 | categorias.cuenta_compra -> cuentas_contables.id | 0 |
 | categorias.cuenta_inventario -> cuentas_contables.id | 0 |
 | categorias.cuenta_venta -> cuentas_contables.id | 0 |
 | categorias.padre_id -> categorias.id | 0 |
 | centros_costo.padre_id -> centros_costo.id | 0 |
+| documento_cobros.cuenta_bancaria_id -> banco_cuentas.id | 0 |
 | documento_cobros.documento_id -> documentos.id | 0 |
 | documento_detalles.centro_costo_id -> centros_costo.id | 0 |
 | documento_detalles.cuenta_id -> cuentas_contables.id | 0 |
@@ -102,6 +140,13 @@
 | documentos.persona_id -> personas.id | 0 |
 | documentos.proveedor_id -> personas.id | 0 |
 | documentos.vendedor_id -> personas.id | 0 |
+| guia_destinatarios.destinatario_id -> personas.id | 0 |
+| guia_destinatarios.documento_id -> documentos.id | 0 |
+| guia_destinatarios.guia_id -> guias.id | 0 |
+| guia_detalles.guia_id -> guias.id | 0 |
+| guia_detalles.producto_id -> productos.id | 0 |
+| guias.bodega_id -> bodegas.id | 0 |
+| guias.transportista_id -> personas.id | 0 |
 | movimiento_detalles.movimiento_id -> movimientos.id | 0 |
 | movimiento_detalles.producto_id -> productos.id | 0 |
 | movimiento_detalles.unidad_id -> unidades.id | 0 |
@@ -129,7 +174,9 @@
 
 | indicador | total |
 | --- | --- |
+| guia_detalles_producto_id_null | 0 |
 | tickets_items | 0 |
+| banco_movimiento_detalles_cuenta_id_null | 3213 |
 | movimiento_detalles_producto_id_null | 0 |
 | documentos_sin_persona_id | 0 |
 | tickets_detalles_producto_id_null_permitido | 17555 |
@@ -240,11 +287,34 @@
 | 2026-04-10 | 1 |
 | 2026-04-08 | 1 |
 
+### Guias por estado y bodega
+
+| estado | bodega | total_guias | documentos_vinculados | cantidad_total |
+| --- | --- | --- | --- | --- |
+| E | BODEGA PRINCIPAL | 36 | 7 | 335.000000 |
+| E | MIGUEL MEJIA | 1 | 1 | 50.000000 |
+| E | SANDRO CHAMORRO | 1 | 0 | 2.000000 |
+
+### Movimientos bancarios por tipo y cuenta
+
+| tipo_registro | cuenta_bancaria | total_movimientos | monto_total |
+| --- | --- | --- | --- |
+| E | BANCO DE GUAYAQUIL | 1261 | 820741.820000 |
+| E | BANCO PICHINCHA | 984 | 1834866.010000 |
+| I | BANCO PICHINCHA | 354 | 508976.090000 |
+| I | BANCO DE GUAYAQUIL | 93 | 290150.170000 |
+| I | BANECUADOR | 29 | 29165.000000 |
+| E | BANECUADOR | 25 | 15226.260000 |
+| E | BANCO DINERS CLUB S.A. | 2 | 17490.970000 |
+| I | BANCO DINERS CLUB S.A. | 2 | 13637.700000 |
+| I | BANCO BOLIVARIANO | 1 | 700.000000 |
+
 ## Incidencias
 
 - El backfill histórico usa paginación exhaustiva completa y no depende de filtros de fecha del backend.
 - El endpoint `movimiento-inventario` reportó un `count` mayor al número final de IDs únicos materializados; se conservó la versión única de cada movimiento.
 - `documento_detalles.producto_id` y `tickets_detalles.producto_id` aceptan `null`; esos registros se conservaron sin romper integridad.
-- Los campos sin catálogo validado quedaron como atributos simples: `caja_id`, `cuenta_bancaria_id`, `banco_codigo_id`, `tarjeta_consumo_id`, `logistica`, `orden_domicilio_id`, `proyecto`.
+- La integración nueva conecta `documento_cobros.cuenta_bancaria_id` con `core.banco_cuentas` y agrega `guias` y `banco_movimientos` como capas nuevas de logística y tesorería.
+- Los campos sin catálogo validado quedaron como atributos simples: `caja_id`, `banco_codigo_id`, `tarjeta_consumo_id`, `logistica`, `orden_domicilio_id`, `proyecto`.
 - Cuando una referencia no vino en el catálogo origen, se creó un placeholder controlado para mantener la FK y dejar trazabilidad de la anomalía.
 - `tickets_items` se cargó únicamente cuando el payload incluyó elementos en `tickets[]`; en ausencia de items, el detalle igualmente quedó preservado.

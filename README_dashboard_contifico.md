@@ -101,7 +101,9 @@ http://127.0.0.1:8123
 
 - Tab `Revision tecnica` con estado del dataset, bitacora de corridas, volumen actualizado, salud relacional, watermarks y boton de refresh real
 - La bitacora distingue entre `filas leidas en esta corrida` y `historico almacenado`, para no confundir optimizacion de lectura con perdida de datos.
-- Tab `Vista analitica` con hero, comercial, clientes, inventario, contabilidad, calidad y tablas exportables
+- Tab `Vista analitica` con hero, comercial, clientes, inventario, logistica, tesoreria, contabilidad, calidad y tablas exportables
+- Integracion nueva de `inventario/guia`, `banco/cuenta` y `banco/movimiento`, conectadas con `documentos`, `personas`, `bodegas`, `productos` y `cuentas_contables`
+- Tres graficos nuevos sobre las capas integradas: trazabilidad de guias, carga logistica por bodega y flujo bancario mensual
 
 ## Notas
 

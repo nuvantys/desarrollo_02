@@ -137,10 +137,10 @@ export function lineComboOption({
   };
 }
 
-export function stackedBarOption({ categories, series }) {
+export function stackedBarOption({ categories, series, formatter = formatNumber }) {
   return {
     color: ["#0d6c5f", "#4a9084", "#8cbeb3", "#cfdc85", "#d79b41", "#b94f44"],
-    tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+    tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, valueFormatter: (value) => formatter(value) },
     legend: { top: 0, textStyle: { color: "#5d6e66" } },
     grid: { left: 36, right: 24, top: 48, bottom: 48 },
     xAxis: {

@@ -51,6 +51,12 @@ PRIMARY_KEYS: dict[str, list[str]] = {
     "marcas": ["id"],
     "cuentas_contables": ["id"],
     "centros_costo": ["id"],
+    "guias": ["id"],
+    "guia_destinatarios": ["guia_id"],
+    "guia_detalles": ["guia_id", "detalle_index"],
+    "banco_cuentas": ["id"],
+    "banco_movimientos": ["id"],
+    "banco_movimiento_detalles": ["movimiento_id", "detalle_index"],
     "extract_runs": ["run_id", "resource"],
     "watermarks": ["resource"],
 }
@@ -73,6 +79,9 @@ SNAPSHOT_RESOURCES = {
     "marca",
     "cuenta-contable",
     "centro-costo",
+    "inventario/guia",
+    "banco/cuenta",
+    "banco/movimiento",
 }
 
 
@@ -200,6 +209,30 @@ RESOURCE_SPECS: tuple[ResourceSpec, ...] = (
         response_kind="paginated",
         mode="snapshot",
         table_names=("periodos",),
+    ),
+    ResourceSpec(
+        key="inventario/guia",
+        display_name="guias",
+        path="/sistema/api/v1/inventario/guia/",
+        response_kind="flat",
+        mode="snapshot",
+        table_names=("guias", "guia_destinatarios", "guia_detalles"),
+    ),
+    ResourceSpec(
+        key="banco/cuenta",
+        display_name="banco_cuentas",
+        path="/sistema/api/v1/banco/cuenta/",
+        response_kind="flat",
+        mode="snapshot",
+        table_names=("banco_cuentas",),
+    ),
+    ResourceSpec(
+        key="banco/movimiento",
+        display_name="banco_movimientos",
+        path="/sistema/api/v1/banco/movimiento/",
+        response_kind="flat",
+        mode="snapshot",
+        table_names=("banco_movimientos", "banco_movimiento_detalles"),
     ),
     ResourceSpec(
         key="contabilidad/asiento",

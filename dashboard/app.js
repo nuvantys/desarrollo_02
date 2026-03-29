@@ -70,6 +70,8 @@ const elements = {
   overviewMetrics: document.getElementById("overview-metrics"),
   storyCards: document.getElementById("story-cards"),
   qualityMetrics: document.getElementById("quality-metrics"),
+  operationsMetrics: document.getElementById("operations-metrics"),
+  operationsStoryCards: document.getElementById("operations-story-cards"),
   activeFilters: document.getElementById("active-filters"),
   tabs: document.querySelectorAll("[data-tab-target]"),
   tabViews: document.querySelectorAll(".tab-view"),
@@ -337,6 +339,20 @@ function filteredMovementLines() {
   });
 }
 
+function filteredGuides() {
+  const { from, to } = currentDateBounds();
+  return (snapshot.inventory.guide_facts || []).filter((row) => {
+    if (!inDateRange(row.date, from, to)) return false;
+    if (state.global.bodega && row.bodega_id !== state.global.bodega) return false;
+    return true;
+  });
+}
+
+function filteredBankMovements() {
+  const { from, to } = currentDateBounds();
+  return (snapshot.accounting.bank_movement_facts || []).filter((row) => inDateRange(row.date, from, to));
+}
+
 function filteredAccountingFacts() {
   const { from, to } = currentDateBounds();
   return snapshot.accounting.monthly_facts.filter((row) => {
@@ -599,6 +615,124 @@ function renderInventory() {
     "inventory-category-chart",
     horizontalBarOption({ labels: categories.map((row) => row.label), values: categories.map((row) => row.value), color: "#d79b41" }),
   );
+}
+
+function renderOperations() {
+  const guides = filteredGuides();
+  const bankMovements = filteredBankMovements();
+  const linkedGuides = guides.filter((row) => row.linked_document);
+  const bankTotal = bankMovements.reduce((sum, row) => sum + toNumber(row.monto_total), 0);
+  const distinctBankAccounts = uniqueCount(bankMovements.map((row) => row.cuenta_bancaria_id));
+
+  renderMetricCards(elements.operationsMetrics, [
+    { label: "Guias filtradas", value: formatPreciseNumber(guides.length), caption: "Guias de remision visibles en la ventana activa." },
+    { label: "Guias vinculadas", value: formatPreciseNumber(linkedGuides.length), caption: "Guias conectadas con un documento del modelo." },
+    { label: "Movimientos bancarios", value: formatPreciseNumber(bankMovements.length), caption: "Eventos bancarios observados dentro del rango temporal." },
+    { label: "Monto bancario", value: formatCurrency(bankTotal), caption: `${formatPreciseNumber(distinctBankAccounts)} cuentas bancarias activas en la vista.` },
+  ]);
+
+  const guideByMonth = aggregateBy(
+    guides,
+    (row) => monthBucket(row.date),
+    (row) => ({ period: monthBucket(row.date), total_guias: 1, linked_guias: row.linked_document ? 1 : 0 }),
+    (acc, row) => {
+      acc.total_guias += 1;
+      acc.linked_guias += row.linked_document ? 1 : 0;
+    },
+  ).sort((a, b) => a.period.localeCompare(b.period));
+
+  setOption(
+    "operations-guides-timeline-chart",
+    lineComboOption({
+      categories: guideByMonth.map((row) => formatDate(row.period)),
+      bars: guideByMonth.map((row) => row.total_guias),
+      line: guideByMonth.map((row) => row.linked_guias),
+      barName: "Guias emitidas",
+      lineName: "Guias vinculadas",
+      barFormatter: formatNumber,
+      lineFormatter: formatNumber,
+    }),
+  );
+
+  const guideByBodega = sortByValueDescending(
+    aggregateBy(
+      guides,
+      (row) => row.bodega_nombre,
+      (row) => ({ label: row.bodega_nombre, guias: 1, cantidad_total: toNumber(row.cantidad_total) }),
+      (acc, row) => {
+        acc.guias += 1;
+        acc.cantidad_total += toNumber(row.cantidad_total);
+      },
+    ),
+    "guias",
+  ).slice(0, 12);
+
+  setOption(
+    "operations-bodega-load-chart",
+    lineComboOption({
+      categories: guideByBodega.map((row) => row.label),
+      bars: guideByBodega.map((row) => row.guias),
+      line: guideByBodega.map((row) => row.cantidad_total),
+      barName: "Guias",
+      lineName: "Cantidad movilizada",
+      barFormatter: formatNumber,
+      lineFormatter: formatNumber,
+    }),
+  );
+
+  const bankByMonthType = aggregateBy(
+    bankMovements,
+    (row) => `${monthBucket(row.date)}|${row.tipo_registro}`,
+    (row) => ({ period: monthBucket(row.date), tipo_registro: row.tipo_registro, monto_total: toNumber(row.monto_total) }),
+    (acc, row) => {
+      acc.monto_total += toNumber(row.monto_total);
+    },
+  );
+  const bankMonths = [...new Set(bankByMonthType.map((row) => row.period))].sort();
+  const bankTypeLabels = [
+    { code: "I", label: "Ingresos" },
+    { code: "E", label: "Egresos" },
+  ];
+  setOption(
+    "operations-bank-flow-chart",
+    stackedBarOption({
+      categories: bankMonths.map((period) => formatDate(period)),
+      series: bankTypeLabels.map((entry) => ({
+        name: entry.label,
+        data: bankMonths.map(
+          (period) => bankByMonthType.find((row) => row.period === period && row.tipo_registro === entry.code)?.monto_total || 0,
+        ),
+      })),
+      formatter: formatCurrency,
+    }),
+  );
+
+  const linkedShare = guides.length ? ((linkedGuides.length / guides.length) * 100).toFixed(1) : "0.0";
+  const topBodega = guideByBodega[0];
+  const topBankAccount = sortByValueDescending(
+    aggregateBy(
+      bankMovements,
+      (row) => row.cuenta_bancaria_nombre,
+      (row) => ({ label: row.cuenta_bancaria_nombre, value: toNumber(row.monto_total) }),
+      (acc, row) => {
+        acc.value += toNumber(row.monto_total);
+      },
+    ),
+  )[0];
+  renderStoryCards(elements.operationsStoryCards, [
+    {
+      title: "Trazabilidad logística",
+      body: `${formatPreciseNumber(linkedGuides.length)} de ${formatPreciseNumber(guides.length)} guias filtradas se enlazan a un documento. Eso deja una cobertura de ${linkedShare}% para seguimiento entre salida fisica y documento comercial.`,
+    },
+    {
+      title: "Presion por bodega",
+      body: `La bodega con mayor carga en la vista activa es ${topBodega?.label || "--"}, con ${formatPreciseNumber(topBodega?.guias || 0)} guias y ${formatPreciseNumber(topBodega?.cantidad_total || 0)} unidades movilizadas.`,
+    },
+    {
+      title: "Lectura de tesoreria",
+      body: `El flujo bancario visible suma ${formatCurrency(bankTotal)} y se concentra principalmente en ${topBankAccount?.label || "--"}. Este dominio complementa cobros y contabilidad con evidencia bancaria real.`,
+    },
+  ]);
 }
 
 function renderAccounting() {
@@ -1411,6 +1545,7 @@ function renderAll() {
   renderCommercial();
   renderCustomersAndProducts();
   renderInventory();
+  renderOperations();
   renderAccounting();
   renderQuality();
   renderTables();

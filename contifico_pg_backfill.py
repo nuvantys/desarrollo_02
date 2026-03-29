@@ -49,10 +49,13 @@ RESOURCE_ORDER = (
     "unidad",
     "centro-costo",
     "contabilidad/periodo",
+    "banco/cuenta",
     "persona",
     "producto",
     "movimiento-inventario",
     "documento",
+    "inventario/guia",
+    "banco/movimiento",
     "documento/tickets",
     "contabilidad/asiento",
 )
@@ -311,6 +314,7 @@ CORE_TABLE_COLUMNS: dict[str, list[str]] = {
     "cuentas_contables": ["id", "nombre", "codigo", "tipo", "run_id", "ingested_at"],
     "centros_costo": ["id", "nombre", "codigo", "tipo", "padre_id", "estado", "run_id", "ingested_at"],
     "periodos": ["id", "fecha_inicio", "fecha_fin", "estado", "dia_cierre_mensual", "run_id", "ingested_at"],
+    "banco_cuentas": ["id", "nombre", "numero", "tipo_cuenta", "cuenta_contable_id", "saldo_inicial", "fecha_corte", "estado", "run_id", "ingested_at"],
     "personas": [
         "id", "tipo", "personaasociada_id", "es_cliente", "es_proveedor", "es_extranjero", "es_vendedor", "es_empleado",
         "es_corporativo", "ruc", "cedula", "placa", "razon_social", "nombre_comercial", "email", "telefonos", "direccion",
@@ -330,6 +334,19 @@ CORE_TABLE_COLUMNS: dict[str, list[str]] = {
         "pvp_peso", "peso_desde", "peso_hasta", "porcentaje_ice", "valor_ice", "campo_catalogo", "maneja_nombremanual",
         "porcentaje_servicio", "run_id", "ingested_at",
     ],
+    "guias": [
+        "id", "source_id", "numero_documento", "fecha_emision", "fecha_inicio", "fecha_fin", "autorizacion", "direccion_partida",
+        "transportista_id", "placa", "descripcion", "pos", "electronico", "bodega_id", "estado", "nombre_chofer", "cedula_chofer",
+        "nombre_despachador", "ordencompraventa_id", "adicional1", "adicional2", "run_id", "ingested_at",
+    ],
+    "guia_destinatarios": [
+        "guia_id", "destinatario_id", "documento_id", "codigo_destino", "motivo", "direccion", "ruta", "run_id", "ingested_at",
+    ],
+    "guia_detalles": [
+        "guia_id", "detalle_index", "producto_id", "cantidad", "serie", "lote", "fecha_expiracion", "nombre_manual", "run_id", "ingested_at",
+    ],
+    "banco_movimientos": ["id", "tipo_registro", "tipo", "fecha_emision", "numero_comprobante", "persona_id", "cuenta_bancaria_id", "run_id", "ingested_at"],
+    "banco_movimiento_detalles": ["movimiento_id", "detalle_index", "cuenta_id", "monto", "centro_costo_id", "run_id", "ingested_at"],
     "movimientos": ["id", "codigo", "bodega_id", "tipo", "fecha", "generar_asiento", "pos", "cuenta_id", "maneja_venta", "descripcion", "total", "estado", "bodega_destino_id", "codigo_interno", "proyecto", "run_id", "ingested_at"],
     "movimiento_detalles": ["movimiento_id", "detalle_index", "serie", "producto_id", "edicion", "precio", "cantidad", "unidad_id", "costo_promedio", "run_id", "ingested_at"],
     "documentos": [
@@ -368,8 +385,14 @@ CORE_PRIMARY_KEYS: dict[str, list[str]] = {
     "cuentas_contables": ["id"],
     "centros_costo": ["id"],
     "periodos": ["id"],
+    "banco_cuentas": ["id"],
     "personas": ["id"],
     "productos": ["id"],
+    "guias": ["id"],
+    "guia_destinatarios": ["guia_id"],
+    "guia_detalles": ["guia_id", "detalle_index"],
+    "banco_movimientos": ["id"],
+    "banco_movimiento_detalles": ["movimiento_id", "detalle_index"],
     "movimientos": ["id"],
     "movimiento_detalles": ["movimiento_id", "detalle_index"],
     "documentos": ["id"],
@@ -386,13 +409,19 @@ CORE_PRIMARY_KEYS: dict[str, list[str]] = {
 REFERENCE_COLUMNS: dict[str, list[tuple[str, str]]] = {
     "categorias": [("cuentas_contables", "cuenta_venta"), ("cuentas_contables", "cuenta_compra"), ("cuentas_contables", "cuenta_inventario"), ("categorias", "padre_id")],
     "centros_costo": [("centros_costo", "padre_id")],
+    "banco_cuentas": [("cuentas_contables", "cuenta_contable_id")],
     "personas": [("personas", "personaasociada_id"), ("categorias", "categoria_id"), ("cuentas_contables", "cuenta_por_cobrar_id"), ("cuentas_contables", "cuenta_por_pagar_id"), ("personas", "vendedor_asignado_id")],
     "productos": [("unidades", "unidad_id"), ("categorias", "categoria_id"), ("marcas", "marca_id"), ("cuentas_contables", "cuenta_venta_id"), ("cuentas_contables", "cuenta_compra_id"), ("cuentas_contables", "cuenta_costo_id"), ("productos", "producto_base_id")],
+    "guias": [("personas", "transportista_id"), ("bodegas", "bodega_id")],
+    "guia_destinatarios": [("guias", "guia_id"), ("personas", "destinatario_id"), ("documentos", "documento_id")],
+    "guia_detalles": [("guias", "guia_id"), ("productos", "producto_id")],
+    "banco_movimientos": [("personas", "persona_id"), ("banco_cuentas", "cuenta_bancaria_id")],
+    "banco_movimiento_detalles": [("banco_movimientos", "movimiento_id"), ("cuentas_contables", "cuenta_id"), ("centros_costo", "centro_costo_id")],
     "movimientos": [("bodegas", "bodega_id"), ("bodegas", "bodega_destino_id"), ("cuentas_contables", "cuenta_id")],
     "movimiento_detalles": [("movimientos", "movimiento_id"), ("productos", "producto_id"), ("unidades", "unidad_id")],
     "documentos": [("personas", "persona_id"), ("personas", "cliente_id"), ("personas", "proveedor_id"), ("personas", "vendedor_id"), ("documentos", "documento_relacionado_id")],
     "documento_detalles": [("documentos", "documento_id"), ("productos", "producto_id"), ("cuentas_contables", "cuenta_id"), ("centros_costo", "centro_costo_id")],
-    "documento_cobros": [("documentos", "documento_id")],
+    "documento_cobros": [("documentos", "documento_id"), ("banco_cuentas", "cuenta_bancaria_id")],
     "tickets_documentos": [("documentos", "id")],
     "tickets_detalles": [("tickets_documentos", "documento_id"), ("productos", "producto_id"), ("centros_costo", "centro_costo_id")],
     "asiento_detalles": [("asientos", "asiento_id"), ("cuentas_contables", "cuenta_id"), ("centros_costo", "centro_costo_id")],
@@ -401,6 +430,7 @@ REFERENCE_COLUMNS: dict[str, list[tuple[str, str]]] = {
 
 STUB_TARGET_ORDER = [
     "cuentas_contables",
+    "banco_cuentas",
     "categorias",
     "bodegas",
     "marcas",
@@ -557,6 +587,20 @@ DDL_STATEMENTS = [
     )
     """,
     """
+    CREATE TABLE IF NOT EXISTS core.banco_cuentas (
+        id text PRIMARY KEY,
+        nombre text,
+        numero text,
+        tipo_cuenta text,
+        cuenta_contable_id text REFERENCES core.cuentas_contables(id),
+        saldo_inicial numeric(18,6),
+        fecha_corte date,
+        estado text,
+        run_id text NOT NULL,
+        ingested_at timestamptz NOT NULL
+    )
+    """,
+    """
     CREATE TABLE IF NOT EXISTS core.personas (
         id text PRIMARY KEY,
         tipo text,
@@ -665,6 +709,61 @@ DDL_STATEMENTS = [
         porcentaje_servicio text,
         run_id text NOT NULL,
         ingested_at timestamptz NOT NULL
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS core.guias (
+        id text PRIMARY KEY,
+        source_id text,
+        numero_documento text,
+        fecha_emision date,
+        fecha_inicio date,
+        fecha_fin date,
+        autorizacion text,
+        direccion_partida text,
+        transportista_id text REFERENCES core.personas(id),
+        placa text,
+        descripcion text,
+        pos text,
+        electronico boolean,
+        bodega_id text REFERENCES core.bodegas(id),
+        estado text,
+        nombre_chofer text,
+        cedula_chofer text,
+        nombre_despachador text,
+        ordencompraventa_id text,
+        adicional1 text,
+        adicional2 text,
+        run_id text NOT NULL,
+        ingested_at timestamptz NOT NULL
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS core.guia_destinatarios (
+        guia_id text PRIMARY KEY REFERENCES core.guias(id),
+        destinatario_id text REFERENCES core.personas(id),
+        documento_id text REFERENCES core.documentos(id),
+        codigo_destino text,
+        motivo text,
+        direccion text,
+        ruta text,
+        run_id text NOT NULL,
+        ingested_at timestamptz NOT NULL
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS core.guia_detalles (
+        guia_id text NOT NULL REFERENCES core.guias(id),
+        detalle_index integer NOT NULL,
+        producto_id text REFERENCES core.productos(id),
+        cantidad numeric(18,6),
+        serie text,
+        lote text,
+        fecha_expiracion date,
+        nombre_manual text,
+        run_id text NOT NULL,
+        ingested_at timestamptz NOT NULL,
+        PRIMARY KEY (guia_id, detalle_index)
     )
     """,
     """
@@ -827,6 +926,20 @@ DDL_STATEMENTS = [
     )
     """,
     """
+    DO $$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1
+            FROM pg_constraint
+            WHERE conname = 'fk_documento_cobros_cuenta_bancaria'
+        ) THEN
+            ALTER TABLE core.documento_cobros
+            ADD CONSTRAINT fk_documento_cobros_cuenta_bancaria
+            FOREIGN KEY (cuenta_bancaria_id) REFERENCES core.banco_cuentas(id) NOT VALID;
+        END IF;
+    END $$;
+    """,
+    """
     CREATE TABLE IF NOT EXISTS core.tickets_documentos (
         id text PRIMARY KEY REFERENCES core.documentos(id),
         fecha_emision date,
@@ -883,6 +996,31 @@ DDL_STATEMENTS = [
         PRIMARY KEY (asiento_id, detalle_index)
     )
     """,
+    """
+    CREATE TABLE IF NOT EXISTS core.banco_movimientos (
+        id text PRIMARY KEY,
+        tipo_registro text,
+        tipo text,
+        fecha_emision date,
+        numero_comprobante text,
+        persona_id text REFERENCES core.personas(id),
+        cuenta_bancaria_id text REFERENCES core.banco_cuentas(id),
+        run_id text NOT NULL,
+        ingested_at timestamptz NOT NULL
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS core.banco_movimiento_detalles (
+        movimiento_id text NOT NULL REFERENCES core.banco_movimientos(id),
+        detalle_index integer NOT NULL,
+        cuenta_id text REFERENCES core.cuentas_contables(id),
+        monto numeric(18,6),
+        centro_costo_id text REFERENCES core.centros_costo(id),
+        run_id text NOT NULL,
+        ingested_at timestamptz NOT NULL,
+        PRIMARY KEY (movimiento_id, detalle_index)
+    )
+    """,
 ]
 
 
@@ -897,6 +1035,7 @@ FK_HEALTH_CHECKS = [
     ("personas.cuenta_por_cobrar_id -> cuentas_contables.id", "core.personas", "cuenta_por_cobrar_id", "core.cuentas_contables", "id"),
     ("personas.cuenta_por_pagar_id -> cuentas_contables.id", "core.personas", "cuenta_por_pagar_id", "core.cuentas_contables", "id"),
     ("personas.vendedor_asignado_id -> personas.id", "core.personas", "vendedor_asignado_id", "core.personas", "id"),
+    ("banco_cuentas.cuenta_contable_id -> cuentas_contables.id", "core.banco_cuentas", "cuenta_contable_id", "core.cuentas_contables", "id"),
     ("productos.unidad_id -> unidades.id", "core.productos", "unidad_id", "core.unidades", "id"),
     ("productos.categoria_id -> categorias.id", "core.productos", "categoria_id", "core.categorias", "id"),
     ("productos.marca_id -> marcas.id", "core.productos", "marca_id", "core.marcas", "id"),
@@ -920,10 +1059,23 @@ FK_HEALTH_CHECKS = [
     ("documento_detalles.cuenta_id -> cuentas_contables.id", "core.documento_detalles", "cuenta_id", "core.cuentas_contables", "id"),
     ("documento_detalles.centro_costo_id -> centros_costo.id", "core.documento_detalles", "centro_costo_id", "core.centros_costo", "id"),
     ("documento_cobros.documento_id -> documentos.id", "core.documento_cobros", "documento_id", "core.documentos", "id"),
+    ("documento_cobros.cuenta_bancaria_id -> banco_cuentas.id", "core.documento_cobros", "cuenta_bancaria_id", "core.banco_cuentas", "id"),
     ("tickets_documentos.id -> documentos.id", "core.tickets_documentos", "id", "core.documentos", "id"),
     ("tickets_detalles.documento_id -> tickets_documentos.id", "core.tickets_detalles", "documento_id", "core.tickets_documentos", "id"),
     ("tickets_detalles.producto_id -> productos.id", "core.tickets_detalles", "producto_id", "core.productos", "id"),
     ("tickets_detalles.centro_costo_id -> centros_costo.id", "core.tickets_detalles", "centro_costo_id", "core.centros_costo", "id"),
+    ("guias.transportista_id -> personas.id", "core.guias", "transportista_id", "core.personas", "id"),
+    ("guias.bodega_id -> bodegas.id", "core.guias", "bodega_id", "core.bodegas", "id"),
+    ("guia_destinatarios.guia_id -> guias.id", "core.guia_destinatarios", "guia_id", "core.guias", "id"),
+    ("guia_destinatarios.destinatario_id -> personas.id", "core.guia_destinatarios", "destinatario_id", "core.personas", "id"),
+    ("guia_destinatarios.documento_id -> documentos.id", "core.guia_destinatarios", "documento_id", "core.documentos", "id"),
+    ("guia_detalles.guia_id -> guias.id", "core.guia_detalles", "guia_id", "core.guias", "id"),
+    ("guia_detalles.producto_id -> productos.id", "core.guia_detalles", "producto_id", "core.productos", "id"),
+    ("banco_movimientos.persona_id -> personas.id", "core.banco_movimientos", "persona_id", "core.personas", "id"),
+    ("banco_movimientos.cuenta_bancaria_id -> banco_cuentas.id", "core.banco_movimientos", "cuenta_bancaria_id", "core.banco_cuentas", "id"),
+    ("banco_movimiento_detalles.movimiento_id -> banco_movimientos.id", "core.banco_movimiento_detalles", "movimiento_id", "core.banco_movimientos", "id"),
+    ("banco_movimiento_detalles.cuenta_id -> cuentas_contables.id", "core.banco_movimiento_detalles", "cuenta_id", "core.cuentas_contables", "id"),
+    ("banco_movimiento_detalles.centro_costo_id -> centros_costo.id", "core.banco_movimiento_detalles", "centro_costo_id", "core.centros_costo", "id"),
     ("asiento_detalles.asiento_id -> asientos.id", "core.asiento_detalles", "asiento_id", "core.asientos", "id"),
     ("asiento_detalles.cuenta_id -> cuentas_contables.id", "core.asiento_detalles", "cuenta_id", "core.cuentas_contables", "id"),
     ("asiento_detalles.centro_costo_id -> centros_costo.id", "core.asiento_detalles", "centro_costo_id", "core.centros_costo", "id"),
@@ -933,6 +1085,9 @@ FK_HEALTH_CHECKS = [
 RESOURCE_MASTER_TABLES: dict[str, tuple[str, str]] = {
     "persona": ("personas", "id"),
     "producto": ("productos", "id"),
+    "inventario/guia": ("guias", "id"),
+    "banco/cuenta": ("banco_cuentas", "id"),
+    "banco/movimiento": ("banco_movimientos", "id"),
     "movimiento-inventario": ("movimientos", "id"),
     "documento": ("documentos", "id"),
     "documento/tickets": ("tickets_documentos", "id"),
@@ -941,6 +1096,12 @@ RESOURCE_MASTER_TABLES: dict[str, tuple[str, str]] = {
 
 
 RESOURCE_CHILD_PURGES: dict[str, tuple[tuple[str, str], ...]] = {
+    "inventario/guia": (
+        ("guia_detalles", "guia_id"),
+        ("guia_destinatarios", "guia_id"),
+        ("guias", "id"),
+    ),
+    "banco/movimiento": (("banco_movimiento_detalles", "movimiento_id"),),
     "movimiento-inventario": (("movimiento_detalles", "movimiento_id"),),
     "documento": (
         ("documento_cobros", "documento_id"),
@@ -970,14 +1131,20 @@ def truncate_backfill_tables(conn) -> None:
         core.tickets_detalles,
         core.tickets_documentos,
         core.documento_cobros,
+        core.banco_movimiento_detalles,
+        core.banco_movimientos,
         core.documento_detalles,
         core.documentos,
+        core.guia_detalles,
+        core.guia_destinatarios,
+        core.guias,
         core.movimiento_detalles,
         core.movimientos,
         core.asiento_detalles,
         core.asientos,
         core.productos,
         core.personas,
+        core.banco_cuentas,
         core.periodos,
         core.centros_costo,
         core.unidades,
@@ -1067,6 +1234,11 @@ def build_stub_row(table_name: str, entity_id: str, run_id: str, ingested_at: dt
         row["nombre"] = placeholder
         row["codigo"] = placeholder
         row["tipo"] = "UNK"
+    elif table_name == "banco_cuentas":
+        row["nombre"] = placeholder
+        row["numero"] = placeholder
+        row["tipo_cuenta"] = "UNK"
+        row["estado"] = "A"
     elif table_name == "centros_costo":
         row["nombre"] = placeholder
         row["codigo"] = placeholder
@@ -1419,6 +1591,153 @@ def normalize_movimiento_records(
     return raw_rows, core_rows
 
 
+def resolve_guia_id(record: dict[str, Any]) -> str | None:
+    source_id = to_nonempty_text(record.get("id"))
+    if source_id:
+        return source_id
+    numero_documento = to_nonempty_text(record.get("numero_documento"))
+    if numero_documento:
+        return f"guia::{numero_documento}"
+    return None
+
+
+def normalize_guia_records(
+    records: list[dict[str, Any]],
+    run_id: str,
+    ingested_at: dt.datetime,
+    page_number: int,
+    request_params: dict[str, Any],
+    fetched_at: dt.datetime,
+) -> tuple[list[dict[str, Any]], dict[str, list[dict[str, Any]]]]:
+    raw_rows: list[dict[str, Any]] = []
+    core_rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    base_meta = resource_metadata(run_id, ingested_at)
+    for record in records:
+        guia_id = resolve_guia_id(record)
+        if not guia_id:
+            continue
+        raw_rows.append(build_raw_row(run_id, "inventario/guia", guia_id, None, page_number, request_params, record, fetched_at))
+        core_rows["guias"].append({
+            "id": guia_id,
+            "source_id": to_nonempty_text(record.get("id")),
+            "numero_documento": to_nonempty_text(record.get("numero_documento")),
+            "fecha_emision": parse_date(record.get("fecha_emision")),
+            "fecha_inicio": parse_date(record.get("fecha_inicio")),
+            "fecha_fin": parse_date(record.get("fecha_fin")),
+            "autorizacion": to_nonempty_text(record.get("autorizacion")),
+            "direccion_partida": to_nonempty_text(record.get("direccion_partida")),
+            "transportista_id": to_nonempty_text(record.get("transportista_id")),
+            "placa": to_nonempty_text(record.get("placa")),
+            "descripcion": to_nonempty_text(record.get("descripcion")),
+            "pos": to_nonempty_text(record.get("pos")),
+            "electronico": to_bool(record.get("electronico")),
+            "bodega_id": to_nonempty_text(record.get("bodega_id")),
+            "estado": to_nonempty_text(record.get("estado")),
+            "nombre_chofer": to_nonempty_text(record.get("nombre_chofer")),
+            "cedula_chofer": to_nonempty_text(record.get("cedula_chofer")),
+            "nombre_despachador": to_nonempty_text(record.get("nombre_despachador")),
+            "ordencompraventa_id": to_nonempty_text(record.get("ordencompraventa_id")),
+            "adicional1": to_nonempty_text(record.get("adicional1")),
+            "adicional2": to_nonempty_text(record.get("adicional2")),
+            **base_meta,
+        })
+        destinatario = record.get("destinatario") if isinstance(record.get("destinatario"), dict) else {}
+        core_rows["guia_destinatarios"].append({
+            "guia_id": guia_id,
+            "destinatario_id": to_nonempty_text(destinatario.get("destinatario_id")),
+            "documento_id": to_nonempty_text(destinatario.get("documento_id")),
+            "codigo_destino": to_nonempty_text(destinatario.get("codigo_destino")),
+            "motivo": to_nonempty_text(destinatario.get("motivo")),
+            "direccion": to_nonempty_text(destinatario.get("direccion")),
+            "ruta": to_nonempty_text(destinatario.get("ruta")),
+            **base_meta,
+        })
+        raw_rows.append(build_raw_row(run_id, "inventario/guia.destinatario", guia_id, guia_id, page_number, request_params, destinatario, fetched_at))
+        for detail_index, detail in enumerate(destinatario.get("detalle") or []):
+            raw_rows.append(build_raw_row(run_id, "inventario/guia.detalle", f"{guia_id}:{detail_index}", guia_id, page_number, request_params, detail, fetched_at))
+            core_rows["guia_detalles"].append({
+                "guia_id": guia_id,
+                "detalle_index": detail_index,
+                "producto_id": to_nonempty_text(detail.get("producto_id")),
+                "cantidad": to_decimal(detail.get("cantidad")),
+                "serie": to_nonempty_text(detail.get("serie")),
+                "lote": to_nonempty_text(detail.get("lote")),
+                "fecha_expiracion": parse_date(detail.get("fecha_expiracion")),
+                "nombre_manual": to_nonempty_text(detail.get("nombre_manual")),
+                **base_meta,
+            })
+    return raw_rows, core_rows
+
+
+def normalize_banco_cuenta_records(
+    records: list[dict[str, Any]],
+    run_id: str,
+    ingested_at: dt.datetime,
+    page_number: int,
+    request_params: dict[str, Any],
+    fetched_at: dt.datetime,
+) -> tuple[list[dict[str, Any]], dict[str, list[dict[str, Any]]]]:
+    raw_rows: list[dict[str, Any]] = []
+    core_rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    base_meta = resource_metadata(run_id, ingested_at)
+    for record in records:
+        entity_id = to_nonempty_text(record.get("id"))
+        if not entity_id:
+            continue
+        raw_rows.append(build_raw_row(run_id, "banco/cuenta", entity_id, None, page_number, request_params, record, fetched_at))
+        core_rows["banco_cuentas"].append({
+            "id": entity_id,
+            "nombre": to_nonempty_text(record.get("nombre")),
+            "numero": to_nonempty_text(record.get("numero")),
+            "tipo_cuenta": to_nonempty_text(record.get("tipo_cuenta")),
+            "cuenta_contable_id": to_nonempty_text(record.get("cuenta_contable")),
+            "saldo_inicial": to_decimal(record.get("saldo_inicial")),
+            "fecha_corte": parse_date(record.get("fecha_corte")),
+            "estado": to_nonempty_text(record.get("estado")),
+            **base_meta,
+        })
+    return raw_rows, core_rows
+
+
+def normalize_banco_movimiento_records(
+    records: list[dict[str, Any]],
+    run_id: str,
+    ingested_at: dt.datetime,
+    page_number: int,
+    request_params: dict[str, Any],
+    fetched_at: dt.datetime,
+) -> tuple[list[dict[str, Any]], dict[str, list[dict[str, Any]]]]:
+    raw_rows: list[dict[str, Any]] = []
+    core_rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    base_meta = resource_metadata(run_id, ingested_at)
+    for record in records:
+        movimiento_id = to_nonempty_text(record.get("id"))
+        if not movimiento_id:
+            continue
+        raw_rows.append(build_raw_row(run_id, "banco/movimiento", movimiento_id, None, page_number, request_params, record, fetched_at))
+        core_rows["banco_movimientos"].append({
+            "id": movimiento_id,
+            "tipo_registro": to_nonempty_text(record.get("tipo_registro")),
+            "tipo": to_nonempty_text(record.get("tipo")),
+            "fecha_emision": parse_date(record.get("fecha_emision")),
+            "numero_comprobante": to_nonempty_text(record.get("numero_comprobante")),
+            "persona_id": to_nonempty_text(record.get("persona")),
+            "cuenta_bancaria_id": to_nonempty_text(record.get("cuenta_bancaria_id")),
+            **base_meta,
+        })
+        for detail_index, detail in enumerate(record.get("detalles") or []):
+            raw_rows.append(build_raw_row(run_id, "banco/movimiento.detalle", f"{movimiento_id}:{detail_index}", movimiento_id, page_number, request_params, detail, fetched_at))
+            core_rows["banco_movimiento_detalles"].append({
+                "movimiento_id": movimiento_id,
+                "detalle_index": detail_index,
+                "cuenta_id": to_nonempty_text(detail.get("cuenta_id")),
+                "monto": to_decimal(detail.get("monto")),
+                "centro_costo_id": to_nonempty_text(detail.get("centro_costo_id")),
+                **base_meta,
+            })
+    return raw_rows, core_rows
+
+
 def derive_document_party_ids(record: dict[str, Any]) -> tuple[str | None, str | None, str | None, str | None]:
     persona_obj = record.get("persona")
     cliente_obj = record.get("cliente")
@@ -1659,6 +1978,12 @@ def normalize_records(
         return normalize_persona_records(records, run_id, ingested_at, page_number, request_params, fetched_at)
     if spec.key == "producto":
         return normalize_producto_records(records, run_id, ingested_at, page_number, request_params, fetched_at)
+    if spec.key == "inventario/guia":
+        return normalize_guia_records(records, run_id, ingested_at, page_number, request_params, fetched_at)
+    if spec.key == "banco/cuenta":
+        return normalize_banco_cuenta_records(records, run_id, ingested_at, page_number, request_params, fetched_at)
+    if spec.key == "banco/movimiento":
+        return normalize_banco_movimiento_records(records, run_id, ingested_at, page_number, request_params, fetched_at)
     if spec.key == "movimiento-inventario":
         return normalize_movimiento_records(records, run_id, ingested_at, page_number, request_params, fetched_at)
     if spec.key == "documento":
@@ -2059,10 +2384,13 @@ def refresh_watermarks(conn, run_id: str) -> None:
         "unidad": "SELECT NULL::date, NULL::date",
         "centro-costo": "SELECT NULL::date, NULL::date",
         "contabilidad/periodo": "SELECT MIN(fecha_inicio), MAX(fecha_fin) FROM core.periodos",
+        "banco/cuenta": "SELECT MIN(fecha_corte), MAX(fecha_corte) FROM core.banco_cuentas",
         "persona": "SELECT MIN(fecha_modificacion::date), MAX(fecha_modificacion::date) FROM core.personas",
         "producto": "SELECT MIN(fecha_creacion::date), MAX(fecha_creacion::date) FROM core.productos",
         "movimiento-inventario": "SELECT MIN(fecha), MAX(fecha) FROM core.movimientos",
         "documento": "SELECT MIN(fecha_emision), MAX(fecha_emision) FROM core.documentos",
+        "inventario/guia": "SELECT MIN(fecha_emision), MAX(fecha_emision) FROM core.guias",
+        "banco/movimiento": "SELECT MIN(fecha_emision), MAX(fecha_emision) FROM core.banco_movimientos",
         "documento/tickets": "SELECT MIN(fecha_emision), MAX(fecha_emision) FROM core.tickets_documentos",
         "contabilidad/asiento": "SELECT MIN(fecha), MAX(fecha) FROM core.asientos",
     }
@@ -2134,6 +2462,12 @@ def create_reporting_views(conn) -> None:
         UNION ALL
         SELECT 'documentos', COUNT(*)::bigint, MIN(fecha_emision), MAX(fecha_emision) FROM core.documentos
         UNION ALL
+        SELECT 'guias', COUNT(*)::bigint, MIN(fecha_emision), MAX(fecha_emision) FROM core.guias
+        UNION ALL
+        SELECT 'banco_cuentas', COUNT(*)::bigint, MIN(fecha_corte), MAX(fecha_corte) FROM core.banco_cuentas
+        UNION ALL
+        SELECT 'banco_movimientos', COUNT(*)::bigint, MIN(fecha_emision), MAX(fecha_emision) FROM core.banco_movimientos
+        UNION ALL
         SELECT 'tickets_documentos', COUNT(*)::bigint, MIN(fecha_emision), MAX(fecha_emision) FROM core.tickets_documentos
         UNION ALL
         SELECT 'asientos', COUNT(*)::bigint, MIN(fecha), MAX(fecha) FROM core.asientos
@@ -2193,10 +2527,59 @@ def create_reporting_views(conn) -> None:
         GROUP BY fecha
         ORDER BY fecha
         """,
+        """
+        CREATE OR REPLACE VIEW reporting.v_guias_resumen AS
+        SELECT
+            COALESCE(g.estado, '(sin estado)') AS estado,
+            COALESCE(b.nombre, '(sin bodega)') AS bodega,
+            COUNT(DISTINCT g.id)::bigint AS total_guias,
+            COUNT(DISTINCT gd.documento_id)::bigint AS documentos_vinculados,
+            COALESCE(SUM(gdet.cantidad), 0)::numeric(18,6) AS cantidad_total
+        FROM core.guias g
+        LEFT JOIN core.bodegas b ON b.id = g.bodega_id
+        LEFT JOIN core.guia_destinatarios gd ON gd.guia_id = g.id
+        LEFT JOIN core.guia_detalles gdet ON gdet.guia_id = g.id
+        GROUP BY 1, 2
+        ORDER BY total_guias DESC, estado, bodega
+        """,
+        """
+        CREATE OR REPLACE VIEW reporting.v_banco_movimientos_resumen AS
+        SELECT
+            COALESCE(bm.tipo_registro, '(sin tipo)') AS tipo_registro,
+            COALESCE(bc.nombre, '(sin cuenta bancaria)') AS cuenta_bancaria,
+            COUNT(DISTINCT bm.id)::bigint AS total_movimientos,
+            COALESCE(SUM(bmd.monto), 0)::numeric(18,6) AS monto_total
+        FROM core.banco_movimientos bm
+        LEFT JOIN core.banco_cuentas bc ON bc.id = bm.cuenta_bancaria_id
+        LEFT JOIN core.banco_movimiento_detalles bmd ON bmd.movimiento_id = bm.id
+        GROUP BY 1, 2
+        ORDER BY total_movimientos DESC, tipo_registro, cuenta_bancaria
+        """,
     ]
     with conn.cursor() as cur:
         for statement in statements:
             cur.execute(statement)
+    conn.commit()
+
+
+def validate_post_load_constraints(conn) -> None:
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            DO $$
+            BEGIN
+                IF EXISTS (
+                    SELECT 1
+                    FROM pg_constraint
+                    WHERE conname = 'fk_documento_cobros_cuenta_bancaria'
+                      AND NOT convalidated
+                ) THEN
+                    ALTER TABLE core.documento_cobros
+                    VALIDATE CONSTRAINT fk_documento_cobros_cuenta_bancaria;
+                END IF;
+            END $$;
+            """
+        )
     conn.commit()
 
 
@@ -2227,10 +2610,13 @@ def generate_final_report(conn, report_path: Path, run_id: str, args: argparse.N
         "unidad": "unidades",
         "centro-costo": "centros_costo",
         "contabilidad/periodo": "periodos",
+        "banco/cuenta": "banco_cuentas",
         "persona": "personas",
         "producto": "productos",
         "movimiento-inventario": "movimientos",
         "documento": "documentos",
+        "inventario/guia": "guias",
+        "banco/movimiento": "banco_movimientos",
         "documento/tickets": "tickets_documentos",
         "contabilidad/asiento": "asientos",
     }
@@ -2261,6 +2647,8 @@ def generate_final_report(conn, report_path: Path, run_id: str, args: argparse.N
     movimientos_rows = query_rows(conn, "SELECT tipo, bodega, total_movimientos, valor_total FROM reporting.v_movimientos_resumen LIMIT 15")
     documentos_rows = query_rows(conn, "SELECT tipo_documento, estado, total_documentos, monto_total FROM reporting.v_documentos_resumen LIMIT 15")
     asientos_rows = query_rows(conn, "SELECT fecha, total_asientos FROM reporting.v_asientos_resumen ORDER BY fecha DESC LIMIT 15")
+    guias_rows = query_rows(conn, "SELECT estado, bodega, total_guias, documentos_vinculados, cantidad_total FROM reporting.v_guias_resumen LIMIT 15")
+    banco_rows = query_rows(conn, "SELECT tipo_registro, cuenta_bancaria, total_movimientos, monto_total FROM reporting.v_banco_movimientos_resumen LIMIT 15")
     source_compare_rows = []
     for row in run_rows:
         table_name = primary_table_by_resource[row["resource"]]
@@ -2305,6 +2693,10 @@ def generate_final_report(conn, report_path: Path, run_id: str, args: argparse.N
         SELECT 'movimiento_detalles_producto_id_null', COUNT(*)::bigint FROM core.movimiento_detalles WHERE producto_id IS NULL
         UNION ALL
         SELECT 'tickets_items', COUNT(*)::bigint FROM core.tickets_items
+        UNION ALL
+        SELECT 'guia_detalles_producto_id_null', COUNT(*)::bigint FROM core.guia_detalles WHERE producto_id IS NULL
+        UNION ALL
+        SELECT 'banco_movimiento_detalles_cuenta_id_null', COUNT(*)::bigint FROM core.banco_movimiento_detalles WHERE cuenta_id IS NULL
         """
     )
     report_lines = [
@@ -2369,12 +2761,21 @@ def generate_final_report(conn, report_path: Path, run_id: str, args: argparse.N
         "",
         markdown_table(asientos_rows, ["fecha", "total_asientos"]),
         "",
+        "### Guias por estado y bodega",
+        "",
+        markdown_table(guias_rows, ["estado", "bodega", "total_guias", "documentos_vinculados", "cantidad_total"]),
+        "",
+        "### Movimientos bancarios por tipo y cuenta",
+        "",
+        markdown_table(banco_rows, ["tipo_registro", "cuenta_bancaria", "total_movimientos", "monto_total"]),
+        "",
         "## Incidencias",
         "",
         "- El backfill histórico usa paginación exhaustiva completa y no depende de filtros de fecha del backend.",
         "- El endpoint `movimiento-inventario` reportó un `count` mayor al número final de IDs únicos materializados; se conservó la versión única de cada movimiento.",
         "- `documento_detalles.producto_id` y `tickets_detalles.producto_id` aceptan `null`; esos registros se conservaron sin romper integridad.",
-        "- Los campos sin catálogo validado quedaron como atributos simples: `caja_id`, `cuenta_bancaria_id`, `banco_codigo_id`, `tarjeta_consumo_id`, `logistica`, `orden_domicilio_id`, `proyecto`.",
+        "- La integración nueva conecta `documento_cobros.cuenta_bancaria_id` con `core.banco_cuentas` y agrega `guias` y `banco_movimientos` como capas nuevas de logística y tesorería.",
+        "- Los campos sin catálogo validado quedaron como atributos simples: `caja_id`, `banco_codigo_id`, `tarjeta_consumo_id`, `logistica`, `orden_domicilio_id`, `proyecto`.",
         "- Cuando una referencia no vino en el catálogo origen, se creó un placeholder controlado para mantener la FK y dejar trazabilidad de la anomalía.",
         "- `tickets_items` se cargó únicamente cuando el payload incluyó elementos en `tickets[]`; en ausencia de items, el detalle igualmente quedó preservado.",
         "",
@@ -2416,6 +2817,8 @@ def run_backfill(args: argparse.Namespace) -> int:
             spec = RESOURCE_SPECS_BY_KEY[resource_key]
             print_progress(f"Loading {resource_key} into PostgreSQL...")
             process_resource(conn, client, spec, run_id, ingested_at, args.save_raw)
+        print_progress("Validating post-load constraints...")
+        validate_post_load_constraints(conn)
         print_progress("Refreshing watermarks and reporting views...")
         refresh_watermarks(conn, run_id)
         create_reporting_views(conn)
@@ -2475,6 +2878,8 @@ def run_refresh(args: argparse.Namespace) -> int:
                 )
             if spec.key == "documento":
                 changed_document_ids = sorted(changed_ids)
+        print_progress("Validating post-load constraints...")
+        validate_post_load_constraints(conn)
         print_progress("Refreshing watermarks and reporting views...")
         refresh_watermarks(conn, run_id)
         create_reporting_views(conn)

@@ -137,6 +137,8 @@ def build_manifest(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict[
         UNION ALL SELECT 'personas', COUNT(*)::bigint FROM core.personas
         UNION ALL SELECT 'productos', COUNT(*)::bigint FROM core.productos
         UNION ALL SELECT 'movimientos', COUNT(*)::bigint FROM core.movimientos
+        UNION ALL SELECT 'guias', COUNT(*)::bigint FROM core.guias
+        UNION ALL SELECT 'banco_movimientos', COUNT(*)::bigint FROM core.banco_movimientos
         UNION ALL SELECT 'asientos', COUNT(*)::bigint FROM core.asientos
         UNION ALL SELECT 'documento_detalles', COUNT(*)::bigint FROM core.documento_detalles
         UNION ALL SELECT 'asiento_detalles', COUNT(*)::bigint FROM core.asiento_detalles
@@ -488,6 +490,49 @@ def build_inventory(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
             LIMIT 20
             """
         ),
+        "guide_facts": query_rows(
+            conn,
+            """
+            SELECT
+                g.id,
+                g.fecha_emision::date AS date,
+                g.numero_documento,
+                g.estado,
+                g.bodega_id,
+                COALESCE(b.nombre, 'Sin bodega') AS bodega_nombre,
+                g.transportista_id,
+                COALESCE(tp.razon_social, tp.nombre_comercial, 'Sin transportista') AS transportista_nombre,
+                gd.destinatario_id,
+                COALESCE(dp.razon_social, dp.nombre_comercial, 'Sin destinatario') AS destinatario_nombre,
+                gd.documento_id,
+                CASE WHEN gd.documento_id IS NOT NULL THEN true ELSE false END AS linked_document,
+                COUNT(gd2.detalle_index)::bigint AS detalle_rows,
+                COALESCE(SUM(gd2.cantidad), 0)::numeric(18,2) AS cantidad_total
+            FROM core.guias g
+            LEFT JOIN core.bodegas b ON b.id = g.bodega_id
+            LEFT JOIN core.personas tp ON tp.id = g.transportista_id
+            LEFT JOIN core.guia_destinatarios gd ON gd.guia_id = g.id
+            LEFT JOIN core.personas dp ON dp.id = gd.destinatario_id
+            LEFT JOIN core.guia_detalles gd2 ON gd2.guia_id = g.id
+            GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12
+            ORDER BY g.fecha_emision, g.numero_documento
+            """
+        ),
+        "guide_bodega_summary": query_rows(
+            conn,
+            """
+            SELECT
+                COALESCE(b.nombre, 'Sin bodega') AS bodega_nombre,
+                COUNT(DISTINCT g.id)::bigint AS guias,
+                COALESCE(SUM(gd.cantidad), 0)::numeric(18,2) AS cantidad_total
+            FROM core.guias g
+            LEFT JOIN core.bodegas b ON b.id = g.bodega_id
+            LEFT JOIN core.guia_detalles gd ON gd.guia_id = g.id
+            GROUP BY 1
+            ORDER BY guias DESC, cantidad_total DESC
+            LIMIT 20
+            """
+        ),
     }
 
 
@@ -561,6 +606,43 @@ def build_accounting(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dic
             LIMIT 25
             """
         ),
+        "bank_movement_facts": query_rows(
+            conn,
+            """
+            SELECT
+                bm.id,
+                bm.fecha_emision::date AS date,
+                bm.tipo_registro,
+                bm.tipo,
+                bm.persona_id,
+                COALESCE(p.razon_social, p.nombre_comercial, 'Sin persona') AS persona_nombre,
+                bm.cuenta_bancaria_id,
+                COALESCE(bc.nombre, 'Sin cuenta bancaria') AS cuenta_bancaria_nombre,
+                COUNT(bmd.detalle_index)::bigint AS detalle_rows,
+                COALESCE(SUM(bmd.monto), 0)::numeric(18,2) AS monto_total
+            FROM core.banco_movimientos bm
+            LEFT JOIN core.personas p ON p.id = bm.persona_id
+            LEFT JOIN core.banco_cuentas bc ON bc.id = bm.cuenta_bancaria_id
+            LEFT JOIN core.banco_movimiento_detalles bmd ON bmd.movimiento_id = bm.id
+            GROUP BY 1,2,3,4,5,6,7,8
+            ORDER BY bm.fecha_emision, bm.id
+            """
+        ),
+        "bank_account_totals": query_rows(
+            conn,
+            """
+            SELECT
+                COALESCE(bc.nombre, 'Sin cuenta bancaria') AS cuenta_bancaria_nombre,
+                COUNT(*)::bigint AS movimientos,
+                COALESCE(SUM(bmd.monto), 0)::numeric(18,2) AS monto_total
+            FROM core.banco_movimientos bm
+            LEFT JOIN core.banco_cuentas bc ON bc.id = bm.cuenta_bancaria_id
+            LEFT JOIN core.banco_movimiento_detalles bmd ON bmd.movimiento_id = bm.id
+            GROUP BY 1
+            ORDER BY monto_total DESC, movimientos DESC
+            LIMIT 20
+            """
+        ),
     }
 
 
@@ -582,10 +664,13 @@ def build_quality(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict[s
                     WHEN 'unidad' THEN (SELECT COUNT(*)::bigint FROM core.unidades)
                     WHEN 'centro-costo' THEN (SELECT COUNT(*)::bigint FROM core.centros_costo)
                     WHEN 'contabilidad/periodo' THEN (SELECT COUNT(*)::bigint FROM core.periodos)
+                    WHEN 'banco/cuenta' THEN (SELECT COUNT(*)::bigint FROM core.banco_cuentas)
                     WHEN 'persona' THEN (SELECT COUNT(*)::bigint FROM core.personas)
                     WHEN 'producto' THEN (SELECT COUNT(*)::bigint FROM core.productos)
                     WHEN 'movimiento-inventario' THEN (SELECT COUNT(*)::bigint FROM core.movimientos)
                     WHEN 'documento' THEN (SELECT COUNT(*)::bigint FROM core.documentos)
+                    WHEN 'inventario/guia' THEN (SELECT COUNT(*)::bigint FROM core.guias)
+                    WHEN 'banco/movimiento' THEN (SELECT COUNT(*)::bigint FROM core.banco_movimientos)
                     WHEN 'documento/tickets' THEN (SELECT COUNT(*)::bigint FROM core.tickets_documentos)
                     WHEN 'contabilidad/asiento' THEN (SELECT COUNT(*)::bigint FROM core.asientos)
                 END AS core_primary_count,
@@ -597,10 +682,13 @@ def build_quality(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict[s
                     WHEN 'unidad' THEN (SELECT COUNT(*)::bigint FROM core.unidades)
                     WHEN 'centro-costo' THEN (SELECT COUNT(*)::bigint FROM core.centros_costo)
                     WHEN 'contabilidad/periodo' THEN (SELECT COUNT(*)::bigint FROM core.periodos)
+                    WHEN 'banco/cuenta' THEN (SELECT COUNT(*)::bigint FROM core.banco_cuentas)
                     WHEN 'persona' THEN (SELECT COUNT(*)::bigint FROM core.personas)
                     WHEN 'producto' THEN (SELECT COUNT(*)::bigint FROM core.productos)
                     WHEN 'movimiento-inventario' THEN (SELECT COUNT(*)::bigint FROM core.movimientos)
                     WHEN 'documento' THEN (SELECT COUNT(*)::bigint FROM core.documentos)
+                    WHEN 'inventario/guia' THEN (SELECT COUNT(*)::bigint FROM core.guias)
+                    WHEN 'banco/movimiento' THEN (SELECT COUNT(*)::bigint FROM core.banco_movimientos)
                     WHEN 'documento/tickets' THEN (SELECT COUNT(*)::bigint FROM core.tickets_documentos)
                     WHEN 'contabilidad/asiento' THEN (SELECT COUNT(*)::bigint FROM core.asientos)
                 END AS difference
@@ -952,7 +1040,7 @@ def build_source_overview(conn, meta: dict[str, Any], recent_runs: list[dict[str
     senior_summary = [
         {
             "title": "Lectura senior del estado actual",
-            "body": f"La base publicada al dashboard sigue siendo local y materializada, pero su fuente de origen real es Contifico API. Hoy el snapshot vigente parte del run {meta.get('run_id')} y refleja {summary.get('resources_processed', 0)} recursos procesados con {summary.get('tables_updated', 0)} tablas impactadas.",
+            "body": f"La base publicada al dashboard sigue siendo local y materializada, pero su fuente de origen real es Contifico API. Hoy el snapshot vigente parte del run {meta.get('run_id')} y refleja {summary.get('resources_processed', 0)} recursos procesados con {summary.get('tables_updated', 0)} tablas impactadas, incluyendo ya las capas de guias de remision y tesoreria bancaria.",
         },
         {
             "title": "Cadena de origen de los datos",
@@ -970,7 +1058,7 @@ def build_source_overview(conn, meta: dict[str, Any], recent_runs: list[dict[str
     source_chain = [
         {
             "layer": "Contifico API",
-            "role": "Fuente viva de personas, productos, documentos, tickets, movimientos, asientos y catalogos.",
+            "role": "Fuente viva de personas, productos, documentos, tickets, movimientos, asientos, guias de remision, cuentas bancarias, movimientos bancarios y catalogos.",
         },
         {
             "layer": "contifico_pg_backfill.py",
@@ -1146,10 +1234,13 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
                 er.resource,
                 max(er.source_count)::bigint AS source_count,
                 CASE er.resource
+                    WHEN 'banco/cuenta' THEN (SELECT COUNT(*) FROM core.banco_cuentas)
                     WHEN 'persona' THEN (SELECT COUNT(*) FROM core.personas)
                     WHEN 'producto' THEN (SELECT COUNT(*) FROM core.productos)
                     WHEN 'movimiento-inventario' THEN (SELECT COUNT(*) FROM core.movimientos)
                     WHEN 'documento' THEN (SELECT COUNT(*) FROM core.documentos)
+                    WHEN 'inventario/guia' THEN (SELECT COUNT(*) FROM core.guias)
+                    WHEN 'banco/movimiento' THEN (SELECT COUNT(*) FROM core.banco_movimientos)
                     WHEN 'documento/tickets' THEN (SELECT COUNT(*) FROM core.tickets_documentos)
                     WHEN 'contabilidad/asiento' THEN (SELECT COUNT(*) FROM core.asientos)
                     WHEN 'contabilidad/periodo' THEN (SELECT COUNT(*) FROM core.periodos)
@@ -1172,6 +1263,7 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         conn,
         """
         SELECT 'categorias' AS table_name, COUNT(*)::bigint AS placeholder_count FROM core.categorias WHERE nombre LIKE '__missing__:%'
+        UNION ALL SELECT 'banco_cuentas', COUNT(*)::bigint FROM core.banco_cuentas WHERE nombre LIKE '__missing__:%'
         UNION ALL SELECT 'productos', COUNT(*)::bigint FROM core.productos WHERE nombre LIKE '__missing__:%'
         UNION ALL SELECT 'personas', COUNT(*)::bigint FROM core.personas WHERE razon_social LIKE '__missing__:%'
         UNION ALL SELECT 'documentos', COUNT(*)::bigint FROM core.documentos WHERE documento LIKE '__missing__:%'
@@ -1183,6 +1275,8 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         SELECT 'documento_detalles_producto_id_null' AS metric, COUNT(*)::bigint AS value FROM core.documento_detalles WHERE producto_id IS NULL
         UNION ALL SELECT 'tickets_detalles_producto_id_null', COUNT(*)::bigint FROM core.tickets_detalles WHERE producto_id IS NULL
         UNION ALL SELECT 'documentos_sin_persona_id', COUNT(*)::bigint FROM core.documentos WHERE persona_id IS NULL
+        UNION ALL SELECT 'guia_detalles_producto_id_null', COUNT(*)::bigint FROM core.guia_detalles WHERE producto_id IS NULL
+        UNION ALL SELECT 'banco_movimiento_detalles_cuenta_id_null', COUNT(*)::bigint FROM core.banco_movimiento_detalles WHERE cuenta_id IS NULL
         """
     )
     consistency_review = build_consistency_review(conn)
@@ -1226,10 +1320,16 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
           + (SELECT COUNT(*) FROM core.marcas)
           + (SELECT COUNT(*) FROM core.unidades)
           + (SELECT COUNT(*) FROM core.cuentas_contables)
+          + (SELECT COUNT(*) FROM core.banco_cuentas)
           + (SELECT COUNT(*) FROM core.centros_costo)
           + (SELECT COUNT(*) FROM core.periodos)
           + (SELECT COUNT(*) FROM core.personas)
           + (SELECT COUNT(*) FROM core.productos)
+          + (SELECT COUNT(*) FROM core.guias)
+          + (SELECT COUNT(*) FROM core.guia_destinatarios)
+          + (SELECT COUNT(*) FROM core.guia_detalles)
+          + (SELECT COUNT(*) FROM core.banco_movimientos)
+          + (SELECT COUNT(*) FROM core.banco_movimiento_detalles)
           + (SELECT COUNT(*) FROM core.movimientos)
           + (SELECT COUNT(*) FROM core.movimiento_detalles)
           + (SELECT COUNT(*) FROM core.documentos)
@@ -1781,8 +1881,9 @@ def build_database(
         ("Comercial", ["core.documentos", "core.documento_detalles", "core.documento_cobros"], "commercial.json"),
         ("Clientes", ["core.personas"], "customers.json"),
         ("Productos", ["core.productos"], "products.json"),
-        ("Inventario", ["core.movimientos", "core.movimiento_detalles"], "inventory.json"),
+        ("Inventario", ["core.movimientos", "core.movimiento_detalles", "core.guias", "core.guia_destinatarios", "core.guia_detalles"], "inventory.json"),
         ("Contabilidad", ["core.asientos", "core.asiento_detalles"], "accounting.json"),
+        ("Tesoreria", ["core.banco_cuentas", "core.banco_movimientos", "core.banco_movimiento_detalles"], "accounting.json"),
         ("Calidad", ["meta.extract_runs", "meta.watermarks", "meta.load_metrics"], "quality.json"),
         ("Tecnica", ["meta.extract_runs", "meta.watermarks", "meta.load_metrics"], "technical.json"),
         ("Tablas analiticas", ["core.documentos", "core.productos", "core.movimientos", "core.asientos"], "tables.json"),
