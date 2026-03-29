@@ -38,6 +38,7 @@ BACKFILL_MODE = "backfill"
 REFRESH_MODE = "refresh"
 DEFAULT_OVERLAP_DAYS = 2
 INSERT_BATCH_SIZE = 2000
+DOCUMENT_DISCOVERY_MAX_PAGES = 10
 
 
 RESOURCE_ORDER = (
@@ -1713,25 +1714,25 @@ def filter_records_by_window(
     return filtered
 
 
-def fetch_ticket_documents_by_id(
+def fetch_payloads_by_id(
     client: ApiClient,
-    spec: ResourceSpec,
-    document_ids: list[str],
+    path_prefix: str,
+    entity_ids: list[str],
 ) -> tuple[list[tuple[int, dict[str, Any]]], int]:
-    unique_ids = [document_id for document_id in dict.fromkeys(document_ids) if document_id]
+    unique_ids = [entity_id for entity_id in dict.fromkeys(entity_ids) if entity_id]
     if not unique_ids:
         return [], 0
     worker_count = min(max(client.max_workers * 2, 1), 16, len(unique_ids))
     pages: list[tuple[int, dict[str, Any]]] = []
 
-    def fetch_single(index: int, document_id: str) -> tuple[int, dict[str, Any] | None]:
-        payload = client.get_json_or_none(f"{spec.path}{document_id}/")
+    def fetch_single(index: int, entity_id: str) -> tuple[int, dict[str, Any] | None]:
+        payload = client.get_json_or_none(f"{path_prefix}{entity_id}/")
         return index, payload
 
     with ThreadPoolExecutor(max_workers=worker_count) as executor:
         futures = [
-            executor.submit(fetch_single, index, document_id)
-            for index, document_id in enumerate(unique_ids, start=1)
+            executor.submit(fetch_single, index, entity_id)
+            for index, entity_id in enumerate(unique_ids, start=1)
         ]
         for future in as_completed(futures):
             index, payload = future.result()
@@ -1739,6 +1740,55 @@ def fetch_ticket_documents_by_id(
                 pages.append((index, payload))
     pages.sort(key=lambda item: item[0])
     return pages, len(unique_ids)
+
+
+def document_record_in_window(record: dict[str, Any], window: tuple[dt.date, dt.date]) -> bool:
+    for field_name in ("fecha_modificacion", "fecha_creacion", "fecha_emision"):
+        record_date = parse_date(record.get(field_name))
+        if record_date and window[0] <= record_date <= window[1]:
+            return True
+    return False
+
+
+def recent_document_ids_from_db(conn, window: tuple[dt.date, dt.date]) -> set[str]:
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT id
+            FROM core.documentos
+            WHERE
+                (fecha_modificacion IS NOT NULL AND fecha_modificacion BETWEEN %s AND %s)
+                OR (fecha_creacion IS NOT NULL AND fecha_creacion BETWEEN %s AND %s)
+                OR (fecha_emision IS NOT NULL AND fecha_emision BETWEEN %s AND %s)
+            """,
+            (window[0], window[1], window[0], window[1], window[0], window[1]),
+        )
+        return {row[0] for row in cur.fetchall() if row and row[0]}
+
+
+def fetch_document_pages_for_refresh(
+    conn,
+    client: ApiClient,
+    spec: ResourceSpec,
+    window: tuple[dt.date, dt.date],
+) -> tuple[list[tuple[int, dict[str, Any]]], int, int]:
+    candidate_ids = recent_document_ids_from_db(conn, window)
+    discovery_pages = 0
+    for page_number in range(1, DOCUMENT_DISCOVERY_MAX_PAGES + 1):
+        payload = client.get_json(spec.path, params={"page": str(page_number)})
+        rows = payload.get("results", [])
+        if not isinstance(rows, list):
+            raise RuntimeError(f"Expected list of records for {spec.key}")
+        discovery_pages += 1
+        for record in rows:
+            entity_id = to_nonempty_text(record.get("id"))
+            if entity_id and document_record_in_window(record, window):
+                candidate_ids.add(entity_id)
+        next_url = payload.get("next")
+        if not next_url:
+            break
+    detail_pages, detail_count = fetch_payloads_by_id(client, spec.path, sorted(candidate_ids))
+    return detail_pages, detail_count, discovery_pages + detail_count
 
 
 def delete_rows_by_ids(cur, table_name: str, column_name: str, ids: set[str]) -> None:
@@ -1870,9 +1920,13 @@ def process_resource_refresh(
     affected_parent_ids: set[str] = set()
     try:
         if spec.key == "documento/tickets":
-            pages, source_count = fetch_ticket_documents_by_id(client, spec, changed_document_ids or [])
+            pages, source_count = fetch_payloads_by_id(client, spec.path, changed_document_ids or [])
             pages_fetched = len(changed_document_ids or [])
             affected_parent_ids = {document_id for document_id in (changed_document_ids or []) if document_id}
+        elif spec.key == "documento":
+            if not window:
+                raise RuntimeError("Refresh for 'documento' requires a resolved date window")
+            pages, source_count, pages_fetched = fetch_document_pages_for_refresh(conn, client, spec, window)
         else:
             pages, source_count = fetch_refresh_pages(client, spec, window)
             pages_fetched = len(pages)
@@ -1884,7 +1938,7 @@ def process_resource_refresh(
         for page_number, payload in pages:
             fetched_at = parse_iso_timestamp(iso_now())
             page_records = payload if spec.response_kind == "flat" else payload.get("results", [])
-            if spec.key == "documento/tickets":
+            if spec.key in {"documento", "documento/tickets"}:
                 page_records = [payload]
             if not isinstance(page_records, list):
                 raise RuntimeError(f"Expected list of records for {spec.key}")
