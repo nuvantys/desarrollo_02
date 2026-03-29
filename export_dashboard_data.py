@@ -1132,7 +1132,6 @@ def build_priority_matrix(consistency_review: dict[str, list[dict[str, Any]]]) -
 
 
 def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict[str, Any]:
-    latest_run_id = meta.get("run_id")
     source_vs_core = query_rows(
         conn,
         """
@@ -1206,6 +1205,8 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         LIMIT 12
         """,
     )
+    last_run = recent_runs[0] if recent_runs else {}
+    latest_run_id = last_run.get("run_id") or meta.get("run_id")
     resource_metrics = (
         query_rows(
             conn,
@@ -1263,7 +1264,6 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
     updated_tables = len({row["table_name"] for row in load_metrics})
     resources_success = sum(1 for row in resource_metrics if row.get("status") == "success")
     resources_failed = sum(1 for row in resource_metrics if row.get("status") == "failed")
-    last_run = recent_runs[0] if recent_runs else {}
     total_core_rows = sum(int(row.get("row_count") or 0) for row in load_metrics if row.get("stage") == "core")
     orphan_total = sum(int(row.get("orphan_count") or 0) for row in fk_health)
     movement_anomaly = next((row for row in source_vs_core if row.get("resource") == "movimiento-inventario"), None)

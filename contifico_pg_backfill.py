@@ -1791,6 +1791,40 @@ def fetch_document_pages_for_refresh(
     return detail_pages, detail_count, discovery_pages + detail_count
 
 
+def fetch_ordered_pages_for_window(
+    client: ApiClient,
+    spec: ResourceSpec,
+    window: tuple[dt.date, dt.date],
+) -> tuple[list[tuple[int, dict[str, Any]]], int, int]:
+    pages: list[tuple[int, dict[str, Any]]] = []
+    page_number = 1
+    relevant_count = 0
+    while True:
+        payload = client.get_json(spec.path, params={"page": str(page_number)})
+        rows = payload.get("results", [])
+        if not isinstance(rows, list):
+            raise RuntimeError(f"Expected list of records for {spec.key}")
+        filtered_rows = filter_records_by_window(spec, rows, window)
+        if filtered_rows:
+            copied_payload = dict(payload)
+            copied_payload["results"] = filtered_rows
+            pages.append((page_number, copied_payload))
+            relevant_count += len(filtered_rows)
+        record_dates = [
+            parse_date(row.get(spec.record_date_field))
+            for row in rows
+            if spec.record_date_field
+        ]
+        record_dates = [value for value in record_dates if value is not None]
+        next_url = payload.get("next")
+        if not next_url:
+            break
+        if record_dates and max(record_dates) < window[0]:
+            break
+        page_number += 1
+    return pages, relevant_count, page_number
+
+
 def delete_rows_by_ids(cur, table_name: str, column_name: str, ids: set[str]) -> None:
     if not ids:
         return
@@ -1927,6 +1961,10 @@ def process_resource_refresh(
             if not window:
                 raise RuntimeError("Refresh for 'documento' requires a resolved date window")
             pages, source_count, pages_fetched = fetch_document_pages_for_refresh(conn, client, spec, window)
+        elif spec.key == "movimiento-inventario":
+            if not window:
+                raise RuntimeError("Refresh for 'movimiento-inventario' requires a resolved date window")
+            pages, source_count, pages_fetched = fetch_ordered_pages_for_window(client, spec, window)
         else:
             pages, source_count = fetch_refresh_pages(client, spec, window)
             pages_fetched = len(pages)

@@ -1,8 +1,8 @@
 {
-  "run_id": "20260329012442",
+  "run_id": "20260329013338",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-03-28T20:26:54-05:00",
+  "generated_at": "2026-03-28T20:35:46-05:00",
   "filters_available": {
     "document_types": [
       {
@@ -627,12 +627,6 @@
       "difference": 0
     },
     {
-      "resource": "marca",
-      "source_count": 16,
-      "core_primary_count": 16,
-      "difference": 0
-    },
-    {
       "resource": "centro-costo",
       "source_count": 2,
       "core_primary_count": 2,
@@ -642,6 +636,12 @@
       "resource": "contabilidad/periodo",
       "source_count": 8,
       "core_primary_count": 8,
+      "difference": 0
+    },
+    {
+      "resource": "marca",
+      "source_count": 16,
+      "core_primary_count": 16,
       "difference": 0
     },
     {
@@ -664,9 +664,9 @@
     },
     {
       "resource": "movimiento-inventario",
-      "source_count": 14101,
+      "source_count": 12,
       "core_primary_count": 9024,
-      "difference": 5077
+      "difference": -9012
     },
     {
       "resource": "documento",
