@@ -536,6 +536,12 @@ function renderTable(targetId, rows, columns) {
 
 function normalizeCloudError(message) {
   const text = String(message || "");
+  if (text.includes("Failed to fetch") || text.includes("NetworkError")) {
+    return "No fue posible alcanzar la capa cloud. El proyecto de Supabase puede estar pausado o devolviendo un error temporal de red.";
+  }
+  if (text.includes("521")) {
+    return "Supabase esta respondiendo con 521. El host del proyecto no esta atendiendo solicitudes en este momento.";
+  }
   if (text.includes("404")) {
     return "Las funciones cloud de refresh todavia no estan desplegadas en Supabase. El dashboard sigue usando el ultimo snapshot estable.";
   }
@@ -543,6 +549,14 @@ function normalizeCloudError(message) {
     return "La capa cloud respondio sin autorizacion. Revisa secrets y permisos del despliegue.";
   }
   return text || "La capa cloud no esta disponible en este momento.";
+}
+
+function normalizeAuthError(error) {
+  const text = String(error?.message || error || "");
+  if (text.includes("Failed to fetch") || text.includes("NetworkError")) {
+    return "Supabase Auth no responde en este momento. El dashboard no puede iniciar sesion hasta que el host del proyecto vuelva a estar disponible.";
+  }
+  return normalizeCloudError(text);
 }
 
 function registerTableExport(key, rows, columns) {
@@ -2610,7 +2624,7 @@ function bindEvents() {
       elements.authPassword.value = "";
       setAuthMessage("Sesion iniciada correctamente.", "success");
     } catch (error) {
-      setAuthMessage(`No fue posible iniciar sesion. ${error.message}`, "error");
+      setAuthMessage(`No fue posible iniciar sesion. ${normalizeAuthError(error)}`, "error");
     } finally {
       setButtonBusy(elements.authSubmit, false);
     }
