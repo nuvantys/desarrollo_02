@@ -1,5 +1,6 @@
 window.CONTIFICO_CONFIG = {
   snapshotBase: "./data",
+  bootstrapApiUrl: "https://anaeoorbwnpstuievcwr.supabase.co/functions/v1/dashboard-bootstrap",
   snapshotApiUrl: "https://anaeoorbwnpstuievcwr.supabase.co/functions/v1/dashboard-snapshot",
   refreshApiUrl: "https://anaeoorbwnpstuievcwr.supabase.co/functions/v1/contifico-refresh",
   refreshStatusUrl: "https://anaeoorbwnpstuievcwr.supabase.co/functions/v1/contifico-refresh-status",

@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.dashboard-snapshot]
 verify_jwt = false
+
+[functions.dashboard-bootstrap]
+verify_jwt = false
