@@ -385,6 +385,17 @@ function setButtonBusy(button, isBusy, busyLabel = "Procesando...") {
   button.textContent = isBusy ? busyLabel : buttonLabels.get(button);
 }
 
+function setControlEnabled(button, enabled) {
+  if (!button) return;
+  button.disabled = !enabled;
+  if (enabled) {
+    button.removeAttribute("disabled");
+    button.setAttribute("aria-disabled", "false");
+  } else {
+    button.setAttribute("aria-disabled", "true");
+  }
+}
+
 function updateSessionChrome() {
   if (!authState.enabled) {
     elements.sessionUserEmail.textContent = "Modo sin login";
@@ -2097,9 +2108,9 @@ function renderTechnicalLoadingState() {
   elements.technical.progressPercent.textContent = `${phaseState.percent}%`;
   elements.technical.progressDetail.textContent = phaseState.detail;
   renderProgressSteps(phaseState.steps);
-  elements.technical.refreshQuickButton.disabled = !canDispatchRefresh;
-  elements.technical.refreshFullButton.disabled = !canDispatchRefresh;
-  elements.technical.reloadButton.disabled = !authState.session || dataState.logoutInFlight;
+  setControlEnabled(elements.technical.refreshQuickButton, canDispatchRefresh);
+  setControlEnabled(elements.technical.refreshFullButton, canDispatchRefresh);
+  setControlEnabled(elements.technical.reloadButton, Boolean(authState.session && !dataState.logoutInFlight));
   renderMetricCards(elements.technical.summaryMetrics, [
     { label: "Ultima actualizacion", value: "--", caption: "Se completara cuando el bootstrap tecnico llegue desde la nube." },
     { label: "Duracion ultima corrida", value: "--", caption: "Se mostrara cuando exista un snapshot tecnico disponible." },
@@ -2162,9 +2173,9 @@ function renderTechnical() {
       ? "El workflow esta en curso; el porcentaje se calcula con etapas reales si estan disponibles y, como respaldo, con el tiempo transcurrido frente a la ultima corrida conocida."
       : "No hay una corrida activa en este momento.");
   renderProgressSteps(progressSteps);
-  elements.technical.reloadButton.disabled = !authState.session || dataState.logoutInFlight;
-  elements.technical.refreshQuickButton.disabled = !canDispatchRefresh || runtimeStatus === "running";
-  elements.technical.refreshFullButton.disabled = !canDispatchRefresh || runtimeStatus === "running";
+  setControlEnabled(elements.technical.reloadButton, Boolean(authState.session && !dataState.logoutInFlight));
+  setControlEnabled(elements.technical.refreshQuickButton, canDispatchRefresh && runtimeStatus !== "running");
+  setControlEnabled(elements.technical.refreshFullButton, canDispatchRefresh && runtimeStatus !== "running");
   renderMetricCards(elements.technical.summaryMetrics, [
     { label: "Ultima actualizacion", value: formatDateTime(technical.generated_at), caption: "Hora efectiva del snapshot tecnico publicado." },
     { label: "Duracion ultima corrida", value: formatDuration(technical.last_refresh_duration_seconds), caption: "Tiempo total de la ultima actualizacion tecnica mas snapshot." },
