@@ -1,10 +1,10 @@
 project_id = "anaeoorbwnpstuievcwr"
 
 [functions.contifico-refresh]
-verify_jwt = true
+verify_jwt = false
 
 [functions.contifico-refresh-status]
-verify_jwt = true
+verify_jwt = false
 
 [functions.dashboard-snapshot]
-verify_jwt = true
+verify_jwt = false
