@@ -60,7 +60,13 @@ window.CONTIFICO_CONFIG = {
 
 ## Publicacion
 
-Publica `dashboard/` en Vercel o Netlify. No abras `index.html` con `file://`.
+El repo ya incluye `deploy-dashboard-pages.yml` para publicar `dashboard/` con GitHub Actions.
+
+Notas practicas:
+
+- si GitHub Pages queda disponible para el repo, la URL publica saldra del propio workflow
+- si GitHub bloquea Pages por visibilidad privada + plan de la organizacion, usa Vercel o Netlify con la misma carpeta `dashboard/`
+- no abras `index.html` con `file://`
 
 ## Nota
 

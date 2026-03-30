@@ -49,8 +49,17 @@ window.CONTIFICO_CONFIG = {
 
 ## Recomendacion de hosting
 
-Publica `dashboard/` en Vercel o Netlify. GitHub Pages solo conviene si la configuracion del snapshot y del login queda ya cerrada y no necesitas headers o reglas adicionales.
+El repo ya quedo listo para publicar `dashboard/` por GitHub Pages con el workflow `.github/workflows/deploy-dashboard-pages.yml`.
+
+Lectura correcta del escenario actual:
+
+- si `desarrollo_02` pasa a publico, GitHub Pages es la via mas directa
+- si el repo sigue privado dentro de una organizacion `Free`, GitHub puede no permitir Pages y entonces la salida correcta es Vercel o Netlify
+
+La aplicacion ya no depende de `localhost`; solo necesita un hosting estatico para servir `dashboard/`.
 
 ## Pendiente operativo
 
-Hace falta crear al menos un usuario en Supabase Auth y cargar la `supabaseAnonKey` en `dashboard/config.js` o inyectarla desde el hosting.
+- El usuario `admin@nuvantys.com` ya puede autenticarse en Supabase Auth.
+- `dashboard/config.js` ya quedo con la `supabaseAnonKey` real.
+- Si se usa GitHub Pages, revisa el primer run de `deploy-dashboard-pages` en la pestaña `Actions`.
