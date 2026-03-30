@@ -6,7 +6,6 @@
     <title>Contifico Analytics</title>
     <link rel="stylesheet" href="./styles.css" />
     <script src="./config.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
     <section class="auth-shell" id="auth-shell">
@@ -14,7 +13,7 @@
         <p class="eyebrow">Acceso seguro</p>
         <h1>Ingreso al dashboard Contifico</h1>
         <p class="auth-copy">
-          El snapshot analitico y el refresh cloud ahora se consumen desde Supabase con sesion autenticada. Inicia sesion para revisar la base, operar el pipeline y explorar la analitica.
+          Este sitio usa un acceso simple de frontend para abrir el dashboard publicado y explorar el snapshot analitico en la nube. Inicia sesion para revisar la base, navegar la analitica y usar la vista tecnica sin depender de autenticacion externa.
         </p>
         <form id="auth-form" class="auth-form">
           <label>
@@ -31,11 +30,11 @@
         <div class="auth-notes">
           <article class="auth-note-card">
             <h3>Fuente de verdad</h3>
-            <p>La base maestra vive en Supabase y el refresh cloud consulta directo a Contifico.</p>
+            <p>La interfaz lee los JSON publicados junto al sitio, sin depender de Auth externo para mostrar la analitica.</p>
           </article>
           <article class="auth-note-card">
             <h3>Operacion</h3>
-            <p>El login habilita la lectura privada del snapshot y el control de actualizacion bajo demanda.</p>
+            <p>El login simple abre el sitio publicado. La actualizacion remota queda fuera de este modo para priorizar una experiencia estable y rapida.</p>
           </article>
         </div>
       </article>
@@ -70,7 +69,7 @@
             <div>
               <p class="eyebrow">Revision tecnica</p>
               <h2>Estado de la base y del pipeline Contifico</h2>
-              <p id="technical-subtitle">Cargando estado tecnico del snapshot y de la base maestra en Supabase...</p>
+              <p id="technical-subtitle">Cargando estado tecnico del snapshot publicado y preparando la vista web...</p>
             </div>
             <div class="technical-actions">
               <button id="technical-refresh-quick-button" class="primary-button" type="button">Refresh rapido</button>
@@ -90,7 +89,7 @@
             <div class="technical-runtime-detail">
               <div class="technical-status-card">
                 <h4>Proceso actual</h4>
-                <p id="technical-runtime-message">Preparando lectura del estado del orquestador y de Supabase.</p>
+                <p id="technical-runtime-message">Preparando lectura del estado del snapshot publicado y del orquestador.</p>
                 <div class="progress-header">
                   <strong id="technical-progress-stage">Esperando estado</strong>
                   <span id="technical-progress-percent">0%</span>

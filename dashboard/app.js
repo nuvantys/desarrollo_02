@@ -22,8 +22,14 @@ const refreshApiUrl = appConfig.refreshApiUrl || "";
 const refreshStatusUrl = appConfig.refreshStatusUrl || "";
 const supabaseUrl = appConfig.supabaseUrl || "";
 const supabaseAnonKey = appConfig.supabaseAnonKey || "";
-const secureModeRequested = Boolean(bootstrapApiUrl || snapshotApiUrl || refreshApiUrl || refreshStatusUrl || supabaseUrl);
-const authEnabled = Boolean((bootstrapApiUrl || snapshotApiUrl || refreshApiUrl || refreshStatusUrl) && supabaseUrl && supabaseAnonKey && window.supabase?.createClient);
+const simpleLoginConfig = appConfig.simpleLogin || {};
+const simpleSessionKey = "contifico_dashboard_simple_login_v2";
+const simpleAuthEnabled = Boolean(simpleLoginConfig.email && simpleLoginConfig.password);
+const secureModeRequested = Boolean(!simpleAuthEnabled && (bootstrapApiUrl || snapshotApiUrl || refreshApiUrl || refreshStatusUrl || supabaseUrl));
+const authEnabled = Boolean(
+  simpleAuthEnabled ||
+  ((bootstrapApiUrl || snapshotApiUrl || refreshApiUrl || refreshStatusUrl) && supabaseUrl && supabaseAnonKey && window.supabase?.createClient),
+);
 
 const analyticsFileNames = [
   "manifest.json",
@@ -72,6 +78,7 @@ const technicalState = {
 
 const authState = {
   enabled: authEnabled,
+  provider: simpleAuthEnabled ? "simple" : authEnabled ? "supabase" : "none",
   client: null,
   session: null,
   user: null,
@@ -97,9 +104,9 @@ const dataState = {
 const tableExports = new Map();
 const buttonLabels = new WeakMap();
 const cacheKeys = {
-  bootstrap: "contifico_dashboard_bootstrap_v2",
-  analytics: "contifico_dashboard_analytics_v2",
-  database: "contifico_dashboard_database_v2",
+  bootstrap: "contifico_dashboard_bootstrap_v3",
+  analytics: "contifico_dashboard_analytics_v3",
+  database: "contifico_dashboard_database_v3",
   legacySnapshot: "contifico_dashboard_snapshot_v1",
   legacyTechnical: "contifico_dashboard_technical_v1",
 };
@@ -220,6 +227,9 @@ function clearCachedData() {
       cacheKeys.bootstrap,
       cacheKeys.analytics,
       cacheKeys.database,
+      "contifico_dashboard_bootstrap_v2",
+      "contifico_dashboard_analytics_v2",
+      "contifico_dashboard_database_v2",
       cacheKeys.legacySnapshot,
       cacheKeys.legacyTechnical,
     ].forEach((key) => window.localStorage.removeItem(key));
@@ -247,6 +257,42 @@ function clearSupabaseStoredSession() {
       }
     }
     toDelete.forEach((key) => store.removeItem(key));
+  }
+}
+
+function readSimpleSession() {
+  try {
+    window.localStorage.removeItem("contifico_dashboard_simple_login_v1");
+    const raw = window.sessionStorage.getItem(simpleSessionKey);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed?.email) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function writeSimpleSession(email) {
+  const payload = {
+    email,
+    provider: "simple",
+    issued_at: new Date().toISOString(),
+  };
+  try {
+    window.sessionStorage.setItem(simpleSessionKey, JSON.stringify(payload));
+  } catch {
+    // Ignore storage errors in demo mode.
+  }
+  return payload;
+}
+
+function clearSimpleSession() {
+  try {
+    window.sessionStorage.removeItem(simpleSessionKey);
+    window.localStorage.removeItem("contifico_dashboard_simple_login_v1");
+  } catch {
+    // Ignore storage errors in demo mode.
   }
 }
 
@@ -295,8 +341,15 @@ function resetUiToSignedOutState() {
   updateSessionChrome();
   setAppVisibility(false);
   elements.authForm?.reset();
-  elements.heroText.textContent = "Inicia sesion para cargar el snapshot privado y habilitar el refresh cloud.";
-  elements.technical.subtitle.textContent = "Inicia sesion para revisar el estado tecnico, la analitica y la base en Supabase.";
+  if (authState.provider === "simple") {
+    elements.authEmail.value = simpleLoginConfig.email || "";
+  }
+  elements.heroText.textContent = authState.provider === "simple"
+    ? "Inicia sesion para abrir el snapshot publicado y explorar la analitica web."
+    : "Inicia sesion para cargar el snapshot privado y habilitar el refresh cloud.";
+  elements.technical.subtitle.textContent = authState.provider === "simple"
+    ? "Inicia sesion para revisar el estado tecnico y la analitica del snapshot publicado."
+    : "Inicia sesion para revisar el estado tecnico, la analitica y la base en Supabase.";
 }
 
 function primeAnalyticsUi() {
@@ -335,7 +388,17 @@ function setButtonBusy(button, isBusy, busyLabel = "Procesando...") {
 function updateSessionChrome() {
   if (!authState.enabled) {
     elements.sessionUserEmail.textContent = "Modo sin login";
-    elements.sessionUserStatus.textContent = "El dashboard esta usando snapshot local o publico.";
+    elements.sessionUserStatus.textContent = "El dashboard esta usando el snapshot publicado del sitio.";
+    return;
+  }
+  if (authState.provider === "simple" && !authState.user) {
+    elements.sessionUserEmail.textContent = "Sesion web no iniciada";
+    elements.sessionUserStatus.textContent = "Inicia sesion para abrir el dashboard publicado.";
+    return;
+  }
+  if (authState.provider === "simple" && authState.user) {
+    elements.sessionUserEmail.textContent = authState.user.email || "Usuario web";
+    elements.sessionUserStatus.textContent = "Sesion web activa.";
     return;
   }
   if (!authState.user) {
@@ -349,6 +412,9 @@ function updateSessionChrome() {
 
 function authHeaders(extraHeaders = {}) {
   const headers = { ...extraHeaders };
+  if (authState.provider !== "supabase") {
+    return headers;
+  }
   if (supabaseAnonKey) {
     headers.apikey = supabaseAnonKey;
   }
@@ -359,7 +425,7 @@ function authHeaders(extraHeaders = {}) {
 }
 
 async function fetchSnapshotPayload(file, options = {}, timeoutMs = 15000) {
-  if (!authState.enabled) {
+  if (authState.provider !== "supabase") {
     return fetchJson(`${snapshotBase}/${file}`, options, timeoutMs);
   }
   const { headers = {}, ...restOptions } = options;
@@ -371,6 +437,26 @@ async function fetchSnapshotPayload(file, options = {}, timeoutMs = 15000) {
 
 async function signInWithPassword(email, password) {
   dataState.logoutInFlight = false;
+  if (authState.provider === "simple") {
+    const normalizedEmail = String(email || "").trim().toLowerCase();
+    const expectedEmail = String(simpleLoginConfig.email || "").trim().toLowerCase();
+    if (normalizedEmail !== expectedEmail || password !== simpleLoginConfig.password) {
+      throw new Error("Credenciales incorrectas. Usa el correo y la contrasena configurados para este dashboard.");
+    }
+    const session = writeSimpleSession(simpleLoginConfig.email);
+    authState.session = { access_token: "frontend-simple-login", provider: "simple" };
+    authState.user = { email: session.email };
+    updateSessionChrome();
+    setAppVisibility(true);
+    const ready = await bootstrapDashboard();
+    if (!ready) {
+      throw new Error("No fue posible cargar el snapshot publicado.");
+    }
+    if (state.ui.activeTab !== "technical-view") {
+      await activateTabAndLoad(state.ui.activeTab);
+    }
+    return;
+  }
   const { error } = await authState.client.auth.signInWithPassword({ email, password });
   if (error) {
     throw error;
@@ -386,11 +472,12 @@ async function signOutSession() {
   clearPolling();
   abortActiveRequests();
   clearCachedData();
+  clearSimpleSession();
   clearSupabaseStoredSession();
   resetUiToSignedOutState();
   setAuthMessage("Sesion cerrada correctamente.", "success");
 
-  if (!client) {
+  if (authState.provider !== "supabase" || !client) {
     dataState.logoutInFlight = false;
     return;
   }
@@ -536,6 +623,9 @@ function renderTable(targetId, rows, columns) {
 
 function normalizeCloudError(message) {
   const text = String(message || "");
+  if (authState.provider === "simple") {
+    return text || "No fue posible leer el snapshot publicado del dashboard.";
+  }
   if (text.includes("Failed to fetch") || text.includes("NetworkError")) {
     return "No fue posible alcanzar la capa cloud. El proyecto de Supabase puede estar pausado o devolviendo un error temporal de red.";
   }
@@ -553,6 +643,9 @@ function normalizeCloudError(message) {
 
 function normalizeAuthError(error) {
   const text = String(error?.message || error || "");
+  if (authState.provider === "simple") {
+    return text || "No fue posible abrir el dashboard con el login web.";
+  }
   if (text.includes("Failed to fetch") || text.includes("NetworkError")) {
     return "Supabase Auth no responde en este momento. El dashboard no puede iniciar sesion hasta que el host del proyecto vuelva a estar disponible.";
   }
@@ -1846,11 +1939,17 @@ function technicalPhaseSnapshot() {
     return {
       badgeLabel: "Cerrando",
       badgeClass: "runtime-badge warning",
-      subtitle: "Cerrando sesion y limpiando el snapshot privado del navegador.",
-      message: "El dashboard vuelve al login sin esperar a que Supabase complete la invalidacion remota.",
+      subtitle: authState.provider === "simple"
+        ? "Cerrando sesion web y limpiando el snapshot cacheado del navegador."
+        : "Cerrando sesion y limpiando el snapshot privado del navegador.",
+      message: authState.provider === "simple"
+        ? "El dashboard vuelve al login del sitio sin conservar la sesion de esta pestana."
+        : "El dashboard vuelve al login sin esperar a que Supabase complete la invalidacion remota.",
       stage: "Cerrando sesion",
       percent: 96,
-      detail: "Limpiando cache local, polling activo y storage asociado a la sesion de Supabase.",
+      detail: authState.provider === "simple"
+        ? "Limpiando cache del navegador, polling activo y estado efimero del login web."
+        : "Limpiando cache local, polling activo y storage asociado a la sesion de Supabase.",
       steps: baseSteps,
       alerts: [],
     };
@@ -1860,11 +1959,17 @@ function technicalPhaseSnapshot() {
     return {
       badgeLabel: "Bloqueado",
       badgeClass: "runtime-badge",
-      subtitle: "Inicia sesion para revisar el estado tecnico, la analitica y la base en Supabase.",
-      message: "El snapshot privado y el refresh cloud solo se habilitan con una sesion valida.",
+      subtitle: authState.provider === "simple"
+        ? "Inicia sesion para abrir el sitio y revisar el snapshot publicado."
+        : "Inicia sesion para revisar el estado tecnico, la analitica y la base en Supabase.",
+      message: authState.provider === "simple"
+        ? "El login simple solo abre la app. La lectura sale del snapshot publicado junto al sitio."
+        : "El snapshot privado y el refresh cloud solo se habilitan con una sesion valida.",
       stage: "Esperando autenticacion",
       percent: 0,
-      detail: "Todavia no hay una sesion valida para consultar el bootstrap cloud.",
+      detail: authState.provider === "simple"
+        ? "Todavia no hay una sesion activa para hidratar la vista web."
+        : "Todavia no hay una sesion valida para consultar el bootstrap cloud.",
       steps: baseSteps,
       alerts: [],
     };
@@ -1875,11 +1980,17 @@ function technicalPhaseSnapshot() {
     return {
       badgeLabel: "Validando",
       badgeClass: "runtime-badge warning",
-      subtitle: "Validando sesion en Supabase antes de abrir el snapshot privado.",
-      message: "Comprobando credenciales y restaurando el contexto seguro del dashboard.",
+      subtitle: authState.provider === "simple"
+        ? "Validando credenciales simples antes de abrir el dashboard publicado."
+        : "Validando sesion en Supabase antes de abrir el snapshot privado.",
+      message: authState.provider === "simple"
+        ? "Comprobando el acceso simple configurado para este sitio."
+        : "Comprobando credenciales y restaurando el contexto seguro del dashboard.",
       stage: "Validando sesion",
       percent: 12,
-      detail: "Se esta verificando el token activo y preparando el arranque del dashboard.",
+      detail: authState.provider === "simple"
+        ? "Se esta validando la clave del sitio y preparando el arranque del snapshot."
+        : "Se esta verificando el token activo y preparando el arranque del dashboard.",
       steps: baseSteps,
       alerts: [],
     };
@@ -1891,11 +2002,17 @@ function technicalPhaseSnapshot() {
     return {
       badgeLabel: "Cargando",
       badgeClass: "runtime-badge warning",
-      subtitle: "Cargando estado tecnico del snapshot y de la base maestra en Supabase.",
-      message: "Leyendo bootstrap cloud, restaurando cache valida y preparando el shell tecnico.",
+      subtitle: authState.provider === "simple"
+        ? "Cargando el snapshot tecnico publicado y restaurando cache valida."
+        : "Cargando estado tecnico del snapshot y de la base maestra en Supabase.",
+      message: authState.provider === "simple"
+        ? "Leyendo los JSON publicados del dashboard y preparando el shell tecnico."
+        : "Leyendo bootstrap cloud, restaurando cache valida y preparando el shell tecnico.",
       stage: "Leyendo snapshot",
       percent: 42,
-      detail: "El dashboard primero intenta hidratar el shell tecnico; si el endpoint tarda, usa cache local o deja un estado degradado visible.",
+      detail: authState.provider === "simple"
+        ? "El dashboard hidrata primero la vista tecnica desde el snapshot publicado y luego carga las demas pestanas bajo demanda."
+        : "El dashboard primero intenta hidratar el shell tecnico; si el endpoint tarda, usa cache local o deja un estado degradado visible.",
       steps: baseSteps,
       alerts: apiMessage
         ? [
@@ -1915,11 +2032,19 @@ function technicalPhaseSnapshot() {
     return {
       badgeLabel: "Degradado",
       badgeClass: "runtime-badge error",
-      subtitle: "No fue posible completar el bootstrap cloud con el tiempo esperado.",
-      message: "El dashboard mantiene el ultimo estado valido disponible o queda listo para reintentar sin bloquear la sesion.",
+      subtitle: authState.provider === "simple"
+        ? "No fue posible completar la lectura del snapshot publicado en el tiempo esperado."
+        : "No fue posible completar el bootstrap cloud con el tiempo esperado.",
+      message: authState.provider === "simple"
+        ? "El dashboard mantiene el ultimo estado valido disponible o queda listo para reintentar la lectura del snapshot publicado del sitio."
+        : "El dashboard mantiene el ultimo estado valido disponible o queda listo para reintentar sin bloquear la sesion.",
       stage: "Bootstrap degradado",
       percent: 100,
-      detail: apiMessage || "El endpoint cloud no devolvio respuesta a tiempo. Usa Recargar estado para reintentar el bootstrap.",
+      detail: apiMessage || (
+        authState.provider === "simple"
+          ? "La lectura del snapshot publicado no devolvio respuesta a tiempo. Usa Recargar estado para reintentar."
+          : "El endpoint cloud no devolvio respuesta a tiempo. Usa Recargar estado para reintentar el bootstrap."
+      ),
       steps: baseSteps.map((step, index) => ({
         ...step,
         status: index === 1 ? "error" : index === 0 ? "completed" : "pending",
@@ -1928,7 +2053,11 @@ function technicalPhaseSnapshot() {
         {
           level: "error",
           title: "Bootstrap incompleto",
-          message: apiMessage || "No fue posible completar la carga inicial desde la nube.",
+          message: apiMessage || (
+            authState.provider === "simple"
+              ? "No fue posible completar la carga inicial desde el snapshot publicado."
+              : "No fue posible completar la carga inicial desde la nube."
+          ),
         },
       ],
     };
@@ -1939,12 +2068,18 @@ function technicalPhaseSnapshot() {
   });
   return {
     badgeLabel: "Listo",
-    badgeClass: "runtime-badge",
-    subtitle: "Bootstrap tecnico listo.",
-    message: "El shell tecnico ya tiene contexto suficiente para pintar datos o pedir cargas diferidas por pestana.",
+      badgeClass: "runtime-badge",
+      subtitle: authState.provider === "simple"
+      ? "Snapshot tecnico listo en modo web."
+      : "Bootstrap tecnico listo.",
+      message: authState.provider === "simple"
+      ? "El shell tecnico ya esta hidratado desde JSON publicados y las pestanas pesadas cargan bajo demanda."
+      : "El shell tecnico ya tiene contexto suficiente para pintar datos o pedir cargas diferidas por pestana.",
     stage: "Listo",
     percent: 100,
-    detail: "La sesion y el bootstrap basico ya estan disponibles.",
+      detail: authState.provider === "simple"
+      ? "La sesion del sitio y el bootstrap basico ya estan disponibles."
+      : "La sesion y el bootstrap basico ya estan disponibles.",
     steps: baseSteps,
     alerts: [],
   };
@@ -2274,9 +2409,11 @@ function clearPolling() {
 }
 
 async function fetchRuntimeState(signal, silent = false) {
-  if (!refreshStatusUrl) {
+  if (authState.provider !== "supabase" || !refreshStatusUrl) {
     technicalState.apiAvailable = false;
-    technicalState.apiError = "No hay endpoint cloud configurado para refresh.";
+    technicalState.apiError = authState.provider === "simple"
+      ? "Modo web simple: la actualizacion remota esta deshabilitada y se muestra el snapshot publicado."
+      : "No hay endpoint cloud configurado para refresh.";
     return { current_job: null, last_job: null };
   }
   try {
@@ -2334,7 +2471,7 @@ function scheduleBootstrapRetry() {
 }
 
 async function fetchBootstrapPayload(signal) {
-  if (bootstrapApiUrl) {
+  if (authState.provider === "supabase" && bootstrapApiUrl) {
     try {
       const payload = await fetchJson(
         bootstrapApiUrl,
@@ -2529,7 +2666,8 @@ async function pollRefreshJob(jobId) {
 }
 
 async function startTechnicalRefresh(scope = "refresh") {
-  if (!technicalState.apiAvailable) {
+  if (authState.provider !== "supabase" || !technicalState.apiAvailable) {
+    technicalState.apiError = "Modo web simple: la actualizacion remota no esta disponible en este acceso.";
     renderTechnical();
     return;
   }
@@ -2618,11 +2756,19 @@ function bindEvents() {
       return;
     }
     setButtonBusy(elements.authSubmit, true, "Ingresando...");
-    setAuthMessage("Validando credenciales en Supabase...", "");
+    setAuthMessage(
+      authState.provider === "simple"
+        ? "Validando acceso del sitio..."
+        : "Validando credenciales en Supabase...",
+      "",
+    );
     try {
       await signInWithPassword(email, password);
       elements.authPassword.value = "";
-      setAuthMessage("Sesion iniciada correctamente.", "success");
+      setAuthMessage(
+        authState.provider === "simple" ? "Sesion web iniciada correctamente." : "Sesion iniciada correctamente.",
+        "success",
+      );
     } catch (error) {
       setAuthMessage(`No fue posible iniciar sesion. ${normalizeAuthError(error)}`, "error");
     } finally {
@@ -2732,9 +2878,27 @@ async function bootstrapDashboard() {
 async function initAuth() {
   bindEvents();
   updateSessionChrome();
+  if (authState.provider === "simple") {
+    elements.authEmail.value = simpleLoginConfig.email || "";
+    elements.authPassword.value = "";
+    const savedSession = readSimpleSession();
+    if (savedSession?.email && String(savedSession.email).toLowerCase() === String(simpleLoginConfig.email || "").toLowerCase()) {
+      authState.session = { access_token: "frontend-simple-login", provider: "simple" };
+      authState.user = { email: savedSession.email };
+      updateSessionChrome();
+      setAppVisibility(true);
+      setAuthMessage("Sesion web activa.", "success");
+      await bootstrapDashboard();
+      return;
+    }
+    resetUiToSignedOutState();
+    setAppVisibility(false);
+    setAuthMessage("Ingresa con la clave configurada para abrir el dashboard publicado.", "");
+    return;
+  }
   if (!authState.enabled && !secureModeRequested) {
     setAppVisibility(true);
-    setAuthMessage("Login no configurado todavia. Completa supabaseAnonKey para proteger el dashboard.", "error");
+    setAuthMessage("Login no configurado todavia. Completa la configuracion del acceso simple para abrir el dashboard.", "error");
     await bootstrapDashboard();
     return;
   }
