@@ -38,21 +38,16 @@ Deno.serve(async (request) => {
       return json({ error: "Faltan variables de entorno de Supabase para leer el snapshot." }, 500);
     }
     const admin = createClient(supabaseUrl, serviceRoleKey);
-    const { data, error } = await admin
-      .schema("app")
-      .from("snapshot_assets")
-      .select("payload_json, updated_at, generated_at, run_id")
-      .eq("filename", file)
-      .maybeSingle();
+    const { data, error } = await admin.rpc("get_snapshot_asset", { p_filename: file });
 
     if (error) {
       return json({ error: "No fue posible leer el snapshot privado.", details: error.message }, 500);
     }
-    if (!data?.payload_json) {
+    if (!data) {
       return json({ error: "El snapshot solicitado aun no existe en Supabase." }, 404);
     }
 
-    return json(data.payload_json);
+    return json(data);
   } catch (error) {
     if (error instanceof AuthError) {
       return json({ error: error.message }, error.status);
