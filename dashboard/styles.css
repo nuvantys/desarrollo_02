@@ -404,6 +404,17 @@ select:focus {
   cursor: pointer;
 }
 
+.primary-button,
+.secondary-button,
+.ghost-button,
+.tab-button {
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease,
+    opacity 160ms ease;
+}
+
 .ghost-button:hover {
   background: rgba(13, 108, 95, 0.1);
 }
@@ -418,10 +429,38 @@ select:focus {
   filter: brightness(1.02);
 }
 
+.primary-button:active,
+.secondary-button:active,
+.ghost-button:active,
+.tab-button:active {
+  transform: translateY(1px);
+}
+
 .primary-button:disabled,
+.secondary-button:disabled,
 .ghost-button:disabled {
   cursor: not-allowed;
-  opacity: 0.55;
+  opacity: 0.58;
+  box-shadow: none;
+}
+
+.primary-button.is-busy,
+.secondary-button.is-busy,
+.ghost-button.is-busy {
+  position: relative;
+  isolation: isolate;
+}
+
+.primary-button.is-busy::after,
+.secondary-button.is-busy::after,
+.ghost-button.is-busy::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  transform: translateX(-100%);
+  animation: button-busy-sheen 1.1s linear infinite;
 }
 
 .active-filters {
@@ -644,6 +683,15 @@ select:focus {
 }
 
 @keyframes progress-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes button-busy-sheen {
   from {
     transform: translateX(-100%);
   }

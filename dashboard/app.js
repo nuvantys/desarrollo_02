@@ -78,6 +78,11 @@ const authState = {
 };
 
 const tableExports = new Map();
+const buttonLabels = new WeakMap();
+const cacheKeys = {
+  snapshot: "contifico_dashboard_snapshot_v1",
+  technical: "contifico_dashboard_technical_v1",
+};
 
 const elements = {
   appShell: document.getElementById("app-shell"),
@@ -164,6 +169,56 @@ const elements = {
 
 let snapshot = null;
 
+function readCachedJson(key) {
+  try {
+    const raw = window.localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeCachedJson(key, payload) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(payload));
+  } catch {
+    // Ignore storage quota or serialization errors.
+  }
+}
+
+function clearCachedData() {
+  try {
+    window.localStorage.removeItem(cacheKeys.snapshot);
+    window.localStorage.removeItem(cacheKeys.technical);
+  } catch {
+    // Ignore storage access errors.
+  }
+}
+
+function resetUiToSignedOutState() {
+  snapshot = null;
+  technicalState.data = null;
+  technicalState.apiError = "";
+  technicalState.runtime = { current_job: null, last_job: null };
+  authState.session = null;
+  authState.user = null;
+  authState.bootstrapped = false;
+  clearPolling();
+  updateSessionChrome();
+  setAppVisibility(false);
+  elements.authForm?.reset();
+  elements.heroText.textContent = "Inicia sesion para cargar el snapshot privado y habilitar el refresh cloud.";
+  elements.technical.subtitle.textContent = "Inicia sesion para revisar el estado tecnico, la analitica y la base en Supabase.";
+}
+
+function primeSnapshotUi() {
+  if (!snapshot) return;
+  renderAlerts(snapshot.manifest.alerts);
+  renderStaticMeta();
+  populateControls();
+  renderAll();
+}
+
 function setAuthMessage(message, tone = "") {
   elements.authMessage.textContent = message;
   elements.authMessage.className = tone ? `auth-message ${tone}` : "auth-message";
@@ -172,6 +227,16 @@ function setAuthMessage(message, tone = "") {
 function setAppVisibility(isAuthenticated) {
   elements.authShell.classList.toggle("hidden", isAuthenticated);
   elements.appShell.classList.toggle("app-shell-hidden", !isAuthenticated);
+}
+
+function setButtonBusy(button, isBusy, busyLabel = "Procesando...") {
+  if (!button) return;
+  if (!buttonLabels.has(button)) {
+    buttonLabels.set(button, button.textContent);
+  }
+  button.disabled = isBusy;
+  button.classList.toggle("is-busy", isBusy);
+  button.textContent = isBusy ? busyLabel : buttonLabels.get(button);
 }
 
 function updateSessionChrome() {
@@ -217,8 +282,18 @@ async function signInWithPassword(email, password) {
 }
 
 async function signOutSession() {
-  if (!authState.client) return;
-  await authState.client.auth.signOut();
+  if (!authState.client) {
+    resetUiToSignedOutState();
+    setAuthMessage("Sesion cerrada correctamente.", "success");
+    return;
+  }
+  try {
+    await authState.client.auth.signOut();
+  } finally {
+    clearCachedData();
+    resetUiToSignedOutState();
+    setAuthMessage("Sesion cerrada correctamente.", "success");
+  }
 }
 
 function toNumber(value) {
@@ -1851,6 +1926,7 @@ async function fetchJson(url, options = {}) {
 
 async function loadTechnicalState() {
   technicalState.data = await fetchSnapshotPayload("technical.json");
+  writeCachedJson(cacheKeys.technical, technicalState.data);
   if (!refreshStatusUrl) {
     technicalState.apiAvailable = false;
     technicalState.apiError = "No hay endpoint cloud configurado para refresh.";
@@ -1917,7 +1993,9 @@ async function startTechnicalRefresh(scope = "refresh") {
     renderTechnical();
     return;
   }
+  const button = scope === "backfill" ? elements.technical.refreshFullButton : elements.technical.refreshQuickButton;
   try {
+    setButtonBusy(button, true, scope === "backfill" ? "Lanzando backfill..." : "Lanzando refresh...");
     const payload = await fetchJson(refreshApiUrl, {
       method: "POST",
       headers: authHeaders({ "Content-Type": "application/json" }),
@@ -1930,11 +2008,18 @@ async function startTechnicalRefresh(scope = "refresh") {
   } catch (error) {
     technicalState.apiError = normalizeCloudError(error.message);
     renderTechnical();
+  } finally {
+    setButtonBusy(button, false);
   }
 }
 
 async function reloadTechnicalSnapshotOnly() {
-  await reloadTechnicalStatus(true);
+  try {
+    setButtonBusy(elements.technical.reloadButton, true, "Recargando...");
+    await reloadTechnicalStatus(true);
+  } finally {
+    setButtonBusy(elements.technical.reloadButton, false);
+  }
 }
 
 function bindEvents() {
@@ -1952,7 +2037,7 @@ function bindEvents() {
       setAuthMessage("Completa correo y contrasena para ingresar.", "error");
       return;
     }
-    elements.authSubmit.disabled = true;
+    setButtonBusy(elements.authSubmit, true, "Ingresando...");
     setAuthMessage("Validando credenciales en Supabase...", "");
     try {
       await signInWithPassword(email, password);
@@ -1961,11 +2046,16 @@ function bindEvents() {
     } catch (error) {
       setAuthMessage(`No fue posible iniciar sesion. ${error.message}`, "error");
     } finally {
-      elements.authSubmit.disabled = false;
+      setButtonBusy(elements.authSubmit, false);
     }
   });
   elements.authSignoutButton.addEventListener("click", async () => {
-    await signOutSession();
+    try {
+      setButtonBusy(elements.authSignoutButton, true, "Cerrando...");
+      await signOutSession();
+    } finally {
+      setButtonBusy(elements.authSignoutButton, false);
+    }
   });
   elements.technical.refreshQuickButton.addEventListener("click", () => startTechnicalRefresh("refresh"));
   elements.technical.refreshFullButton.addEventListener("click", () => startTechnicalRefresh("backfill"));
@@ -2042,26 +2132,46 @@ function bindEvents() {
 async function loadSnapshot() {
   const responses = await Promise.all(fileNames.map((file) => fetchSnapshotPayload(file)));
   const [manifest, overview, commercial, customers, products, inventory, accounting, quality, database, tables] = responses;
-  return { manifest, overview, commercial, customers, products, inventory, accounting, quality, database, tables };
+  const payload = { manifest, overview, commercial, customers, products, inventory, accounting, quality, database, tables };
+  writeCachedJson(cacheKeys.snapshot, payload);
+  return payload;
 }
 
 async function bootstrapDashboard() {
-  try {
-    [snapshot] = await Promise.all([loadSnapshot(), loadTechnicalState()]);
-    renderAlerts(snapshot.manifest.alerts);
-    renderStaticMeta();
-    populateControls();
-    bindEvents();
-    renderAll();
-    setActiveTab("technical-view");
-    authState.bootstrapped = true;
-    if (technicalState.runtime.current_job?.job_id) {
-      await pollRefreshJob(technicalState.runtime.current_job.job_id);
-    }
-  } catch (error) {
-    elements.heroText.textContent = `No fue posible cargar el snapshot del dashboard. ${error.message}`;
-    elements.technical.subtitle.textContent = `No fue posible cargar la revision tecnica. ${error.message}`;
-    console.error(error);
+  bindEvents();
+  setActiveTab("technical-view");
+
+  const cachedSnapshot = readCachedJson(cacheKeys.snapshot);
+  const cachedTechnical = readCachedJson(cacheKeys.technical);
+  if (cachedSnapshot) {
+    snapshot = cachedSnapshot;
+    primeSnapshotUi();
+  }
+  if (cachedTechnical) {
+    technicalState.data = cachedTechnical;
+    renderTechnical();
+  }
+
+  const snapshotPromise = loadSnapshot();
+  const technicalPromise = loadTechnicalState();
+  const [snapshotResult, technicalResult] = await Promise.allSettled([snapshotPromise, technicalPromise]);
+
+  if (snapshotResult.status === "fulfilled") {
+    snapshot = snapshotResult.value;
+    primeSnapshotUi();
+  } else if (!snapshot) {
+    elements.heroText.textContent = `No fue posible cargar el snapshot del dashboard. ${snapshotResult.reason.message}`;
+  }
+
+  if (technicalResult.status === "fulfilled") {
+    renderTechnical();
+  } else if (!technicalState.data) {
+    elements.technical.subtitle.textContent = `No fue posible cargar la revision tecnica. ${technicalResult.reason.message}`;
+  }
+
+  authState.bootstrapped = Boolean(snapshot);
+  if (technicalState.runtime.current_job?.job_id) {
+    await pollRefreshJob(technicalState.runtime.current_job.job_id);
   }
 }
 
@@ -2091,16 +2201,19 @@ async function initAuth() {
     authState.user = session?.user || null;
     updateSessionChrome();
     if (!session) {
-      clearPolling();
-      authState.bootstrapped = false;
-      technicalState.runtime = { current_job: null, last_job: null };
-      setAppVisibility(false);
+      resetUiToSignedOutState();
       setAuthMessage("Inicia sesion para cargar el snapshot privado y habilitar el refresh cloud.", "");
       return;
     }
     setAppVisibility(true);
+    setAuthMessage(authState.bootstrapped ? "Sesion activa." : "Restaurando snapshot y estado tecnico...", "success");
+    if (!authState.bootstrapped) {
+      await bootstrapDashboard();
+      setAuthMessage("Sesion activa.", "success");
+      return;
+    }
+    await reloadTechnicalStatus(true);
     setAuthMessage("Sesion activa.", "success");
-    await bootstrapDashboard();
   };
 
   authState.client.auth.onAuthStateChange((_event, session) => {
