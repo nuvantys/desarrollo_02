@@ -2087,6 +2087,7 @@ function technicalPhaseSnapshot() {
 
 function renderTechnicalLoadingState() {
   const phaseState = technicalPhaseSnapshot();
+  const canDispatchRefresh = Boolean(authState.session && !dataState.logoutInFlight && refreshApiUrl);
   elements.technical.subtitle.textContent = phaseState.subtitle;
   elements.technical.runtimeBadge.className = phaseState.badgeClass;
   elements.technical.runtimeBadge.textContent = phaseState.badgeLabel;
@@ -2096,8 +2097,8 @@ function renderTechnicalLoadingState() {
   elements.technical.progressPercent.textContent = `${phaseState.percent}%`;
   elements.technical.progressDetail.textContent = phaseState.detail;
   renderProgressSteps(phaseState.steps);
-  elements.technical.refreshQuickButton.disabled = !authState.session || dataState.logoutInFlight || !technicalState.apiAvailable;
-  elements.technical.refreshFullButton.disabled = !authState.session || dataState.logoutInFlight || !technicalState.apiAvailable;
+  elements.technical.refreshQuickButton.disabled = !canDispatchRefresh;
+  elements.technical.refreshFullButton.disabled = !canDispatchRefresh;
   elements.technical.reloadButton.disabled = !authState.session || dataState.logoutInFlight;
   renderMetricCards(elements.technical.summaryMetrics, [
     { label: "Ultima actualizacion", value: "--", caption: "Se completara cuando el bootstrap tecnico llegue desde la nube." },
@@ -2144,6 +2145,7 @@ function renderTechnical() {
   const summary = technical.summary || {};
   const runtimeScopeLabel = runtime?.scope_label || summary.run_mode_label || "Modo no disponible";
 
+  const canDispatchRefresh = Boolean(refreshApiUrl && authState.session && !dataState.logoutInFlight);
   elements.technical.subtitle.textContent = `Cobertura ${technical.coverage_min || "--"} a ${technical.coverage_max || "--"} con run_id ${technical.run_id || "--"} y ultimo modo ${summary.run_mode_label || "--"}.`;
   elements.technical.runtimeBadge.className = runtimeBadgeClass(runtimeStatus);
   elements.technical.runtimeBadge.textContent = runtimeStatus === "running" ? "Actualizando" : runtimeStatus === "error" ? "Con error" : "Estable";
@@ -2161,8 +2163,8 @@ function renderTechnical() {
       : "No hay una corrida activa en este momento.");
   renderProgressSteps(progressSteps);
   elements.technical.reloadButton.disabled = !authState.session || dataState.logoutInFlight;
-  elements.technical.refreshQuickButton.disabled = !technicalState.apiAvailable || runtimeStatus === "running";
-  elements.technical.refreshFullButton.disabled = !technicalState.apiAvailable || runtimeStatus === "running";
+  elements.technical.refreshQuickButton.disabled = !canDispatchRefresh || runtimeStatus === "running";
+  elements.technical.refreshFullButton.disabled = !canDispatchRefresh || runtimeStatus === "running";
   renderMetricCards(elements.technical.summaryMetrics, [
     { label: "Ultima actualizacion", value: formatDateTime(technical.generated_at), caption: "Hora efectiva del snapshot tecnico publicado." },
     { label: "Duracion ultima corrida", value: formatDuration(technical.last_refresh_duration_seconds), caption: "Tiempo total de la ultima actualizacion tecnica mas snapshot." },
@@ -2688,7 +2690,7 @@ async function pollRefreshJob(jobId) {
 }
 
 async function startTechnicalRefresh(scope = "refresh") {
-  if (!refreshApiUrl || !technicalState.apiAvailable) {
+  if (!refreshApiUrl) {
     technicalState.apiError = "La actualizacion remota no esta disponible en este acceso.";
     renderTechnical();
     return;
