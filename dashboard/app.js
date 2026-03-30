@@ -187,6 +187,9 @@ function updateSessionChrome() {
 
 function authHeaders(extraHeaders = {}) {
   const headers = { ...extraHeaders };
+  if (supabaseAnonKey) {
+    headers.apikey = supabaseAnonKey;
+  }
   if (authState.session?.access_token) {
     headers.Authorization = `Bearer ${authState.session.access_token}`;
   }
@@ -1732,7 +1735,14 @@ async function fetchJson(url, options = {}) {
   const response = await fetch(url, options);
   if (!response.ok) {
     const text = await response.text().catch(() => "");
-    throw new Error(text || `${response.status} ${response.statusText}`);
+    let message = text;
+    try {
+      const parsed = JSON.parse(text);
+      message = parsed.message || parsed.error || text;
+    } catch {
+      // Keep raw response text when the body is not JSON.
+    }
+    throw new Error(message || `${response.status} ${response.statusText}`);
   }
   return response.json();
 }
