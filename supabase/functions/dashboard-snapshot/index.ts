@@ -1,5 +1,6 @@
+import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders, json } from "../_shared/cors.ts";
-import { AuthError, createAdminClient, requireUser } from "../_shared/auth.ts";
+import { AuthError, requireUser } from "../_shared/auth.ts";
 
 const ALLOWED_FILES = new Set([
   "manifest.json",
@@ -31,7 +32,12 @@ Deno.serve(async (request) => {
       return json({ error: "Archivo de snapshot no permitido." }, 400);
     }
 
-    const admin = createAdminClient();
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (!supabaseUrl || !serviceRoleKey) {
+      return json({ error: "Faltan variables de entorno de Supabase para leer el snapshot." }, 500);
+    }
+    const admin = createClient(supabaseUrl, serviceRoleKey);
     const { data, error } = await admin
       .schema("app")
       .from("snapshot_assets")
