@@ -282,17 +282,22 @@ async function signInWithPassword(email, password) {
 }
 
 async function signOutSession() {
-  if (!authState.client) {
-    resetUiToSignedOutState();
-    setAuthMessage("Sesion cerrada correctamente.", "success");
+  const client = authState.client;
+  clearCachedData();
+  resetUiToSignedOutState();
+  setAuthMessage("Sesion cerrada correctamente.", "success");
+
+  if (!client) {
     return;
   }
+
   try {
-    await authState.client.auth.signOut();
-  } finally {
-    clearCachedData();
-    resetUiToSignedOutState();
-    setAuthMessage("Sesion cerrada correctamente.", "success");
+    await Promise.race([
+      client.auth.signOut({ scope: "local" }),
+      new Promise((resolve) => window.setTimeout(resolve, 1200)),
+    ]);
+  } catch {
+    // Keep the local logout even if the remote invalidation takes too long or fails.
   }
 }
 
@@ -2055,6 +2060,11 @@ function bindEvents() {
       await signOutSession();
     } finally {
       setButtonBusy(elements.authSignoutButton, false);
+      window.setTimeout(() => {
+        if (!authState.session) {
+          window.location.reload();
+        }
+      }, 40);
     }
   });
   elements.technical.refreshQuickButton.addEventListener("click", () => startTechnicalRefresh("refresh"));
