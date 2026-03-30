@@ -619,7 +619,11 @@
     "meta_rows": 1058,
     "frontend_total_rows": 163888,
     "database_total_size_bytes": 126795776,
+<<<<<<< HEAD
     "frontend_total_size_bytes": 42864500,
+=======
+    "frontend_total_size_bytes": 42864501,
+>>>>>>> 96c3da3 (feat: agrega login y snapshot privado en Supabase)
     "optional_relationships": 45,
     "total_orphans": 0
   },
@@ -2037,7 +2041,11 @@
     {
       "file_name": "technical.json",
       "rows_exposed": 180,
+<<<<<<< HEAD
       "size_bytes": 55127,
+=======
+      "size_bytes": 55128,
+>>>>>>> 96c3da3 (feat: agrega login y snapshot privado en Supabase)
       "collection_count": 13,
       "largest_collection": "fk_health",
       "largest_collection_rows": 54

@@ -1,4 +1,5 @@
 import { corsHeaders, json } from "../_shared/cors.ts";
+import { AuthError, requireUser } from "../_shared/auth.ts";
 
 type RefreshScope = "refresh" | "backfill";
 
@@ -56,6 +57,7 @@ Deno.serve(async (request) => {
   }
 
   try {
+    await requireUser(request);
     const body = await request.json().catch(() => ({}));
     const scope = normalizeScope(body?.scope);
 
@@ -149,6 +151,9 @@ Deno.serve(async (request) => {
       202,
     );
   } catch (error) {
+    if (error instanceof AuthError) {
+      return json({ error: error.message }, error.status);
+    }
     return json({ error: String(error instanceof Error ? error.message : error) }, 500);
   }
 });

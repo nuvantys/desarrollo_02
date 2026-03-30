@@ -50,6 +50,64 @@ def payload_top_level_rows(payload: dict[str, Any]) -> int:
     return sum(len(value) for value in payload.values() if isinstance(value, list))
 
 
+def ensure_snapshot_assets_table(conn) -> None:
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            CREATE SCHEMA IF NOT EXISTS app;
+            CREATE TABLE IF NOT EXISTS app.snapshot_assets (
+                filename text PRIMARY KEY,
+                payload_json jsonb NOT NULL,
+                payload_bytes bigint NOT NULL DEFAULT 0,
+                top_level_rows bigint NOT NULL DEFAULT 0,
+                run_id text,
+                generated_at timestamptz,
+                updated_at timestamptz NOT NULL DEFAULT now()
+            );
+            """
+        )
+    conn.commit()
+
+
+def publish_snapshot_assets(conn, payloads: dict[str, dict[str, Any]], meta: dict[str, Any]) -> None:
+    ensure_snapshot_assets_table(conn)
+    generated_at = meta.get("generated_at")
+    run_id = meta.get("run_id")
+    with conn.cursor() as cur:
+        for filename, payload in payloads.items():
+            cur.execute(
+                """
+                INSERT INTO app.snapshot_assets (
+                    filename,
+                    payload_json,
+                    payload_bytes,
+                    top_level_rows,
+                    run_id,
+                    generated_at,
+                    updated_at
+                )
+                VALUES (%s, %s::jsonb, %s, %s, %s, %s, now())
+                ON CONFLICT (filename) DO UPDATE
+                SET
+                    payload_json = EXCLUDED.payload_json,
+                    payload_bytes = EXCLUDED.payload_bytes,
+                    top_level_rows = EXCLUDED.top_level_rows,
+                    run_id = EXCLUDED.run_id,
+                    generated_at = EXCLUDED.generated_at,
+                    updated_at = now()
+                """,
+                (
+                    filename,
+                    json.dumps(payload, ensure_ascii=False, default=json_default),
+                    payload_size_bytes(payload),
+                    payload_top_level_rows(payload),
+                    run_id,
+                    generated_at,
+                ),
+            )
+    conn.commit()
+
+
 def database_label_from_config(config) -> str:
     if getattr(config, "dsn", None):
         return "Supabase postgres"
@@ -2355,6 +2413,7 @@ def export_dashboard_data(args: argparse.Namespace) -> int:
             "tables.json": build_tables(conn, meta, filters),
         }
         payloads["database.json"] = build_database(conn, meta, filters, database_label, payloads)
+        publish_snapshot_assets(conn, payloads, meta)
     for filename, payload in payloads.items():
         write_json(out_dir / filename, payload)
     return 0

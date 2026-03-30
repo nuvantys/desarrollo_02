@@ -16,8 +16,13 @@ import {
 
 const appConfig = window.CONTIFICO_CONFIG || {};
 const snapshotBase = (appConfig.snapshotBase || "./data").replace(/\/$/, "");
+const snapshotApiUrl = appConfig.snapshotApiUrl || "";
 const refreshApiUrl = appConfig.refreshApiUrl || "";
 const refreshStatusUrl = appConfig.refreshStatusUrl || "";
+const supabaseUrl = appConfig.supabaseUrl || "";
+const supabaseAnonKey = appConfig.supabaseAnonKey || "";
+const secureModeRequested = Boolean(snapshotApiUrl || refreshApiUrl || refreshStatusUrl || supabaseUrl);
+const authEnabled = Boolean(snapshotApiUrl && supabaseUrl && supabaseAnonKey && window.supabase?.createClient);
 
 const fileNames = [
   "manifest.json",
@@ -63,9 +68,28 @@ const technicalState = {
   pollHandle: null,
 };
 
+const authState = {
+  enabled: authEnabled,
+  client: null,
+  session: null,
+  user: null,
+  bootstrapped: false,
+  bindingReady: false,
+};
+
 const tableExports = new Map();
 
 const elements = {
+  appShell: document.getElementById("app-shell"),
+  authShell: document.getElementById("auth-shell"),
+  authForm: document.getElementById("auth-form"),
+  authEmail: document.getElementById("auth-email"),
+  authPassword: document.getElementById("auth-password"),
+  authSubmit: document.getElementById("auth-submit"),
+  authMessage: document.getElementById("auth-message"),
+  authSignoutButton: document.getElementById("auth-signout-button"),
+  sessionUserEmail: document.getElementById("session-user-email"),
+  sessionUserStatus: document.getElementById("session-user-status"),
   heroText: document.getElementById("hero-text"),
   heroGeneratedAt: document.getElementById("hero-generated-at"),
   heroCoverage: document.getElementById("hero-coverage"),
@@ -135,6 +159,60 @@ const elements = {
 };
 
 let snapshot = null;
+
+function setAuthMessage(message, tone = "") {
+  elements.authMessage.textContent = message;
+  elements.authMessage.className = tone ? `auth-message ${tone}` : "auth-message";
+}
+
+function setAppVisibility(isAuthenticated) {
+  elements.authShell.classList.toggle("hidden", isAuthenticated);
+  elements.appShell.classList.toggle("app-shell-hidden", !isAuthenticated);
+}
+
+function updateSessionChrome() {
+  if (!authState.enabled) {
+    elements.sessionUserEmail.textContent = "Modo sin login";
+    elements.sessionUserStatus.textContent = "El dashboard esta usando snapshot local o publico.";
+    return;
+  }
+  if (!authState.user) {
+    elements.sessionUserEmail.textContent = "Sesion no iniciada";
+    elements.sessionUserStatus.textContent = "Inicia sesion para desbloquear snapshot y refresh cloud.";
+    return;
+  }
+  elements.sessionUserEmail.textContent = authState.user.email || "Usuario autenticado";
+  elements.sessionUserStatus.textContent = "Sesion activa con Supabase Auth.";
+}
+
+function authHeaders(extraHeaders = {}) {
+  const headers = { ...extraHeaders };
+  if (authState.session?.access_token) {
+    headers.Authorization = `Bearer ${authState.session.access_token}`;
+  }
+  return headers;
+}
+
+async function fetchSnapshotPayload(file) {
+  if (!authState.enabled) {
+    return fetchJson(`${snapshotBase}/${file}`);
+  }
+  return fetchJson(`${snapshotApiUrl}?file=${encodeURIComponent(file)}`, {
+    headers: authHeaders(),
+  });
+}
+
+async function signInWithPassword(email, password) {
+  const { error } = await authState.client.auth.signInWithPassword({ email, password });
+  if (error) {
+    throw error;
+  }
+}
+
+async function signOutSession() {
+  if (!authState.client) return;
+  await authState.client.auth.signOut();
+}
 
 function toNumber(value) {
   return Number(value || 0);
@@ -1653,13 +1731,14 @@ function populateControls() {
 async function fetchJson(url, options = {}) {
   const response = await fetch(url, options);
   if (!response.ok) {
-    throw new Error(`${response.status} ${response.statusText}`);
+    const text = await response.text().catch(() => "");
+    throw new Error(text || `${response.status} ${response.statusText}`);
   }
   return response.json();
 }
 
 async function loadTechnicalState() {
-  technicalState.data = await fetchJson(`${snapshotBase}/technical.json`);
+  technicalState.data = await fetchSnapshotPayload("technical.json");
   if (!refreshStatusUrl) {
     technicalState.apiAvailable = false;
     technicalState.apiError = "No hay endpoint cloud configurado para refresh.";
@@ -1667,7 +1746,9 @@ async function loadTechnicalState() {
     return;
   }
   try {
-    const payload = await fetchJson(refreshStatusUrl);
+    const payload = await fetchJson(refreshStatusUrl, {
+      headers: authHeaders(),
+    });
     technicalState.apiAvailable = true;
     technicalState.apiError = "";
     technicalState.runtime = payload.runtime || { current_job: null, last_job: null };
@@ -1701,7 +1782,9 @@ async function pollRefreshJob(jobId) {
   clearPolling();
   technicalState.pollHandle = window.setInterval(async () => {
     try {
-      const payload = await fetchJson(`${refreshStatusUrl}?run_id=${encodeURIComponent(jobId)}`);
+      const payload = await fetchJson(`${refreshStatusUrl}?run_id=${encodeURIComponent(jobId)}`, {
+        headers: authHeaders(),
+      });
       technicalState.runtime.current_job = payload.job?.status === "running" ? payload.job : null;
       technicalState.runtime.last_job = payload.job?.status === "running" ? technicalState.runtime.last_job : payload.job;
       renderTechnical();
@@ -1725,7 +1808,7 @@ async function startTechnicalRefresh(scope = "refresh") {
   try {
     const payload = await fetchJson(refreshApiUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({ scope }),
     });
     technicalState.runtime.current_job = payload.job;
@@ -1743,8 +1826,34 @@ async function reloadTechnicalSnapshotOnly() {
 }
 
 function bindEvents() {
+  if (authState.bindingReady) return;
+  authState.bindingReady = true;
   elements.tabs.forEach((button) => {
     button.addEventListener("click", () => setActiveTab(button.dataset.tabTarget));
+  });
+  elements.authForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!authState.enabled) return;
+    const email = elements.authEmail.value.trim();
+    const password = elements.authPassword.value;
+    if (!email || !password) {
+      setAuthMessage("Completa correo y contrasena para ingresar.", "error");
+      return;
+    }
+    elements.authSubmit.disabled = true;
+    setAuthMessage("Validando credenciales en Supabase...", "");
+    try {
+      await signInWithPassword(email, password);
+      elements.authPassword.value = "";
+      setAuthMessage("Sesion iniciada correctamente.", "success");
+    } catch (error) {
+      setAuthMessage(`No fue posible iniciar sesion. ${error.message}`, "error");
+    } finally {
+      elements.authSubmit.disabled = false;
+    }
+  });
+  elements.authSignoutButton.addEventListener("click", async () => {
+    await signOutSession();
   });
   elements.technical.refreshQuickButton.addEventListener("click", () => startTechnicalRefresh("refresh"));
   elements.technical.refreshFullButton.addEventListener("click", () => startTechnicalRefresh("backfill"));
@@ -1819,9 +1928,76 @@ function bindEvents() {
 }
 
 async function loadSnapshot() {
-  const responses = await Promise.all(fileNames.map((file) => fetchJson(`${snapshotBase}/${file}`)));
+  const responses = await Promise.all(fileNames.map((file) => fetchSnapshotPayload(file)));
   const [manifest, overview, commercial, customers, products, inventory, accounting, quality, database, tables] = responses;
   return { manifest, overview, commercial, customers, products, inventory, accounting, quality, database, tables };
+}
+
+async function bootstrapDashboard() {
+  try {
+    [snapshot] = await Promise.all([loadSnapshot(), loadTechnicalState()]);
+    renderAlerts(snapshot.manifest.alerts);
+    renderStaticMeta();
+    populateControls();
+    bindEvents();
+    renderAll();
+    setActiveTab("technical-view");
+    authState.bootstrapped = true;
+    if (technicalState.runtime.current_job?.job_id) {
+      await pollRefreshJob(technicalState.runtime.current_job.job_id);
+    }
+  } catch (error) {
+    elements.heroText.textContent = `No fue posible cargar el snapshot del dashboard. ${error.message}`;
+    elements.technical.subtitle.textContent = `No fue posible cargar la revision tecnica. ${error.message}`;
+    console.error(error);
+  }
+}
+
+async function initAuth() {
+  bindEvents();
+  updateSessionChrome();
+  if (!authState.enabled && !secureModeRequested) {
+    setAppVisibility(true);
+    setAuthMessage("Login no configurado todavia. Completa supabaseAnonKey para proteger el dashboard.", "error");
+    await bootstrapDashboard();
+    return;
+  }
+  if (!authState.enabled && secureModeRequested) {
+    setAppVisibility(false);
+    setAuthMessage("Falta configurar supabaseAnonKey en dashboard/config.js o desde el hosting. El dashboard queda bloqueado hasta completar ese dato.", "error");
+    return;
+  }
+
+  authState.client = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+  const { data, error } = await authState.client.auth.getSession();
+  if (error) {
+    setAuthMessage(`No fue posible leer la sesion actual. ${error.message}`, "error");
+  }
+
+  const applySession = async (session) => {
+    authState.session = session;
+    authState.user = session?.user || null;
+    updateSessionChrome();
+    if (!session) {
+      clearPolling();
+      authState.bootstrapped = false;
+      technicalState.runtime = { current_job: null, last_job: null };
+      setAppVisibility(false);
+      setAuthMessage("Inicia sesion para cargar el snapshot privado y habilitar el refresh cloud.", "");
+      return;
+    }
+    setAppVisibility(true);
+    setAuthMessage("Sesion activa.", "success");
+    await bootstrapDashboard();
+  };
+
+  authState.client.auth.onAuthStateChange((_event, session) => {
+    Promise.resolve(applySession(session)).catch((error) => {
+      setAuthMessage(`No fue posible aplicar la sesion. ${error.message}`, "error");
+    });
+  });
+
+  await applySession(data.session);
 }
 
 async function init() {
@@ -1829,24 +2005,7 @@ async function init() {
     showHostingHelp();
     return;
   }
-  try {
-    [snapshot] = await Promise.all([loadSnapshot(), loadTechnicalState()]);
-    renderAlerts(snapshot.manifest.alerts);
-    renderStaticMeta();
-    populateControls();
-    renderTechnical();
-    bindEvents();
-    renderAll();
-    setActiveTab("technical-view");
-    if (technicalState.runtime.current_job?.job_id) {
-      await pollRefreshJob(technicalState.runtime.current_job.job_id);
-    }
-  } catch (error) {
-    elements.heroText.textContent = `No fue posible cargar el snapshot del dashboard. ${error.message}`;
-    elements.technical.subtitle.textContent = `No fue posible cargar la revision tecnica. ${error.message}`;
-    showHostingHelp();
-    console.error(error);
-  }
+  await initAuth();
 }
 
 init();

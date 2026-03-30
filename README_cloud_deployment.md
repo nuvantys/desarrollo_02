@@ -1,26 +1,24 @@
-# Despliegue cloud-only
+# Despliegue cloud-only con login
 
-Este proyecto ya quedó preparado para operar sin `localhost`. Para activarlo de punta a punta faltan solo pasos de infraestructura:
+El proyecto ya quedo preparado para operar sin `localhost` y con base maestra en Supabase. El siguiente paso es publicarlo con autenticacion real para que el dashboard consuma el snapshot privado desde la nube.
 
-## 1. Publicar el dashboard
+## Arquitectura final
 
-Publica `dashboard/` en GitHub Pages, Netlify o Vercel.
+1. El usuario inicia sesion con Supabase Auth.
+2. El frontend pide cada asset del snapshot a `dashboard-snapshot`.
+3. `dashboard-snapshot` valida la sesion y lee `app.snapshot_assets`.
+4. El usuario autorizado puede disparar `contifico-refresh`.
+5. Supabase Edge Functions despacha GitHub Actions.
+6. GitHub Actions actualiza Supabase desde Contifico.
+7. `export_dashboard_data.py` regenera `dashboard/data/*.json` y publica cada archivo en `app.snapshot_assets`.
+8. El frontend vuelve a leer el snapshot privado actualizado.
 
-## 2. Crear secrets en GitHub
-
-En el repositorio agrega:
+## Secrets en GitHub
 
 - `CONTIFICO_AUTHORIZATION`
 - `SUPABASE_DB_URL`
 
-## 3. Desplegar funciones en Supabase
-
-Publica:
-
-- `supabase/functions/contifico-refresh`
-- `supabase/functions/contifico-refresh-status`
-
-## 4. Crear secrets en Supabase Edge Functions
+## Secrets en Supabase Edge Functions
 
 - `GITHUB_WORKFLOW_TOKEN`
 - `GITHUB_OWNER=nuvantys`
@@ -28,24 +26,31 @@ Publica:
 - `GITHUB_WORKFLOW_FILE=contifico-cloud-refresh.yml`
 - `GITHUB_REF=main`
 
-## 5. Verificar `dashboard/config.js`
+## Funciones a desplegar en Supabase
 
-Debe apuntar al proyecto correcto:
+- `supabase/functions/dashboard-snapshot`
+- `supabase/functions/contifico-refresh`
+- `supabase/functions/contifico-refresh-status`
+
+## Configuracion del frontend
+
+`dashboard/config.js` debe contener:
 
 ```js
 window.CONTIFICO_CONFIG = {
   snapshotBase: "./data",
+  snapshotApiUrl: "https://anaeoorbwnpstuievcwr.supabase.co/functions/v1/dashboard-snapshot",
   refreshApiUrl: "https://anaeoorbwnpstuievcwr.supabase.co/functions/v1/contifico-refresh",
   refreshStatusUrl: "https://anaeoorbwnpstuievcwr.supabase.co/functions/v1/contifico-refresh-status",
+  supabaseUrl: "https://anaeoorbwnpstuievcwr.supabase.co",
+  supabaseAnonKey: "<SUPABASE_ANON_KEY>",
 };
 ```
 
-## Resultado
+## Recomendacion de hosting
 
-Cuando pulses `Refresh rapido` o `Refresh completo`:
+Publica `dashboard/` en Vercel o Netlify. GitHub Pages solo conviene si la configuracion del snapshot y del login queda ya cerrada y no necesitas headers o reglas adicionales.
 
-1. la pagina llamará a Supabase
-2. Supabase disparará GitHub Actions
-3. GitHub Actions actualizará Supabase desde Contifico
-4. GitHub Actions regenerará `dashboard/data/*.json`
-5. el dashboard publicado quedará actualizado sin tocar `localhost`
+## Pendiente operativo
+
+Hace falta crear al menos un usuario en Supabase Auth y cargar la `supabaseAnonKey` en `dashboard/config.js` o inyectarla desde el hosting.

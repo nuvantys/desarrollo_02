@@ -6,9 +6,42 @@
     <title>Contifico Analytics</title>
     <link rel="stylesheet" href="./styles.css" />
     <script src="./config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
-    <div class="app-shell">
+    <section class="auth-shell" id="auth-shell">
+      <article class="auth-card">
+        <p class="eyebrow">Acceso seguro</p>
+        <h1>Ingreso al dashboard Contifico</h1>
+        <p class="auth-copy">
+          El snapshot analitico y el refresh cloud ahora se consumen desde Supabase con sesion autenticada. Inicia sesion para revisar la base, operar el pipeline y explorar la analitica.
+        </p>
+        <form id="auth-form" class="auth-form">
+          <label>
+            <span>Correo</span>
+            <input id="auth-email" type="email" autocomplete="username" placeholder="analista@nuvantys.com" required />
+          </label>
+          <label>
+            <span>Contrasena</span>
+            <input id="auth-password" type="password" autocomplete="current-password" placeholder="Tu contrasena" required />
+          </label>
+          <button id="auth-submit" class="primary-button auth-submit" type="submit">Ingresar</button>
+        </form>
+        <p id="auth-message" class="auth-message">Esperando credenciales...</p>
+        <div class="auth-notes">
+          <article class="auth-note-card">
+            <h3>Fuente de verdad</h3>
+            <p>La base maestra vive en Supabase y el refresh cloud consulta directo a Contifico.</p>
+          </article>
+          <article class="auth-note-card">
+            <h3>Operacion</h3>
+            <p>El login habilita la lectura privada del snapshot y el control de actualizacion bajo demanda.</p>
+          </article>
+        </div>
+      </article>
+    </section>
+
+    <div class="app-shell app-shell-hidden" id="app-shell">
       <section class="top-nav-panel">
         <div class="top-nav-copy">
           <p class="eyebrow">Control del dataset</p>
@@ -17,10 +50,17 @@
             Revision tecnica para operar el pipeline, vista analitica para explorar el snapshot y DataBase para inspeccionar estructura, volumen y relaciones.
           </p>
         </div>
-        <div class="tab-switcher" role="tablist" aria-label="Vistas del dashboard">
-          <button class="tab-button active" id="tab-technical" data-tab-target="technical-view" type="button">Revision tecnica</button>
-          <button class="tab-button" id="tab-analytics" data-tab-target="analytic-view" type="button">Vista analitica</button>
-          <button class="tab-button" id="tab-database" data-tab-target="database-view" type="button">DataBase</button>
+        <div class="top-nav-toolbar">
+          <div class="session-panel">
+            <strong id="session-user-email">Sesion no iniciada</strong>
+            <span id="session-user-status">Login requerido</span>
+          </div>
+          <button id="auth-signout-button" class="ghost-button" type="button">Cerrar sesion</button>
+          <div class="tab-switcher" role="tablist" aria-label="Vistas del dashboard">
+            <button class="tab-button active" id="tab-technical" data-tab-target="technical-view" type="button">Revision tecnica</button>
+            <button class="tab-button" id="tab-analytics" data-tab-target="analytic-view" type="button">Vista analitica</button>
+            <button class="tab-button" id="tab-database" data-tab-target="database-view" type="button">DataBase</button>
+          </div>
         </div>
       </section>
 
