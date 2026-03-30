@@ -110,7 +110,11 @@ const elements = {
     runtimeBadge: document.getElementById("technical-runtime-badge"),
     summaryMetrics: document.getElementById("technical-summary-metrics"),
     runtimeMessage: document.getElementById("technical-runtime-message"),
+    progressStage: document.getElementById("technical-progress-stage"),
+    progressPercent: document.getElementById("technical-progress-percent"),
     progressBar: document.getElementById("technical-progress-bar"),
+    progressDetail: document.getElementById("technical-progress-detail"),
+    progressSteps: document.getElementById("technical-progress-steps"),
     runtimeMeta: document.getElementById("technical-runtime-meta"),
     refreshGuide: document.getElementById("technical-refresh-guide"),
     alerts: document.getElementById("technical-alerts"),
@@ -1124,6 +1128,11 @@ function stageProgress(stage, status) {
   if (status === "success") return 100;
   if (status === "error") return 100;
   const map = {
+    queued: 6,
+    setup: 18,
+    dependencies: 34,
+    sync: 72,
+    publish: 92,
     extrayendo: 20,
     normalizando: 40,
     "cargando PostgreSQL": 68,
@@ -1131,6 +1140,88 @@ function stageProgress(stage, status) {
     finalizado: 100,
   };
   return map[stage] || 8;
+}
+
+function elapsedSecondsSince(timestamp) {
+  if (!timestamp) return 0;
+  const value = Date.parse(timestamp);
+  if (!Number.isFinite(value)) return 0;
+  return Math.max(0, Math.round((Date.now() - value) / 1000));
+}
+
+function runtimeStageLabel(runtime, status) {
+  if (runtime?.stage === "finalizado" || status === "success") return "Finalizado";
+  if (runtime?.stage === "error" || status === "error") return "Con error";
+  if (runtime?.active_step) return runtime.active_step;
+  if (runtime?.stage_detail) return runtime.stage_detail;
+  return "Esperando estado";
+}
+
+function inferProgressPercent(runtime, status, fallbackDurationSeconds = 0) {
+  if (runtime?.progress_percent != null) return Number(runtime.progress_percent);
+  if (status === "success" || runtime?.stage === "finalizado") return 100;
+  if (status === "error" || runtime?.stage === "error") return 100;
+  const explicit = stageProgress(runtime?.stage, status);
+  if (runtime?.started_at && fallbackDurationSeconds > 0) {
+    const elapsed = elapsedSecondsSince(runtime.started_at);
+    const ratio = Math.min(0.96, elapsed / Math.max(fallbackDurationSeconds, 1));
+    return Math.max(explicit, Math.round(ratio * 100));
+  }
+  return explicit;
+}
+
+function inferProgressSteps(runtime, status) {
+  if (Array.isArray(runtime?.steps) && runtime.steps.length) {
+    return runtime.steps;
+  }
+  const steps = [
+    { key: "queued", label: "En cola", status: "completed" },
+    { key: "setup", label: "Preparando entorno", status: "pending" },
+    { key: "sync", label: "Actualizando Supabase", status: "pending" },
+    { key: "publish", label: "Publicando snapshot", status: "pending" },
+    { key: "final", label: "Finalizado", status: "pending" },
+  ];
+  const current = runtime?.stage || (status === "success" ? "finalizado" : status === "error" ? "error" : "queued");
+  const indexMap = { queued: 0, running: 1, setup: 1, dependencies: 1, sync: 2, publish: 3, finalizado: 4, error: 4 };
+  const activeIndex = indexMap[current] ?? 1;
+  steps.forEach((step, index) => {
+    if (status === "success") {
+      step.status = "completed";
+    } else if (status === "error" && index === steps.length - 1) {
+      step.status = "error";
+    } else if (index < activeIndex) {
+      step.status = "completed";
+    } else if (index === activeIndex && status === "running") {
+      step.status = "active";
+    }
+  });
+  return steps;
+}
+
+function renderProgressSteps(steps = []) {
+  if (!steps.length) {
+    elements.technical.progressSteps.innerHTML = "";
+    return;
+  }
+  elements.technical.progressSteps.innerHTML = steps
+    .map(
+      (step, index) => `
+        <article class="progress-step ${step.status || "pending"}">
+          <span class="step-index">${index + 1}</span>
+          <strong>${step.label}</strong>
+          <span>${
+            step.status === "completed"
+              ? "Completado"
+              : step.status === "active"
+                ? "En curso"
+                : step.status === "error"
+                  ? "Con error"
+                  : "Pendiente"
+          }</span>
+        </article>
+      `,
+    )
+    .join("");
 }
 
 function runtimeBadgeClass(status) {
@@ -1552,7 +1643,17 @@ function renderTechnical() {
   elements.technical.runtimeBadge.textContent = runtimeStatus === "running" ? "Actualizando" : runtimeStatus === "error" ? "Con error" : "Estable";
   elements.technical.runtimeMessage.textContent =
     runtime?.message || "No hay procesos activos. El estado expuesto corresponde al ultimo snapshot tecnico disponible.";
-  elements.technical.progressBar.style.width = `${stageProgress(runtime?.stage, runtimeStatus)}%`;
+  const progressPercent = inferProgressPercent(runtime, runtimeStatus, technical.last_refresh_duration_seconds);
+  const progressSteps = inferProgressSteps(runtime, runtimeStatus);
+  elements.technical.progressBar.style.width = `${progressPercent}%`;
+  elements.technical.progressStage.textContent = runtimeStageLabel(runtime, runtimeStatus);
+  elements.technical.progressPercent.textContent = runtime?.progress_label || `${Math.round(progressPercent)}%`;
+  elements.technical.progressDetail.textContent =
+    runtime?.stage_detail ||
+    (runtimeStatus === "running"
+      ? "El workflow esta en curso; el porcentaje se calcula con etapas reales si estan disponibles y, como respaldo, con el tiempo transcurrido frente a la ultima corrida conocida."
+      : "No hay una corrida activa en este momento.");
+  renderProgressSteps(progressSteps);
   elements.technical.refreshQuickButton.disabled = !technicalState.apiAvailable || runtimeStatus === "running";
   elements.technical.refreshFullButton.disabled = !technicalState.apiAvailable || runtimeStatus === "running";
   renderMetricCards(elements.technical.summaryMetrics, [
@@ -1572,6 +1673,7 @@ function renderTechnical() {
     `Modo: ${runtimeScopeLabel}`,
     `Inicio: ${formatDateTime(technical.last_refresh_started_at)}`,
     `Fin: ${formatDateTime(technical.last_refresh_finished_at)}`,
+    `Progreso: ${runtime?.progress_label || `${Math.round(progressPercent)}%`}`,
     `Exitosos: ${summary.resources_success || 0}`,
     `Fallidos: ${summary.resources_failed || 0}`,
     `Filas leidas: ${formatCompact(summary.source_rows_processed || 0)}`,

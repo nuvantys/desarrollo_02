@@ -516,12 +516,14 @@ select:focus {
 }
 
 .progress-shell {
+  position: relative;
   width: 100%;
-  height: 12px;
+  height: 16px;
   margin: 16px 0;
   overflow: hidden;
   border-radius: 999px;
   background: rgba(13, 108, 95, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(13, 108, 95, 0.06);
 }
 
 .progress-bar {
@@ -529,7 +531,125 @@ select:focus {
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, #0d6c5f, #cfdc85);
-  transition: width 0.2s ease;
+  transition: width 0.35s ease;
+  position: relative;
+}
+
+.progress-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 35%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  transform: translateX(-100%);
+  animation: progress-shimmer 1.8s linear infinite;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.progress-header strong {
+  font-size: 1rem;
+}
+
+.progress-header span {
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 0.96rem;
+}
+
+.progress-detail {
+  margin: 0 0 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.progress-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.progress-step {
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(248, 250, 247, 0.86);
+}
+
+.progress-step .step-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  background: rgba(13, 108, 95, 0.08);
+  color: var(--accent);
+}
+
+.progress-step strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.92rem;
+}
+
+.progress-step span {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.progress-step.completed {
+  border-color: rgba(13, 108, 95, 0.18);
+  background: rgba(216, 239, 232, 0.7);
+}
+
+.progress-step.completed .step-index {
+  background: var(--accent);
+  color: #fff;
+}
+
+.progress-step.active {
+  border-color: rgba(201, 134, 29, 0.26);
+  background: rgba(251, 243, 225, 0.9);
+  box-shadow: 0 10px 20px rgba(201, 134, 29, 0.12);
+}
+
+.progress-step.active .step-index {
+  background: var(--warn);
+  color: #fff;
+}
+
+.progress-step.error {
+  border-color: rgba(185, 79, 68, 0.2);
+  background: rgba(252, 236, 234, 0.92);
+}
+
+.progress-step.error .step-index {
+  background: var(--danger);
+  color: #fff;
+}
+
+@keyframes progress-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }
 
 .technical-meta-list {
