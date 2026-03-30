@@ -1,4 +1,4 @@
-import { createAdminClient, AuthError, requireUser } from "../_shared/auth.ts";
+import { createAdminClient } from "../_shared/auth.ts";
 import { corsHeaders, json } from "../_shared/cors.ts";
 
 const meaningfulSteps = [
@@ -273,7 +273,6 @@ Deno.serve(async (request) => {
   }
 
   try {
-    await requireUser(request);
     const [manifest, overview, technical, runtime] = await Promise.all([
       readSnapshotAsset("manifest.json"),
       readSnapshotAsset("overview.json"),
@@ -292,9 +291,6 @@ Deno.serve(async (request) => {
       coverage_max: technical?.coverage_max || manifest?.coverage_max || null,
     });
   } catch (error) {
-    if (error instanceof AuthError) {
-      return json({ error: error.message }, error.status);
-    }
     return json({ error: String(error instanceof Error ? error.message : error) }, 500);
   }
 });

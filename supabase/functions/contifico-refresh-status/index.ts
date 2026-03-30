@@ -1,5 +1,4 @@
 import { corsHeaders, json } from "../_shared/cors.ts";
-import { AuthError, requireUser } from "../_shared/auth.ts";
 
 const meaningfulSteps = [
   { key: "queued", label: "En cola", matches: [] as string[] },
@@ -220,7 +219,6 @@ Deno.serve(async (request) => {
   }
 
   try {
-    await requireUser(request);
     const githubToken = env("GITHUB_WORKFLOW_TOKEN");
     const githubOwner = env("GITHUB_OWNER");
     const githubRepo = env("GITHUB_REPO");
@@ -280,9 +278,6 @@ Deno.serve(async (request) => {
       job: mapped.selected_job,
     });
   } catch (error) {
-    if (error instanceof AuthError) {
-      return json({ error: error.message }, error.status);
-    }
     return json({ error: String(error instanceof Error ? error.message : error) }, 500);
   }
 });

@@ -1,6 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders, json } from "../_shared/cors.ts";
-import { AuthError, requireUser } from "../_shared/auth.ts";
 
 const ALLOWED_FILES = new Set([
   "manifest.json",
@@ -25,7 +24,6 @@ Deno.serve(async (request) => {
   }
 
   try {
-    await requireUser(request);
     const url = new URL(request.url);
     const file = String(url.searchParams.get("file") || "").trim();
     if (!ALLOWED_FILES.has(file)) {
@@ -49,9 +47,6 @@ Deno.serve(async (request) => {
 
     return json(data);
   } catch (error) {
-    if (error instanceof AuthError) {
-      return json({ error: error.message }, error.status);
-    }
     return json({ error: String(error instanceof Error ? error.message : error) }, 500);
   }
 });

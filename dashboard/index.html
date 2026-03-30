@@ -13,7 +13,7 @@
         <p class="eyebrow">Acceso seguro</p>
         <h1>Ingreso al dashboard Contifico</h1>
         <p class="auth-copy">
-          Este sitio usa un acceso simple de frontend para abrir el dashboard publicado y explorar el snapshot analitico en la nube. Inicia sesion para revisar la base, navegar la analitica y usar la vista tecnica sin depender de autenticacion externa.
+          Este sitio usa un acceso simple de frontend para abrir el dashboard publicado y explorar el snapshot analitico en la nube. Inicia sesion para revisar la base, navegar la analitica y usar la vista tecnica con lectura web y refresh cloud.
         </p>
         <form id="auth-form" class="auth-form">
           <label>
@@ -30,11 +30,11 @@
         <div class="auth-notes">
           <article class="auth-note-card">
             <h3>Fuente de verdad</h3>
-            <p>La interfaz lee los JSON publicados junto al sitio, sin depender de Auth externo para mostrar la analitica.</p>
+            <p>La interfaz lee los JSON publicados junto al sitio y puede apoyarse en las funciones cloud para estado tecnico y recarga remota.</p>
           </article>
           <article class="auth-note-card">
             <h3>Operacion</h3>
-            <p>El login simple abre el sitio publicado. La actualizacion remota queda fuera de este modo para priorizar una experiencia estable y rapida.</p>
+            <p>El login simple abre el sitio publicado. El refresh y el estado tecnico se consultan por Edge Functions sin depender de Supabase Auth.</p>
           </article>
         </div>
       </article>

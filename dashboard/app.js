@@ -2408,12 +2408,10 @@ function clearPolling() {
   }
 }
 
-async function fetchRuntimeState(signal, silent = false) {
-  if (authState.provider !== "supabase" || !refreshStatusUrl) {
+async function fetchRuntimeState(signal, silent = false, timeoutMs = 12000) {
+  if (!refreshStatusUrl) {
     technicalState.apiAvailable = false;
-    technicalState.apiError = authState.provider === "simple"
-      ? "Modo web simple: la actualizacion remota esta deshabilitada y se muestra el snapshot publicado."
-      : "No hay endpoint cloud configurado para refresh.";
+    technicalState.apiError = "No hay endpoint cloud configurado para refresh.";
     return { current_job: null, last_job: null };
   }
   try {
@@ -2423,7 +2421,7 @@ async function fetchRuntimeState(signal, silent = false) {
         headers: authHeaders(),
         signal,
       },
-      12000,
+      timeoutMs,
     );
     technicalState.apiAvailable = true;
     technicalState.apiError = "";
@@ -2471,7 +2469,23 @@ function scheduleBootstrapRetry() {
 }
 
 async function fetchBootstrapPayload(signal) {
-  if (authState.provider === "supabase" && bootstrapApiUrl) {
+  if (authState.provider === "simple") {
+    const [technical, runtime] = await Promise.all([
+      fetchSnapshotPayload("technical.json", { signal }, 8000),
+      fetchRuntimeState(signal, true, 3000),
+    ]);
+    return {
+      technical,
+      runtime,
+      bootstrap_generated_at: technical.generated_at || null,
+      run_id: technical.run_id || null,
+      coverage_min: technical.coverage_min || null,
+      coverage_max: technical.coverage_max || null,
+      fallback: true,
+    };
+  }
+
+  if (bootstrapApiUrl) {
     try {
       const payload = await fetchJson(
         bootstrapApiUrl,
@@ -2510,7 +2524,15 @@ async function loadBootstrapState({ preferCache = true, silent = false } = {}) {
   const cached = preferCache ? readCachedJson(cacheKeys.bootstrap) : null;
   if (cached) {
     applyBootstrapPayload(cached);
+    setSessionPhase("ready");
     renderTechnical();
+    if (preferCache) {
+      window.setTimeout(() => {
+        if (!authState.session || dataState.logoutInFlight || dataState.bootstrapInFlight) return;
+        void loadBootstrapState({ preferCache: false, silent: true });
+      }, 0);
+      return Promise.resolve(cached);
+    }
   }
 
   setSessionPhase("bootstrapping");
@@ -2666,8 +2688,8 @@ async function pollRefreshJob(jobId) {
 }
 
 async function startTechnicalRefresh(scope = "refresh") {
-  if (authState.provider !== "supabase" || !technicalState.apiAvailable) {
-    technicalState.apiError = "Modo web simple: la actualizacion remota no esta disponible en este acceso.";
+  if (!refreshApiUrl || !technicalState.apiAvailable) {
+    technicalState.apiError = "La actualizacion remota no esta disponible en este acceso.";
     renderTechnical();
     return;
   }
