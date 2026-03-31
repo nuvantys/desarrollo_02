@@ -396,6 +396,12 @@ function setControlEnabled(button, enabled) {
   }
 }
 
+function canDispatchRefresh() {
+  if (!refreshApiUrl || !authState.session || dataState.logoutInFlight) return false;
+  if (authState.provider === "simple" && !technicalState.apiAvailable) return false;
+  return true;
+}
+
 function updateSessionChrome() {
   if (!authState.enabled) {
     elements.sessionUserEmail.textContent = "Modo sin login";
@@ -1548,6 +1554,14 @@ function setActiveTab(targetId) {
 
 function renderTechnicalAlerts(alerts, runtime) {
   const cards = [...alerts];
+  if (technicalState.apiError && technicalState.apiAvailable) {
+    cards.unshift({
+      level: "warning",
+      title: "Refresh cloud no disponible",
+      message: normalizeCloudError(technicalState.apiError),
+      metric: 0,
+    });
+  }
   if (!technicalState.apiAvailable) {
     cards.unshift({
       level: "warning",
@@ -2098,7 +2112,6 @@ function technicalPhaseSnapshot() {
 
 function renderTechnicalLoadingState() {
   const phaseState = technicalPhaseSnapshot();
-  const canDispatchRefresh = Boolean(authState.session && !dataState.logoutInFlight && refreshApiUrl);
   elements.technical.subtitle.textContent = phaseState.subtitle;
   elements.technical.runtimeBadge.className = phaseState.badgeClass;
   elements.technical.runtimeBadge.textContent = phaseState.badgeLabel;
@@ -2108,8 +2121,8 @@ function renderTechnicalLoadingState() {
   elements.technical.progressPercent.textContent = `${phaseState.percent}%`;
   elements.technical.progressDetail.textContent = phaseState.detail;
   renderProgressSteps(phaseState.steps);
-  setControlEnabled(elements.technical.refreshQuickButton, canDispatchRefresh);
-  setControlEnabled(elements.technical.refreshFullButton, canDispatchRefresh);
+  setControlEnabled(elements.technical.refreshQuickButton, canDispatchRefresh());
+  setControlEnabled(elements.technical.refreshFullButton, canDispatchRefresh());
   setControlEnabled(elements.technical.reloadButton, Boolean(authState.session && !dataState.logoutInFlight));
   renderMetricCards(elements.technical.summaryMetrics, [
     { label: "Ultima actualizacion", value: "--", caption: "Se completara cuando el bootstrap tecnico llegue desde la nube." },
@@ -2156,7 +2169,7 @@ function renderTechnical() {
   const summary = technical.summary || {};
   const runtimeScopeLabel = runtime?.scope_label || summary.run_mode_label || "Modo no disponible";
 
-  const canDispatchRefresh = Boolean(refreshApiUrl && authState.session && !dataState.logoutInFlight);
+  const refreshEnabled = canDispatchRefresh();
   elements.technical.subtitle.textContent = `Cobertura ${technical.coverage_min || "--"} a ${technical.coverage_max || "--"} con run_id ${technical.run_id || "--"} y ultimo modo ${summary.run_mode_label || "--"}.`;
   elements.technical.runtimeBadge.className = runtimeBadgeClass(runtimeStatus);
   elements.technical.runtimeBadge.textContent = runtimeStatus === "running" ? "Actualizando" : runtimeStatus === "error" ? "Con error" : "Estable";
@@ -2174,8 +2187,8 @@ function renderTechnical() {
       : "No hay una corrida activa en este momento.");
   renderProgressSteps(progressSteps);
   setControlEnabled(elements.technical.reloadButton, Boolean(authState.session && !dataState.logoutInFlight));
-  setControlEnabled(elements.technical.refreshQuickButton, canDispatchRefresh && runtimeStatus !== "running");
-  setControlEnabled(elements.technical.refreshFullButton, canDispatchRefresh && runtimeStatus !== "running");
+  setControlEnabled(elements.technical.refreshQuickButton, refreshEnabled && runtimeStatus !== "running");
+  setControlEnabled(elements.technical.refreshFullButton, refreshEnabled && runtimeStatus !== "running");
   renderMetricCards(elements.technical.summaryMetrics, [
     { label: "Ultima actualizacion", value: formatDateTime(technical.generated_at), caption: "Hora efectiva del snapshot tecnico publicado." },
     { label: "Duracion ultima corrida", value: formatDuration(technical.last_refresh_duration_seconds), caption: "Tiempo total de la ultima actualizacion tecnica mas snapshot." },
@@ -2703,6 +2716,15 @@ async function pollRefreshJob(jobId) {
 async function startTechnicalRefresh(scope = "refresh") {
   if (!refreshApiUrl) {
     technicalState.apiError = "La actualizacion remota no esta disponible en este acceso.";
+    technicalState.apiAvailable = false;
+    renderTechnical();
+    return;
+  }
+  if (!canDispatchRefresh()) {
+    technicalState.apiError = authState.provider === "simple"
+      ? "El refresh cloud sigue protegido por autenticacion en Supabase. La version desplegada de las funciones todavia no acepta el acceso web simple."
+      : "La sesion actual no tiene permiso para disparar el refresh cloud.";
+    technicalState.apiAvailable = false;
     renderTechnical();
     return;
   }
@@ -2724,6 +2746,7 @@ async function startTechnicalRefresh(scope = "refresh") {
     await pollRefreshJob(payload.job.job_id);
   } catch (error) {
     technicalState.apiError = normalizeCloudError(error.message);
+    technicalState.apiAvailable = false;
     renderTechnical();
   } finally {
     setButtonBusy(button, false);
