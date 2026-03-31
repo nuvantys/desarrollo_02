@@ -1,17 +1,15 @@
-# Despliegue cloud-only con login
+# Despliegue cloud-only
 
-El proyecto ya quedo preparado para operar sin `localhost` y con base maestra en Supabase. El siguiente paso es publicarlo con autenticacion real para que el dashboard consuma el snapshot privado desde la nube.
+El proyecto opera con base maestra en Supabase y sitio publicado en la nube. No requiere runtime local para servir el dashboard ni para disparar el refresh.
 
 ## Arquitectura final
 
-1. El usuario inicia sesion con Supabase Auth.
-2. El frontend pide cada asset del snapshot a `dashboard-snapshot`.
-3. `dashboard-snapshot` valida la sesion y lee `app.snapshot_assets`.
-4. El usuario autorizado puede disparar `contifico-refresh`.
-5. Supabase Edge Functions despacha GitHub Actions.
-6. GitHub Actions actualiza Supabase desde Contifico.
-7. `export_dashboard_data.py` regenera `dashboard/data/*.json` y publica cada archivo en `app.snapshot_assets`.
-8. El frontend vuelve a leer el snapshot privado actualizado.
+1. El usuario entra al sitio publicado con login simple de frontend.
+2. El frontend lee el snapshot web publicado y consulta funciones cloud para estado y refresh.
+3. `contifico-refresh` despacha GitHub Actions.
+4. GitHub Actions actualiza Supabase desde Contifico.
+5. `export_dashboard_data.py` regenera `dashboard/data/*.json`.
+6. GitHub Pages publica el snapshot renovado y el frontend lo vuelve a consumir.
 
 ## Secrets en GitHub
 
@@ -28,9 +26,10 @@ El proyecto ya quedo preparado para operar sin `localhost` y con base maestra en
 
 ## Funciones a desplegar en Supabase
 
-- `supabase/functions/dashboard-snapshot`
 - `supabase/functions/contifico-refresh`
 - `supabase/functions/contifico-refresh-status`
+- `supabase/functions/dashboard-bootstrap`
+- `supabase/functions/dashboard-snapshot`
 
 ## Configuracion del frontend
 
@@ -39,11 +38,16 @@ El proyecto ya quedo preparado para operar sin `localhost` y con base maestra en
 ```js
 window.CONTIFICO_CONFIG = {
   snapshotBase: "./data",
+  bootstrapApiUrl: "https://anaeoorbwnpstuievcwr.supabase.co/functions/v1/dashboard-bootstrap",
   snapshotApiUrl: "https://anaeoorbwnpstuievcwr.supabase.co/functions/v1/dashboard-snapshot",
   refreshApiUrl: "https://anaeoorbwnpstuievcwr.supabase.co/functions/v1/contifico-refresh",
   refreshStatusUrl: "https://anaeoorbwnpstuievcwr.supabase.co/functions/v1/contifico-refresh-status",
-  supabaseUrl: "https://anaeoorbwnpstuievcwr.supabase.co",
-  supabaseAnonKey: "<SUPABASE_ANON_KEY>",
+  supabaseUrl: "",
+  supabaseAnonKey: "",
+  simpleLogin: {
+    email: "admin@nuvantys.com",
+    password: "Nuvant@1410",
+  },
 };
 ```
 
@@ -53,13 +57,13 @@ El repo ya quedo listo para publicar `dashboard/` por GitHub Pages con el workfl
 
 Lectura correcta del escenario actual:
 
-- si `desarrollo_02` pasa a publico, GitHub Pages es la via mas directa
-- si el repo sigue privado dentro de una organizacion `Free`, GitHub puede no permitir Pages y entonces la salida correcta es Vercel o Netlify
+- si `desarrollo_02` es publico, GitHub Pages es la via mas directa
+- si el repo no puede usar Pages, la salida correcta es Vercel o Netlify
 
-La aplicacion ya no depende de `localhost`; solo necesita un hosting estatico para servir `dashboard/`.
+La aplicacion solo necesita hosting estatico para servir `dashboard/`.
 
 ## Pendiente operativo
 
-- El usuario `admin@nuvantys.com` ya puede autenticarse en Supabase Auth.
-- `dashboard/config.js` ya quedo con la `supabaseAnonKey` real.
-- Si se usa GitHub Pages, revisa el primer run de `deploy-dashboard-pages` en la pestaña `Actions`.
+- el sitio publicado debe servir la carpeta `dashboard/`
+- las funciones desplegadas en Supabase deben coincidir con el codigo del repo
+- si se usa GitHub Pages, revisa el workflow `deploy-dashboard-pages` en `Actions`

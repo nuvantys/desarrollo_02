@@ -1230,25 +1230,25 @@ def build_source_overview(conn, meta: dict[str, Any], recent_runs: list[dict[str
             "role": "Snapshot estable consumido por la vista analitica y regenerado desde Supabase.",
         },
         {
-            "layer": "local_dashboard_api.py",
-            "role": "Expone estado tecnico y orquesta refresh bajo demanda desde la UI, sin persistir datos fuera de Supabase.",
+            "layer": "supabase/functions/*",
+            "role": "Expone estado tecnico, bootstrap y refresh bajo demanda desde la nube, sin runtime local.",
         },
     ]
     operating_modes = [
         {
-            "mode": "Snapshot estable",
-            "script": "dashboard/start_dashboard_server.ps1",
-            "description": "Levanta dashboard + API tecnica y conserva el ultimo snapshot materializado desde Supabase sin ejecutar refresco automatico.",
+            "mode": "Sitio publicado",
+            "script": "https://nuvantys.github.io/desarrollo_02/",
+            "description": "Sirve el dashboard publicado en la nube y consume el snapshot web generado desde Supabase.",
         },
         {
             "mode": "Refresh rapido",
-            "script": "dashboard/start_dashboard_live_refresh.ps1",
-            "description": "Levanta dashboard + API tecnica y dispara el modo operacional: lee cambios recientes desde Contifico API, actualiza Supabase y republica el snapshot.",
+            "script": "supabase/functions/contifico-refresh",
+            "description": "Dispara el modo operacional desde la nube: lee cambios recientes desde Contifico API, actualiza Supabase y republica el snapshot.",
         },
         {
             "mode": "Refresh completo",
-            "script": "dashboard/start_dashboard_full_refresh.ps1",
-            "description": "Levanta dashboard + API tecnica y dispara un backfill historico completo desde Contifico API hacia Supabase y JSON.",
+            "script": "supabase/functions/contifico-refresh",
+            "description": "Dispara un backfill historico completo desde la nube hacia Supabase y el snapshot web.",
         },
     ]
     return {
