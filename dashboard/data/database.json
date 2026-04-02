@@ -1,34 +1,34 @@
 {
-  "run_id": "20260330102155",
+  "run_id": "20260402191655",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-03-30T10:23:11+00:00",
+  "generated_at": "2026-04-02T19:18:29+00:00",
   "filters_available": {
     "document_types": [
       {
         "value": "FAC",
         "label": "FAC",
-        "count": 19342
+        "count": 19395
       },
       {
         "value": "COT",
         "label": "COT",
-        "count": 1971
+        "count": 1980
       },
       {
         "value": "DAC",
         "label": "DAC",
-        "count": 957
+        "count": 958
       },
       {
         "value": "NCT",
         "label": "NCT",
-        "count": 438
+        "count": 440
       },
       {
         "value": "NAI",
         "label": "NAI",
-        "count": 355
+        "count": 356
       },
       {
         "value": "DNA",
@@ -38,12 +38,12 @@
       {
         "value": "NVE",
         "label": "NVE",
-        "count": 228
+        "count": 229
       },
       {
         "value": "CVE",
         "label": "CVE",
-        "count": 163
+        "count": 164
       },
       {
         "value": "LQC",
@@ -85,22 +85,22 @@
       {
         "value": "G",
         "label": "G",
-        "count": 10812
+        "count": 10832
       },
       {
         "value": "C",
         "label": "C",
-        "count": 10653
+        "count": 10664
       },
       {
         "value": "P",
         "label": "P",
-        "count": 1255
+        "count": 1290
       },
       {
         "value": "E",
         "label": "E",
-        "count": 1124
+        "count": 1126
       },
       {
         "value": "A",
@@ -122,17 +122,17 @@
       {
         "value": "NO8bYrxZfkmRd7j4",
         "label": "BODEGA PRINCIPAL",
-        "count": 5267
+        "count": 5287
       },
       {
         "value": "5xmbm8PZS18waoKM",
         "label": "ALMACEN MACHACHI",
-        "count": 2456
+        "count": 2465
       },
       {
         "value": "GEjb2rJmTKWqbVNW",
         "label": "BODEGA LUIS CONDOR",
-        "count": 930
+        "count": 934
       },
       {
         "value": "wJvaMN3KuxDKbpzg",
@@ -346,82 +346,82 @@
       {
         "value": "MEegJZVqvfPKXdQ5",
         "label": "INVENTARIO DE REPUESTOS",
-        "count": 46623
+        "count": 46643
       },
       {
         "value": "0yelYxVlQIOmJaER",
         "label": "COSTO DE REPUESTOS",
-        "count": 30599
+        "count": 30619
       },
       {
         "value": "loejRZVwGclDLeQM",
         "label": "VENTA DE REPUESTOS",
-        "count": 29370
+        "count": 29388
       },
       {
         "value": "RMdR6OwLktno9dl6",
         "label": "Clientes Comerciales",
-        "count": 24815
+        "count": 24854
       },
       {
         "value": "pZeVOAlJDU0mraGW",
         "label": "Proveedores",
-        "count": 22058
+        "count": 22085
       },
       {
         "value": "EMaxkn98mtmD6e5G",
         "label": "Rebaja y/o Descuentos sobre Ventas",
-        "count": 16481
+        "count": 16496
       },
       {
         "value": "YWb4xQDrPsYENbZ1",
         "label": "BANCO PICHINCHA",
-        "count": 12032
+        "count": 12039
       },
       {
         "value": "5wboY3RwMhl5NexE",
         "label": "BANCO DE GUAYAQUIL",
-        "count": 7717
+        "count": 7745
       },
       {
         "value": "rRbDk1PYRIjw2a6L",
         "label": "IVA sobre Compras",
-        "count": 6166
+        "count": 6170
       },
       {
         "value": "5wbo2V9Bxil5NaxE",
         "label": "VENTA DE CONSUMIBLES",
-        "count": 5827
+        "count": 5837
       },
       {
         "value": "1qdG6vgQXsWExbN8",
         "label": "IVA sobre Ventas",
-        "count": 5429
+        "count": 5435
       },
       {
         "value": "MEegJZ6QvSPKXdQ5",
         "label": "Cuenta por Pagar Funcionarios y/o Empleados",
-        "count": 4729
+        "count": 4743
       },
       {
         "value": "Yjbqx7XEKtLnAaLN",
         "label": "INVENTARIO DE CONSUMIBLES",
-        "count": 4529
+        "count": 4537
       },
       {
         "value": "Lmav2l7MWCOqma3N",
         "label": "COSTO DE CONSUMIBLES",
-        "count": 3694
+        "count": 3702
       },
       {
         "value": "wKe5yQEv4Fg3me31",
         "label": "CAJA PRINCIPAL",
-        "count": 3334
+        "count": 3336
       },
       {
         "value": "Arb68X2VxhV72eyR",
         "label": "Combustible Vtas.",
-        "count": 2580
+        "count": 2581
       },
       {
         "value": "gQbW6zYY0HzZ7a6w",
@@ -431,7 +431,7 @@
       {
         "value": "loejR6vKXslDLeQM",
         "label": "1.75% Bienes Muebles de Naturaleza Corporal",
-        "count": 2427
+        "count": 2438
       },
       {
         "value": "Lmav2lDR7tOqma3N",
@@ -441,7 +441,7 @@
       {
         "value": "EMaxkn9LDtmD6e5G",
         "label": "Suministros, Materiales y Repuestos Costos",
-        "count": 2100
+        "count": 2106
       },
       {
         "value": "XKdwpVZ59u0kMegW",
@@ -451,22 +451,22 @@
       {
         "value": "RBe31j3vmC7o1bLJ",
         "label": "Anticipo a Empleados",
-        "count": 1593
+        "count": 1603
       },
       {
         "value": "YWb4xQ4YXuYENbZ1",
         "label": "Sueldos por Pagar",
-        "count": 1560
+        "count": 1580
       },
       {
         "value": "mBdJ6ylWLUplGd0J",
         "label": "Alimentación Vtas.",
-        "count": 1499
+        "count": 1509
       },
       {
         "value": "wKe5yQ3w0hg3me31",
         "label": "Miscelaneos Vtas.",
-        "count": 1496
+        "count": 1498
       },
       {
         "value": "Y4erk8XMmHw7Ka2L",
@@ -476,62 +476,62 @@
       {
         "value": "MEegJMxEwCPKXdQ5",
         "label": "1.75% Bienes Muebles de Naturaleza Corporal",
-        "count": 1325
+        "count": 1342
       },
       {
         "value": "xmbmZOGEoH18wdoK",
         "label": "Mercaderías en Transito",
-        "count": 1293
+        "count": 1297
       },
       {
         "value": "XKdwpVZRkc0kMegW",
         "label": "30% Bienes",
-        "count": 1288
+        "count": 1291
       },
       {
         "value": "RBe31rRL1t7o1bLJ",
         "label": "Materiales de Ferretería",
-        "count": 1048
+        "count": 1049
       },
       {
         "value": "jZdyPoMm1h6KvbJ4",
         "label": "Anticipo a Proveedores",
-        "count": 971
+        "count": 973
       },
       {
         "value": "Gge0RYOA1IJQObAD",
         "label": "9.45% Aportes Individuales",
-        "count": 942
+        "count": 952
       },
       {
         "value": "BleXDLnkzsBjverN",
         "label": "11.15% Aportes Patronales I.E.S.S.",
-        "count": 941
+        "count": 951
       },
       {
         "value": "O8bYEW0lPSkmRb7j",
         "label": "1% Secap - Iece",
-        "count": 931
+        "count": 941
       },
       {
         "value": "xgepY8778cQqra1p",
         "label": "Anticipos de Clientes",
-        "count": 918
+        "count": 919
       },
       {
         "value": "LqdPNKm43tv9Yal4",
         "label": "Mantenimiento Vehículo",
-        "count": 843
+        "count": 844
       },
       {
         "value": "9jaKr1mzqh8Pgek5",
         "label": "Fletes",
-        "count": 836
+        "count": 839
       },
       {
         "value": "gQbW6LmjrfzZ7a6w",
         "label": "Vacaciones",
-        "count": 788
+        "count": 798
       },
       {
         "value": "RBe31KLK3I7o1bLJ",
@@ -541,22 +541,22 @@
       {
         "value": "RMdR6Ow5vUno9dl6",
         "label": "Décimo Tercer Sueldo",
-        "count": 717
+        "count": 720
       },
       {
         "value": "pZeVOAl0Df0mraGW",
         "label": "Décimo Cuarto Sueldo",
-        "count": 714
+        "count": 717
       },
       {
         "value": "9jaKr7X4qF8Pgek5",
         "label": "Peajes",
-        "count": 713
+        "count": 714
       },
       {
         "value": "xgepY7mnoiQqra1p",
         "label": "2.75% Servicios",
-        "count": 692
+        "count": 693
       },
       {
         "value": "0yelYxDMQFOmJaER",
@@ -571,39 +571,39 @@
       {
         "value": "rRbDk1PWXIjw2a6L",
         "label": "Sueldos Unificados Vtas.",
-        "count": 570
+        "count": 578
       },
       {
         "value": "01dNkLp1kiVJKeX7",
         "label": "Décimo Tercer Sueldo Vtas.",
-        "count": 569
+        "count": 577
       },
       {
         "value": "QzaOYMq97F5lVdp4",
         "label": "Décimo Cuarto Sueldo Vtas.",
-        "count": 567
+        "count": 575
       },
       {
         "value": "9jaKr1m9Wh8Pgek5",
         "label": "Aportes Patronales al IESS Vtas.",
-        "count": 566
+        "count": 574
       },
       {
-        "value": "EMaxkn97VTmD6e5G",
-        "label": "70% Servicios",
-        "count": 565
+        "value": "BXdL97nWMhNVxeJZ",
+        "label": "Secap - Iece Vtas.",
+        "count": 572
       }
     ],
     "cost_centers": [
       {
         "value": "9pgenrglKFlg0eNQ",
         "label": "Bodega Principal",
-        "count": 57352
+        "count": 57393
       },
       {
         "value": "N5wboQjmxil5NexE",
         "label": "Bodega Machachi",
-        "count": 17602
+        "count": 17663
       }
     ]
   },
@@ -613,20 +613,20 @@
     "table_count": 29,
     "view_count": 10,
     "relationship_count": 55,
-    "backend_total_rows": 630871,
-    "core_rows": 629733,
+    "backend_total_rows": 632422,
+    "core_rows": 631204,
     "raw_rows": 0,
-    "meta_rows": 1138,
-    "frontend_total_rows": 163888,
-    "database_total_size_bytes": 127115264,
-    "frontend_total_size_bytes": 42864492,
+    "meta_rows": 1218,
+    "frontend_total_rows": 164453,
+    "database_total_size_bytes": 127238144,
+    "frontend_total_size_bytes": 43012618,
     "optional_relationships": 45,
     "total_orphans": 0
   },
   "story_cards": [
     {
       "title": "Base maestra relacional",
-      "body": "La base Supabase postgres concentra 29 tablas base, 10 vistas y 55 relaciones FK materializadas. El esquema core domina el volumen con 629733 filas y soporta toda la capa analitica publicada desde la nube."
+      "body": "La base Supabase postgres concentra 29 tablas base, 10 vistas y 55 relaciones FK materializadas. El esquema core domina el volumen con 631204 filas y soporta toda la capa analitica publicada desde la nube."
     },
     {
       "title": "Enfoque en relaciones",
@@ -634,7 +634,7 @@
     },
     {
       "title": "Back versus front",
-      "body": "El backend en Supabase conserva 630871 filas entre meta, raw y core, mientras el snapshot web expone 163888 registros agregados en 10 archivos JSON para exploracion rapida sin abrir la base al navegador."
+      "body": "El backend en Supabase conserva 632422 filas entre meta, raw y core, mientras el snapshot web expone 164453 registros agregados en 10 archivos JSON para exploracion rapida sin abrir la base al navegador."
     },
     {
       "title": "Puntos de mayor acoplamiento",
@@ -646,15 +646,15 @@
       "schema_name": "core",
       "table_count": 25,
       "view_count": 0,
-      "total_rows": 629733,
-      "total_size_bytes": 126689280
+      "total_rows": 631204,
+      "total_size_bytes": 126795776
     },
     {
       "schema_name": "meta",
       "table_count": 3,
       "view_count": 0,
-      "total_rows": 1138,
-      "total_size_bytes": 393216
+      "total_rows": 1218,
+      "total_size_bytes": 409600
     },
     {
       "schema_name": "raw",
@@ -676,43 +676,43 @@
       "schema_name": "core",
       "table_name": "asiento_detalles",
       "qualified_name": "core.asiento_detalles",
-      "row_count": 279354,
+      "row_count": 279829,
       "column_count": 8,
       "nullable_columns": 4,
       "pk_columns": "asiento_id, detalle_index",
-      "total_size_bytes": 47423488,
+      "total_size_bytes": 47456256,
       "data_size_bytes": 31588352,
-      "index_size_bytes": 15794176
+      "index_size_bytes": 15826944
     },
     {
       "schema_name": "core",
       "table_name": "documento_detalles",
       "qualified_name": "core.documento_detalles",
-      "row_count": 77447,
+      "row_count": 77720,
       "column_count": 30,
       "nullable_columns": 26,
       "pk_columns": "documento_id, detalle_index",
-      "total_size_bytes": 19529728,
+      "total_size_bytes": 19546112,
       "data_size_bytes": 15138816,
-      "index_size_bytes": 4349952
+      "index_size_bytes": 4366336
     },
     {
       "schema_name": "core",
       "table_name": "tickets_detalles",
       "qualified_name": "core.tickets_detalles",
-      "row_count": 77447,
+      "row_count": 77720,
       "column_count": 10,
       "nullable_columns": 6,
       "pk_columns": "documento_id, detalle_index",
-      "total_size_bytes": 15073280,
+      "total_size_bytes": 15089664,
       "data_size_bytes": 10682368,
-      "index_size_bytes": 4349952
+      "index_size_bytes": 4366336
     },
     {
       "schema_name": "core",
       "table_name": "asientos",
       "qualified_name": "core.asientos",
-      "row_count": 67402,
+      "row_count": 67519,
       "column_count": 5,
       "nullable_columns": 2,
       "pk_columns": "id",
@@ -724,19 +724,19 @@
       "schema_name": "core",
       "table_name": "documentos",
       "qualified_name": "core.documentos",
-      "row_count": 23911,
+      "row_count": 23979,
       "column_count": 58,
       "nullable_columns": 55,
       "pk_columns": "id",
-      "total_size_bytes": 10674176,
+      "total_size_bytes": 10682368,
       "data_size_bytes": 9306112,
-      "index_size_bytes": 1327104
+      "index_size_bytes": 1335296
     },
     {
       "schema_name": "core",
       "table_name": "movimiento_detalles",
       "qualified_name": "core.movimiento_detalles",
-      "row_count": 37122,
+      "row_count": 37232,
       "column_count": 11,
       "nullable_columns": 7,
       "pk_columns": "movimiento_id, detalle_index",
@@ -748,7 +748,7 @@
       "schema_name": "core",
       "table_name": "documento_cobros",
       "qualified_name": "core.documento_cobros",
-      "row_count": 24039,
+      "row_count": 24068,
       "column_count": 20,
       "nullable_columns": 16,
       "pk_columns": "documento_id, cobro_index",
@@ -760,43 +760,43 @@
       "schema_name": "core",
       "table_name": "tickets_documentos",
       "qualified_name": "core.tickets_documentos",
-      "row_count": 23911,
+      "row_count": 23979,
       "column_count": 4,
       "nullable_columns": 1,
       "pk_columns": "id",
-      "total_size_bytes": 3227648,
-      "data_size_bytes": 1843200,
-      "index_size_bytes": 1343488
+      "total_size_bytes": 3244032,
+      "data_size_bytes": 1851392,
+      "index_size_bytes": 1351680
     },
     {
       "schema_name": "core",
       "table_name": "movimientos",
       "qualified_name": "core.movimientos",
-      "row_count": 9024,
+      "row_count": 9057,
       "column_count": 17,
       "nullable_columns": 14,
       "pk_columns": "id",
-      "total_size_bytes": 2318336,
-      "data_size_bytes": 1753088,
+      "total_size_bytes": 2326528,
+      "data_size_bytes": 1761280,
       "index_size_bytes": 524288
     },
     {
       "schema_name": "core",
       "table_name": "banco_movimientos",
       "qualified_name": "core.banco_movimientos",
-      "row_count": 2751,
+      "row_count": 2762,
       "column_count": 9,
       "nullable_columns": 6,
       "pk_columns": "id",
-      "total_size_bytes": 999424,
+      "total_size_bytes": 1007616,
       "data_size_bytes": 720896,
-      "index_size_bytes": 237568
+      "index_size_bytes": 245760
     },
     {
       "schema_name": "core",
       "table_name": "banco_movimiento_detalles",
       "qualified_name": "core.banco_movimiento_detalles",
-      "row_count": 3213,
+      "row_count": 3224,
       "column_count": 7,
       "nullable_columns": 3,
       "pk_columns": "movimiento_id, detalle_index",
@@ -808,12 +808,12 @@
       "schema_name": "core",
       "table_name": "personas",
       "qualified_name": "core.personas",
-      "row_count": 2060,
+      "row_count": 2063,
       "column_count": 43,
       "nullable_columns": 40,
       "pk_columns": "id",
-      "total_size_bytes": 712704,
-      "data_size_bytes": 540672,
+      "total_size_bytes": 720896,
+      "data_size_bytes": 548864,
       "index_size_bytes": 131072
     },
     {
@@ -842,27 +842,27 @@
     },
     {
       "schema_name": "meta",
+      "table_name": "load_metrics",
+      "qualified_name": "meta.load_metrics",
+      "row_count": 719,
+      "column_count": 6,
+      "nullable_columns": 0,
+      "pk_columns": "run_id, resource, stage, table_name",
+      "total_size_bytes": 180224,
+      "data_size_bytes": 73728,
+      "index_size_bytes": 73728
+    },
+    {
+      "schema_name": "meta",
       "table_name": "extract_runs",
       "qualified_name": "meta.extract_runs",
-      "row_count": 451,
+      "row_count": 483,
       "column_count": 12,
       "nullable_columns": 2,
       "pk_columns": "run_id, resource",
       "total_size_bytes": 163840,
       "data_size_bytes": 90112,
       "index_size_bytes": 40960
-    },
-    {
-      "schema_name": "meta",
-      "table_name": "load_metrics",
-      "qualified_name": "meta.load_metrics",
-      "row_count": 671,
-      "column_count": 6,
-      "nullable_columns": 0,
-      "pk_columns": "run_id, resource, stage, table_name",
-      "total_size_bytes": 163840,
-      "data_size_bytes": 65536,
-      "index_size_bytes": 65536
     },
     {
       "schema_name": "core",
@@ -920,8 +920,8 @@
       "column_count": 10,
       "nullable_columns": 6,
       "pk_columns": "guia_id, detalle_index",
-      "total_size_bytes": 73728,
-      "data_size_bytes": 16384,
+      "total_size_bytes": 65536,
+      "data_size_bytes": 8192,
       "index_size_bytes": 16384
     },
     {
@@ -1748,7 +1748,7 @@
       "table_name": "core.personas",
       "outgoing_fks": 5,
       "incoming_fks": 9,
-      "row_count": 2060
+      "row_count": 2063
     },
     {
       "table_name": "core.cuentas_contables",
@@ -1766,7 +1766,7 @@
       "table_name": "core.documentos",
       "outgoing_fks": 5,
       "incoming_fks": 5,
-      "row_count": 23911
+      "row_count": 23979
     },
     {
       "table_name": "core.categorias",
@@ -1784,19 +1784,19 @@
       "table_name": "core.documento_detalles",
       "outgoing_fks": 4,
       "incoming_fks": 0,
-      "row_count": 77447
+      "row_count": 77720
     },
     {
       "table_name": "core.tickets_detalles",
       "outgoing_fks": 3,
       "incoming_fks": 1,
-      "row_count": 77447
+      "row_count": 77720
     },
     {
       "table_name": "core.movimientos",
       "outgoing_fks": 3,
       "incoming_fks": 1,
-      "row_count": 9024
+      "row_count": 9057
     },
     {
       "table_name": "core.guias",
@@ -1808,25 +1808,25 @@
       "table_name": "core.asiento_detalles",
       "outgoing_fks": 3,
       "incoming_fks": 0,
-      "row_count": 279354
+      "row_count": 279829
     },
     {
       "table_name": "core.movimiento_detalles",
       "outgoing_fks": 3,
       "incoming_fks": 0,
-      "row_count": 37122
+      "row_count": 37232
     },
     {
       "table_name": "core.banco_movimiento_detalles",
       "outgoing_fks": 3,
       "incoming_fks": 0,
-      "row_count": 3213
+      "row_count": 3224
     },
     {
       "table_name": "core.banco_movimientos",
       "outgoing_fks": 2,
       "incoming_fks": 1,
-      "row_count": 2751
+      "row_count": 2762
     },
     {
       "table_name": "core.guia_destinatarios",
@@ -1850,13 +1850,13 @@
       "table_name": "core.documento_cobros",
       "outgoing_fks": 2,
       "incoming_fks": 0,
-      "row_count": 24039
+      "row_count": 24068
     },
     {
       "table_name": "core.tickets_documentos",
       "outgoing_fks": 1,
       "incoming_fks": 1,
-      "row_count": 23911
+      "row_count": 23979
     },
     {
       "table_name": "core.guia_detalles",
@@ -1874,7 +1874,7 @@
       "table_name": "core.asientos",
       "outgoing_fks": 0,
       "incoming_fks": 1,
-      "row_count": 67402
+      "row_count": 67519
     },
     {
       "table_name": "core.marcas",
@@ -2004,48 +2004,48 @@
   "frontend_assets": [
     {
       "file_name": "products.json",
-      "rows_exposed": 77481,
-      "size_bytes": 22932949,
+      "rows_exposed": 77754,
+      "size_bytes": 23014086,
       "collection_count": 3,
       "largest_collection": "line_facts",
-      "largest_collection_rows": 77447
+      "largest_collection_rows": 77720
     },
     {
       "file_name": "inventory.json",
-      "rows_exposed": 46204,
-      "size_bytes": 10339668,
+      "rows_exposed": 46347,
+      "size_bytes": 10371000,
       "collection_count": 5,
       "largest_collection": "movement_line_facts",
-      "largest_collection_rows": 37122
+      "largest_collection_rows": 37232
     },
     {
       "file_name": "commercial.json",
-      "rows_exposed": 24041,
-      "size_bytes": 5770880,
+      "rows_exposed": 24109,
+      "size_bytes": 5787669,
       "collection_count": 4,
       "largest_collection": "document_facts",
-      "largest_collection_rows": 23911
+      "largest_collection_rows": 23979
     },
     {
       "file_name": "accounting.json",
-      "rows_exposed": 15289,
-      "size_bytes": 3643749,
+      "rows_exposed": 15368,
+      "size_bytes": 3662408,
       "collection_count": 8,
       "largest_collection": "monthly_facts",
-      "largest_collection_rows": 12231
+      "largest_collection_rows": 12297
     },
     {
       "file_name": "technical.json",
       "rows_exposed": 180,
-      "size_bytes": 55120,
+      "size_bytes": 55158,
       "collection_count": 13,
       "largest_collection": "fk_health",
       "largest_collection_rows": 54
     },
     {
       "file_name": "customers.json",
-      "rows_exposed": 314,
-      "size_bytes": 49616,
+      "rows_exposed": 315,
+      "size_bytes": 49673,
       "collection_count": 4,
       "largest_collection": "customer_stats",
       "largest_collection_rows": 200
@@ -2053,23 +2053,23 @@
     {
       "file_name": "tables.json",
       "rows_exposed": 167,
-      "size_bytes": 28465,
+      "size_bytes": 28476,
       "collection_count": 4,
       "largest_collection": "top_customers",
       "largest_collection_rows": 50
     },
     {
       "file_name": "overview.json",
-      "rows_exposed": 102,
-      "size_bytes": 17609,
+      "rows_exposed": 103,
+      "size_bytes": 17699,
       "collection_count": 4,
       "largest_collection": "monthly_story",
-      "largest_collection_rows": 85
+      "largest_collection_rows": 86
     },
     {
       "file_name": "quality.json",
       "rows_exposed": 88,
-      "size_bytes": 16559,
+      "size_bytes": 16567,
       "collection_count": 5,
       "largest_collection": "fk_health",
       "largest_collection_rows": 54
@@ -2077,7 +2077,7 @@
     {
       "file_name": "manifest.json",
       "rows_exposed": 22,
-      "size_bytes": 9877,
+      "size_bytes": 9882,
       "collection_count": 3,
       "largest_collection": "data_files",
       "largest_collection_rows": 10
@@ -2086,229 +2086,245 @@
   "front_back_inventory": [
     {
       "domain": "Comercial",
-      "backend_rows": 125397,
-      "frontend_rows": 24041,
+      "backend_rows": 125767,
+      "frontend_rows": 24109,
       "frontend_file": "commercial.json",
       "backend_scope": "documentos, documento_detalles, documento_cobros"
     },
     {
       "domain": "Clientes",
-      "backend_rows": 2060,
-      "frontend_rows": 314,
+      "backend_rows": 2063,
+      "frontend_rows": 315,
       "frontend_file": "customers.json",
       "backend_scope": "personas"
     },
     {
       "domain": "Productos",
       "backend_rows": 1237,
-      "frontend_rows": 77481,
+      "frontend_rows": 77754,
       "frontend_file": "products.json",
       "backend_scope": "productos"
     },
     {
       "domain": "Inventario",
-      "backend_rows": 46294,
-      "frontend_rows": 46204,
+      "backend_rows": 46437,
+      "frontend_rows": 46347,
       "frontend_file": "inventory.json",
       "backend_scope": "movimientos, movimiento_detalles, guias, guia_destinatarios, guia_detalles"
     },
     {
       "domain": "Contabilidad",
-      "backend_rows": 346756,
-      "frontend_rows": 15289,
+      "backend_rows": 347348,
+      "frontend_rows": 15368,
       "frontend_file": "accounting.json",
       "backend_scope": "asientos, asiento_detalles"
     },
     {
       "domain": "Tesoreria",
-      "backend_rows": 5969,
-      "frontend_rows": 15289,
+      "backend_rows": 5991,
+      "frontend_rows": 15368,
       "frontend_file": "accounting.json",
       "backend_scope": "banco_cuentas, banco_movimientos, banco_movimiento_detalles"
     },
     {
       "domain": "Calidad",
-      "backend_rows": 1138,
+      "backend_rows": 1218,
       "frontend_rows": 88,
       "frontend_file": "quality.json",
       "backend_scope": "extract_runs, watermarks, load_metrics"
     },
     {
       "domain": "Tecnica",
-      "backend_rows": 1138,
+      "backend_rows": 1218,
       "frontend_rows": 180,
       "frontend_file": "technical.json",
       "backend_scope": "extract_runs, watermarks, load_metrics"
     },
     {
       "domain": "Tablas analiticas",
-      "backend_rows": 101574,
+      "backend_rows": 101792,
       "frontend_rows": 167,
       "frontend_file": "tables.json",
       "backend_scope": "documentos, productos, movimientos, asientos"
     }
   ],
   "performance_summary": {
-    "latest_run_id": "20260330102155",
-    "latest_total_duration_seconds": 76,
-    "latest_total_pages": 121,
-    "latest_total_source_rows": 5605,
-    "latest_total_core_rows": 6985,
+    "latest_run_id": "20260402191655",
+    "latest_total_duration_seconds": 92,
+    "latest_total_pages": 297,
+    "latest_total_source_rows": 5941,
+    "latest_total_core_rows": 8460,
     "slowest_resource": "documento",
-    "slowest_duration_seconds": 45,
+    "slowest_duration_seconds": 54,
     "highest_fanout_resource": "contabilidad/asiento",
-    "highest_fanout_ratio": 4.0,
+    "highest_fanout_ratio": 5.06,
     "highest_pages_resource": "documento",
-    "highest_pages_fetched": 64
+    "highest_pages_fetched": 171
   },
   "performance_story_cards": [
     {
       "title": "Recurso mas costoso del refresh",
-      "body": "El recurso mas lento hoy es documento con 45 segundos. Consume 59.21% del tiempo de extraccion y carga del ultimo run."
+      "body": "El recurso mas lento hoy es documento con 54 segundos. Consume 58.7% del tiempo de extraccion y carga del ultimo run."
     },
     {
       "title": "Principal driver tecnico",
-      "body": "El mayor recorrido por paginas esta en documento con 64 paginas. El mayor fanout lo presenta contabilidad/asiento con una expansion de 4.0 filas core por fila fuente."
+      "body": "El mayor recorrido por paginas esta en documento con 171 paginas. El mayor fanout lo presenta contabilidad/asiento con una expansion de 5.06 filas core por fila fuente."
     },
     {
       "title": "Lectura operativa",
-      "body": "En el ultimo run se recorrieron 121 paginas, se recuperaron 5605 filas fuente y se materializaron 6985 filas core. El punto critico no es solo el volumen, sino la combinacion entre paginacion remota y expansion a detalles."
+      "body": "En el ultimo run se recorrieron 297 paginas, se recuperaron 5941 filas fuente y se materializaron 8460 filas core. El punto critico no es solo el volumen, sino la combinacion entre paginacion remota y expansion a detalles."
     }
   ],
   "performance_resources": [
     {
       "resource": "documento",
-      "latest_run_id": "20260330102155",
-      "latest_duration_seconds": 45,
-      "avg_duration_seconds": 47.0,
-      "max_duration_seconds": 49,
-      "latest_pages_fetched": 64,
-      "latest_source_count": 54,
-      "latest_core_rows_loaded": 67,
-      "source_rows_per_second": 1.2,
-      "core_rows_per_second": 1.49,
-      "fanout_ratio": 1.24,
-      "duration_share_pct": 59.21,
+      "latest_run_id": "20260402191655",
+      "latest_duration_seconds": 54,
+      "avg_duration_seconds": 50.0,
+      "max_duration_seconds": 55,
+      "latest_pages_fetched": 171,
+      "latest_source_count": 161,
+      "latest_core_rows_loaded": 437,
+      "source_rows_per_second": 2.98,
+      "core_rows_per_second": 8.09,
+      "fanout_ratio": 2.71,
+      "duration_share_pct": 58.7,
       "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
       "resource": "banco/movimiento",
-      "latest_run_id": "20260330102155",
-      "latest_duration_seconds": 13,
-      "avg_duration_seconds": 14.4,
-      "max_duration_seconds": 15,
+      "latest_run_id": "20260402191655",
+      "latest_duration_seconds": 16,
+      "avg_duration_seconds": 22.2,
+      "max_duration_seconds": 52,
       "latest_pages_fetched": 1,
-      "latest_source_count": 2751,
-      "latest_core_rows_loaded": 5964,
-      "source_rows_per_second": 211.62,
-      "core_rows_per_second": 458.77,
+      "latest_source_count": 2762,
+      "latest_core_rows_loaded": 5986,
+      "source_rows_per_second": 172.62,
+      "core_rows_per_second": 374.12,
       "fanout_ratio": 2.17,
-      "duration_share_pct": 17.11,
+      "duration_share_pct": 17.39,
       "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
       "resource": "producto",
-      "latest_run_id": "20260330102155",
-      "latest_duration_seconds": 8,
-      "avg_duration_seconds": 8.2,
+      "latest_run_id": "20260402191655",
+      "latest_duration_seconds": 9,
+      "avg_duration_seconds": 8.4,
       "max_duration_seconds": 9,
       "latest_pages_fetched": 2,
       "latest_source_count": 1,
       "latest_core_rows_loaded": 1,
-      "source_rows_per_second": 0.12,
-      "core_rows_per_second": 0.12,
+      "source_rows_per_second": 0.11,
+      "core_rows_per_second": 0.11,
       "fanout_ratio": 1.0,
-      "duration_share_pct": 10.53,
+      "duration_share_pct": 9.78,
       "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
       "resource": "movimiento-inventario",
-      "latest_run_id": "20260330102155",
+      "latest_run_id": "20260402191655",
       "latest_duration_seconds": 5,
-      "avg_duration_seconds": 5.4,
+      "avg_duration_seconds": 5.2,
       "max_duration_seconds": 6,
       "latest_pages_fetched": 2,
-      "latest_source_count": 12,
-      "latest_core_rows_loaded": 41,
-      "source_rows_per_second": 2.4,
-      "core_rows_per_second": 8.2,
-      "fanout_ratio": 3.42,
-      "duration_share_pct": 6.58,
-      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
-      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
+      "latest_source_count": 44,
+      "latest_core_rows_loaded": 181,
+      "source_rows_per_second": 8.8,
+      "core_rows_per_second": 36.2,
+      "fanout_ratio": 4.11,
+      "duration_share_pct": 5.43,
+      "reason": "Cada entidad base genera multiples filas hijas, lo que amplifica el costo de carga.",
+      "optimization_hint": "Separar cabeceras y detalles en lotes dedicados y monitorear fanout esperado por recurso."
+    },
+    {
+      "resource": "documento/tickets",
+      "latest_run_id": "20260402191655",
+      "latest_duration_seconds": 3,
+      "avg_duration_seconds": 4.4,
+      "max_duration_seconds": 15,
+      "latest_pages_fetched": 89,
+      "latest_source_count": 89,
+      "latest_core_rows_loaded": 402,
+      "source_rows_per_second": 29.67,
+      "core_rows_per_second": 134.0,
+      "fanout_ratio": 4.52,
+      "duration_share_pct": 3.26,
+      "reason": "Cada entidad base genera multiples filas hijas, lo que amplifica el costo de carga.",
+      "optimization_hint": "Separar cabeceras y detalles en lotes dedicados y monitorear fanout esperado por recurso."
     },
     {
       "resource": "persona",
-      "latest_run_id": "20260330102155",
+      "latest_run_id": "20260402191655",
       "latest_duration_seconds": 2,
-      "avg_duration_seconds": 2.2,
+      "avg_duration_seconds": 2.4,
       "max_duration_seconds": 3,
       "latest_pages_fetched": 21,
-      "latest_source_count": 2060,
-      "latest_core_rows_loaded": 29,
-      "source_rows_per_second": 1030.0,
-      "core_rows_per_second": 14.5,
-      "fanout_ratio": 0.01,
-      "duration_share_pct": 2.63,
+      "latest_source_count": 2063,
+      "latest_core_rows_loaded": 47,
+      "source_rows_per_second": 1031.5,
+      "core_rows_per_second": 23.5,
+      "fanout_ratio": 0.02,
+      "duration_share_pct": 2.17,
       "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
-      "resource": "bodega",
-      "latest_run_id": "20260330102155",
-      "latest_duration_seconds": 1,
-      "avg_duration_seconds": 0.6,
-      "max_duration_seconds": 1,
-      "latest_pages_fetched": 1,
-      "latest_source_count": 21,
-      "latest_core_rows_loaded": 21,
-      "source_rows_per_second": 21.0,
-      "core_rows_per_second": 21.0,
-      "fanout_ratio": 1.0,
-      "duration_share_pct": 1.32,
-      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
-      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
-    },
-    {
-      "resource": "cuenta-contable",
-      "latest_run_id": "20260330102155",
+      "resource": "centro-costo",
+      "latest_run_id": "20260402191655",
       "latest_duration_seconds": 1,
       "avg_duration_seconds": 0.4,
       "max_duration_seconds": 1,
       "latest_pages_fetched": 1,
-      "latest_source_count": 572,
-      "latest_core_rows_loaded": 572,
-      "source_rows_per_second": 572.0,
-      "core_rows_per_second": 572.0,
+      "latest_source_count": 2,
+      "latest_core_rows_loaded": 2,
+      "source_rows_per_second": 2.0,
+      "core_rows_per_second": 2.0,
       "fanout_ratio": 1.0,
-      "duration_share_pct": 1.32,
+      "duration_share_pct": 1.09,
       "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
-      "resource": "documento/tickets",
-      "latest_run_id": "20260330102155",
+      "resource": "contabilidad/asiento",
+      "latest_run_id": "20260402191655",
+      "latest_duration_seconds": 1,
+      "avg_duration_seconds": 1.0,
+      "max_duration_seconds": 2,
+      "latest_pages_fetched": 2,
+      "latest_source_count": 117,
+      "latest_core_rows_loaded": 592,
+      "source_rows_per_second": 117.0,
+      "core_rows_per_second": 592.0,
+      "fanout_ratio": 5.06,
+      "duration_share_pct": 1.09,
+      "reason": "Cada entidad base genera multiples filas hijas, lo que amplifica el costo de carga.",
+      "optimization_hint": "Separar cabeceras y detalles en lotes dedicados y monitorear fanout esperado por recurso."
+    },
+    {
+      "resource": "inventario/guia",
+      "latest_run_id": "20260402191655",
       "latest_duration_seconds": 1,
       "avg_duration_seconds": 1.2,
-      "max_duration_seconds": 2,
-      "latest_pages_fetched": 21,
-      "latest_source_count": 21,
-      "latest_core_rows_loaded": 61,
-      "source_rows_per_second": 21.0,
-      "core_rows_per_second": 61.0,
-      "fanout_ratio": 2.9,
-      "duration_share_pct": 1.32,
+      "max_duration_seconds": 3,
+      "latest_pages_fetched": 1,
+      "latest_source_count": 38,
+      "latest_core_rows_loaded": 148,
+      "source_rows_per_second": 38.0,
+      "core_rows_per_second": 148.0,
+      "fanout_ratio": 3.89,
+      "duration_share_pct": 1.09,
       "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
       "resource": "banco/cuenta",
-      "latest_run_id": "20260330102155",
+      "latest_run_id": "20260402191655",
       "latest_duration_seconds": 0,
-      "avg_duration_seconds": 0.4,
+      "avg_duration_seconds": 0.2,
       "max_duration_seconds": 1,
       "latest_pages_fetched": 1,
       "latest_source_count": 5,
@@ -2321,10 +2337,26 @@
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
-      "resource": "categoria",
-      "latest_run_id": "20260330102155",
+      "resource": "bodega",
+      "latest_run_id": "20260402191655",
       "latest_duration_seconds": 0,
       "avg_duration_seconds": 0.4,
+      "max_duration_seconds": 1,
+      "latest_pages_fetched": 1,
+      "latest_source_count": 21,
+      "latest_core_rows_loaded": 21,
+      "source_rows_per_second": 0,
+      "core_rows_per_second": 0,
+      "fanout_ratio": 1.0,
+      "duration_share_pct": 0.0,
+      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
+      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
+    },
+    {
+      "resource": "categoria",
+      "latest_run_id": "20260402191655",
+      "latest_duration_seconds": 0,
+      "avg_duration_seconds": 0.2,
       "max_duration_seconds": 1,
       "latest_pages_fetched": 1,
       "latest_source_count": 22,
@@ -2337,42 +2369,10 @@
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
-      "resource": "centro-costo",
-      "latest_run_id": "20260330102155",
-      "latest_duration_seconds": 0,
-      "avg_duration_seconds": 0.2,
-      "max_duration_seconds": 1,
-      "latest_pages_fetched": 1,
-      "latest_source_count": 2,
-      "latest_core_rows_loaded": 2,
-      "source_rows_per_second": 0,
-      "core_rows_per_second": 0,
-      "fanout_ratio": 1.0,
-      "duration_share_pct": 0.0,
-      "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
-      "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
-    },
-    {
-      "resource": "contabilidad/asiento",
-      "latest_run_id": "20260330102155",
-      "latest_duration_seconds": 0,
-      "avg_duration_seconds": 0.8,
-      "max_duration_seconds": 1,
-      "latest_pages_fetched": 1,
-      "latest_source_count": 2,
-      "latest_core_rows_loaded": 8,
-      "source_rows_per_second": 0,
-      "core_rows_per_second": 0,
-      "fanout_ratio": 4.0,
-      "duration_share_pct": 0.0,
-      "reason": "Cada entidad base genera multiples filas hijas, lo que amplifica el costo de carga.",
-      "optimization_hint": "Separar cabeceras y detalles en lotes dedicados y monitorear fanout esperado por recurso."
-    },
-    {
       "resource": "contabilidad/periodo",
-      "latest_run_id": "20260330102155",
+      "latest_run_id": "20260402191655",
       "latest_duration_seconds": 0,
-      "avg_duration_seconds": 0.2,
+      "avg_duration_seconds": 0.4,
       "max_duration_seconds": 1,
       "latest_pages_fetched": 1,
       "latest_source_count": 8,
@@ -2385,24 +2385,24 @@
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
-      "resource": "inventario/guia",
-      "latest_run_id": "20260330102155",
+      "resource": "cuenta-contable",
+      "latest_run_id": "20260402191655",
       "latest_duration_seconds": 0,
-      "avg_duration_seconds": 1.0,
-      "max_duration_seconds": 2,
+      "avg_duration_seconds": 0.6,
+      "max_duration_seconds": 1,
       "latest_pages_fetched": 1,
-      "latest_source_count": 38,
-      "latest_core_rows_loaded": 148,
+      "latest_source_count": 572,
+      "latest_core_rows_loaded": 572,
       "source_rows_per_second": 0,
       "core_rows_per_second": 0,
-      "fanout_ratio": 3.89,
+      "fanout_ratio": 1.0,
       "duration_share_pct": 0.0,
       "reason": "Carga controlada; el tiempo responde mas al volumen normal del recurso que a una anomalia estructural.",
       "optimization_hint": "Mantener monitoreo de throughput y alertar desviaciones sobre el promedio historico."
     },
     {
       "resource": "marca",
-      "latest_run_id": "20260330102155",
+      "latest_run_id": "20260402191655",
       "latest_duration_seconds": 0,
       "avg_duration_seconds": 0.6,
       "max_duration_seconds": 1,
@@ -2418,7 +2418,7 @@
     },
     {
       "resource": "unidad",
-      "latest_run_id": "20260330102155",
+      "latest_run_id": "20260402191655",
       "latest_duration_seconds": 0,
       "avg_duration_seconds": 0.0,
       "max_duration_seconds": 0,
@@ -2434,6 +2434,26 @@
     }
   ],
   "performance_runs": [
+    {
+      "run_id": "20260402191655",
+      "resources_processed": 16,
+      "total_duration_seconds": 92,
+      "total_pages_fetched": 297,
+      "total_source_rows": 5941,
+      "total_core_rows": 8460,
+      "slowest_resource": "documento",
+      "slowest_duration_seconds": 54
+    },
+    {
+      "run_id": "20260330104458",
+      "resources_processed": 16,
+      "total_duration_seconds": 146,
+      "total_pages_fetched": 121,
+      "total_source_rows": 5605,
+      "total_core_rows": 6985,
+      "slowest_resource": "documento",
+      "slowest_duration_seconds": 55
+    },
     {
       "run_id": "20260330102155",
       "resources_processed": 16,
@@ -2463,55 +2483,35 @@
       "total_core_rows": 7083,
       "slowest_resource": "documento",
       "slowest_duration_seconds": 47
-    },
-    {
-      "run_id": "20260329233251",
-      "resources_processed": 16,
-      "total_duration_seconds": 81,
-      "total_pages_fetched": 121,
-      "total_source_rows": 5629,
-      "total_core_rows": 7083,
-      "slowest_resource": "documento",
-      "slowest_duration_seconds": 48
-    },
-    {
-      "run_id": "20260329233007",
-      "resources_processed": 16,
-      "total_duration_seconds": 84,
-      "total_pages_fetched": 121,
-      "total_source_rows": 5629,
-      "total_core_rows": 7083,
-      "slowest_resource": "documento",
-      "slowest_duration_seconds": 46
     }
   ],
   "performance_comparison": {
-    "latest_run_id": "20260330102155",
-    "previous_run_id": "20260330001713",
-    "latest_total_duration_seconds": 76,
-    "previous_total_duration_seconds": 89,
-    "total_delta_seconds": -13,
-    "total_delta_pct": -14.61,
-    "improved_resources": 10,
-    "regressed_resources": 1,
+    "latest_run_id": "20260402191655",
+    "previous_run_id": "20260330104458",
+    "latest_total_duration_seconds": 92,
+    "previous_total_duration_seconds": 146,
+    "total_delta_seconds": -54,
+    "total_delta_pct": -36.99,
+    "improved_resources": 9,
+    "regressed_resources": 2,
     "unchanged_resources": 5,
     "latest_slowest_resource": "documento",
     "previous_slowest_resource": "documento",
-    "latest_pages_fetched": 121,
+    "latest_pages_fetched": 297,
     "previous_pages_fetched": 121,
-    "latest_source_rows": 5605,
+    "latest_source_rows": 5941,
     "previous_source_rows": 5605,
-    "latest_core_rows": 6985,
+    "latest_core_rows": 8460,
     "previous_core_rows": 6985
   },
   "performance_comparison_story_cards": [
     {
       "title": "Comparativo entre corridas",
-      "body": "La corrida 20260330102155 se compara contra 20260330001713. La variacion total es de -13 segundos sobre corridas exitosas completas del pipeline."
+      "body": "La corrida 20260402191655 se compara contra 20260330104458. La variacion total es de -54 segundos sobre corridas exitosas completas del pipeline."
     },
     {
       "title": "Lectura de mejora",
-      "body": "Recursos con mejora: 10. Recursos con regresion: 1. Recursos sin cambio material: 5."
+      "body": "Recursos con mejora: 9. Recursos con regresion: 2. Recursos sin cambio material: 5."
     },
     {
       "title": "Interpretacion tecnica",
@@ -2520,52 +2520,84 @@
   ],
   "performance_resource_comparison": [
     {
-      "resource": "documento",
-      "latest_duration_seconds": 45,
-      "previous_duration_seconds": 49,
-      "delta_seconds": -4,
-      "delta_pct": -8.16,
-      "latest_pages_fetched": 64,
-      "previous_pages_fetched": 64,
-      "latest_source_count": 54,
-      "previous_source_count": 54,
-      "latest_core_rows_loaded": 67,
-      "previous_core_rows_loaded": 67,
-      "status": "mejora",
-      "same_volume": true,
-      "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
-    },
-    {
       "resource": "banco/movimiento",
-      "latest_duration_seconds": 13,
-      "previous_duration_seconds": 15,
-      "delta_seconds": -2,
-      "delta_pct": -13.33,
+      "latest_duration_seconds": 16,
+      "previous_duration_seconds": 52,
+      "delta_seconds": -36,
+      "delta_pct": -69.23,
       "latest_pages_fetched": 1,
       "previous_pages_fetched": 1,
-      "latest_source_count": 2751,
+      "latest_source_count": 2762,
       "previous_source_count": 2751,
-      "latest_core_rows_loaded": 5964,
+      "latest_core_rows_loaded": 5986,
       "previous_core_rows_loaded": 5964,
+      "status": "mejora",
+      "same_volume": false,
+      "explanation": "Mejora con cambios de volumen; el recurso sigue respondiendo mas rapido en el ultimo run."
+    },
+    {
+      "resource": "documento/tickets",
+      "latest_duration_seconds": 3,
+      "previous_duration_seconds": 15,
+      "delta_seconds": -12,
+      "delta_pct": -80.0,
+      "latest_pages_fetched": 89,
+      "previous_pages_fetched": 21,
+      "latest_source_count": 89,
+      "previous_source_count": 21,
+      "latest_core_rows_loaded": 402,
+      "previous_core_rows_loaded": 61,
+      "status": "mejora",
+      "same_volume": false,
+      "explanation": "Mejora con cambios de volumen; el recurso sigue respondiendo mas rapido en el ultimo run."
+    },
+    {
+      "resource": "inventario/guia",
+      "latest_duration_seconds": 1,
+      "previous_duration_seconds": 3,
+      "delta_seconds": -2,
+      "delta_pct": -66.67,
+      "latest_pages_fetched": 1,
+      "previous_pages_fetched": 1,
+      "latest_source_count": 38,
+      "previous_source_count": 38,
+      "latest_core_rows_loaded": 148,
+      "previous_core_rows_loaded": 148,
       "status": "mejora",
       "same_volume": true,
       "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
     },
     {
-      "resource": "movimiento-inventario",
-      "latest_duration_seconds": 5,
-      "previous_duration_seconds": 6,
+      "resource": "documento",
+      "latest_duration_seconds": 54,
+      "previous_duration_seconds": 55,
       "delta_seconds": -1,
-      "delta_pct": -16.67,
+      "delta_pct": -1.82,
+      "latest_pages_fetched": 171,
+      "previous_pages_fetched": 64,
+      "latest_source_count": 161,
+      "previous_source_count": 54,
+      "latest_core_rows_loaded": 437,
+      "previous_core_rows_loaded": 67,
+      "status": "mejora",
+      "same_volume": false,
+      "explanation": "Mejora con cambios de volumen; el recurso sigue respondiendo mas rapido en el ultimo run."
+    },
+    {
+      "resource": "producto",
+      "latest_duration_seconds": 9,
+      "previous_duration_seconds": 8,
+      "delta_seconds": 1,
+      "delta_pct": 12.5,
       "latest_pages_fetched": 2,
       "previous_pages_fetched": 2,
-      "latest_source_count": 12,
-      "previous_source_count": 12,
-      "latest_core_rows_loaded": 41,
-      "previous_core_rows_loaded": 41,
-      "status": "mejora",
+      "latest_source_count": 1,
+      "previous_source_count": 1,
+      "latest_core_rows_loaded": 1,
+      "previous_core_rows_loaded": 1,
+      "status": "regresion",
       "same_volume": true,
-      "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
+      "explanation": "Mismo volumen pero mayor tiempo: revisar variacion de red, API o presion del motor."
     },
     {
       "resource": "persona",
@@ -2575,88 +2607,56 @@
       "delta_pct": -33.33,
       "latest_pages_fetched": 21,
       "previous_pages_fetched": 21,
-      "latest_source_count": 2060,
+      "latest_source_count": 2063,
       "previous_source_count": 2060,
-      "latest_core_rows_loaded": 29,
+      "latest_core_rows_loaded": 47,
       "previous_core_rows_loaded": 29,
       "status": "mejora",
-      "same_volume": true,
-      "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
+      "same_volume": false,
+      "explanation": "Mejora con cambios de volumen; el recurso sigue respondiendo mas rapido en el ultimo run."
     },
     {
-      "resource": "cuenta-contable",
+      "resource": "centro-costo",
       "latest_duration_seconds": 1,
       "previous_duration_seconds": 0,
       "delta_seconds": 1,
       "delta_pct": 0,
       "latest_pages_fetched": 1,
       "previous_pages_fetched": 1,
-      "latest_source_count": 572,
-      "previous_source_count": 572,
-      "latest_core_rows_loaded": 572,
-      "previous_core_rows_loaded": 572,
+      "latest_source_count": 2,
+      "previous_source_count": 2,
+      "latest_core_rows_loaded": 2,
+      "previous_core_rows_loaded": 2,
       "status": "regresion",
       "same_volume": true,
       "explanation": "Mismo volumen pero mayor tiempo: revisar variacion de red, API o presion del motor."
     },
     {
-      "resource": "documento/tickets",
+      "resource": "contabilidad/asiento",
       "latest_duration_seconds": 1,
       "previous_duration_seconds": 2,
       "delta_seconds": -1,
       "delta_pct": -50.0,
-      "latest_pages_fetched": 21,
-      "previous_pages_fetched": 21,
-      "latest_source_count": 21,
-      "previous_source_count": 21,
-      "latest_core_rows_loaded": 61,
-      "previous_core_rows_loaded": 61,
-      "status": "mejora",
-      "same_volume": true,
-      "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
-    },
-    {
-      "resource": "banco/cuenta",
-      "latest_duration_seconds": 0,
-      "previous_duration_seconds": 1,
-      "delta_seconds": -1,
-      "delta_pct": -100.0,
-      "latest_pages_fetched": 1,
+      "latest_pages_fetched": 2,
       "previous_pages_fetched": 1,
-      "latest_source_count": 5,
-      "previous_source_count": 5,
-      "latest_core_rows_loaded": 5,
-      "previous_core_rows_loaded": 5,
-      "status": "mejora",
-      "same_volume": true,
-      "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
-    },
-    {
-      "resource": "centro-costo",
-      "latest_duration_seconds": 0,
-      "previous_duration_seconds": 1,
-      "delta_seconds": -1,
-      "delta_pct": -100.0,
-      "latest_pages_fetched": 1,
-      "previous_pages_fetched": 1,
-      "latest_source_count": 2,
+      "latest_source_count": 117,
       "previous_source_count": 2,
-      "latest_core_rows_loaded": 2,
-      "previous_core_rows_loaded": 2,
+      "latest_core_rows_loaded": 592,
+      "previous_core_rows_loaded": 8,
       "status": "mejora",
-      "same_volume": true,
-      "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
+      "same_volume": false,
+      "explanation": "Mejora con cambios de volumen; el recurso sigue respondiendo mas rapido en el ultimo run."
     },
     {
-      "resource": "contabilidad/asiento",
+      "resource": "contabilidad/periodo",
       "latest_duration_seconds": 0,
       "previous_duration_seconds": 1,
       "delta_seconds": -1,
       "delta_pct": -100.0,
       "latest_pages_fetched": 1,
       "previous_pages_fetched": 1,
-      "latest_source_count": 2,
-      "previous_source_count": 2,
+      "latest_source_count": 8,
+      "previous_source_count": 8,
       "latest_core_rows_loaded": 8,
       "previous_core_rows_loaded": 8,
       "status": "mejora",
@@ -2664,17 +2664,17 @@
       "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
     },
     {
-      "resource": "inventario/guia",
+      "resource": "cuenta-contable",
       "latest_duration_seconds": 0,
       "previous_duration_seconds": 1,
       "delta_seconds": -1,
       "delta_pct": -100.0,
       "latest_pages_fetched": 1,
       "previous_pages_fetched": 1,
-      "latest_source_count": 38,
-      "previous_source_count": 38,
-      "latest_core_rows_loaded": 148,
-      "previous_core_rows_loaded": 148,
+      "latest_source_count": 572,
+      "previous_source_count": 572,
+      "latest_core_rows_loaded": 572,
+      "previous_core_rows_loaded": 572,
       "status": "mejora",
       "same_volume": true,
       "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
@@ -2696,27 +2696,43 @@
       "explanation": "Mismo volumen y menos tiempo: la mejora apunta a menor costo de roundtrips e insercion."
     },
     {
-      "resource": "producto",
-      "latest_duration_seconds": 8,
-      "previous_duration_seconds": 8,
+      "resource": "movimiento-inventario",
+      "latest_duration_seconds": 5,
+      "previous_duration_seconds": 5,
       "delta_seconds": 0,
       "delta_pct": 0.0,
       "latest_pages_fetched": 2,
       "previous_pages_fetched": 2,
-      "latest_source_count": 1,
-      "previous_source_count": 1,
-      "latest_core_rows_loaded": 1,
-      "previous_core_rows_loaded": 1,
+      "latest_source_count": 44,
+      "previous_source_count": 12,
+      "latest_core_rows_loaded": 181,
+      "previous_core_rows_loaded": 41,
+      "status": "sin_cambio",
+      "same_volume": false,
+      "explanation": "Sin cambio material frente al run anterior."
+    },
+    {
+      "resource": "banco/cuenta",
+      "latest_duration_seconds": 0,
+      "previous_duration_seconds": 0,
+      "delta_seconds": 0,
+      "delta_pct": 0,
+      "latest_pages_fetched": 1,
+      "previous_pages_fetched": 1,
+      "latest_source_count": 5,
+      "previous_source_count": 5,
+      "latest_core_rows_loaded": 5,
+      "previous_core_rows_loaded": 5,
       "status": "sin_cambio",
       "same_volume": true,
       "explanation": "Sin cambio material frente al run anterior."
     },
     {
       "resource": "bodega",
-      "latest_duration_seconds": 1,
-      "previous_duration_seconds": 1,
+      "latest_duration_seconds": 0,
+      "previous_duration_seconds": 0,
       "delta_seconds": 0,
-      "delta_pct": 0.0,
+      "delta_pct": 0,
       "latest_pages_fetched": 1,
       "previous_pages_fetched": 1,
       "latest_source_count": 21,
@@ -2739,22 +2755,6 @@
       "previous_source_count": 22,
       "latest_core_rows_loaded": 22,
       "previous_core_rows_loaded": 22,
-      "status": "sin_cambio",
-      "same_volume": true,
-      "explanation": "Sin cambio material frente al run anterior."
-    },
-    {
-      "resource": "contabilidad/periodo",
-      "latest_duration_seconds": 0,
-      "previous_duration_seconds": 0,
-      "delta_seconds": 0,
-      "delta_pct": 0,
-      "latest_pages_fetched": 1,
-      "previous_pages_fetched": 1,
-      "latest_source_count": 8,
-      "previous_source_count": 8,
-      "latest_core_rows_loaded": 8,
-      "previous_core_rows_loaded": 8,
       "status": "sin_cambio",
       "same_volume": true,
       "explanation": "Sin cambio material frente al run anterior."
