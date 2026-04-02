@@ -7,28 +7,28 @@
 - Modo: `refresh`
 - API base: `https://api.contifico.com`
 - Raw auditado: `no`
-- Run ID: `20260402191655`
+- Run ID: `20260402192041`
 
 ## Recursos procesados
 
 | resource | status | source_count | pages_fetched | raw_row_count | started_at | finished_at |
 | --- | --- | --- | --- | --- | --- | --- |
-| categoria | success | 22 | 1 | 0 | 2026-04-02 19:16:55+00:00 | 2026-04-02 19:16:55+00:00 |
-| cuenta-contable | success | 572 | 1 | 0 | 2026-04-02 19:16:55+00:00 | 2026-04-02 19:16:55+00:00 |
-| bodega | success | 21 | 1 | 0 | 2026-04-02 19:16:56+00:00 | 2026-04-02 19:16:56+00:00 |
-| centro-costo | success | 2 | 1 | 0 | 2026-04-02 19:16:56+00:00 | 2026-04-02 19:16:57+00:00 |
-| marca | success | 16 | 1 | 0 | 2026-04-02 19:16:56+00:00 | 2026-04-02 19:16:56+00:00 |
-| unidad | success | 20 | 1 | 0 | 2026-04-02 19:16:56+00:00 | 2026-04-02 19:16:56+00:00 |
-| banco/cuenta | success | 5 | 1 | 0 | 2026-04-02 19:16:57+00:00 | 2026-04-02 19:16:57+00:00 |
-| contabilidad/periodo | success | 8 | 1 | 0 | 2026-04-02 19:16:57+00:00 | 2026-04-02 19:16:57+00:00 |
-| persona | success | 2063 | 21 | 0 | 2026-04-02 19:16:57+00:00 | 2026-04-02 19:16:59+00:00 |
-| producto | success | 1 | 2 | 0 | 2026-04-02 19:16:59+00:00 | 2026-04-02 19:17:08+00:00 |
-| movimiento-inventario | success | 44 | 2 | 0 | 2026-04-02 19:17:08+00:00 | 2026-04-02 19:17:13+00:00 |
-| documento | success | 161 | 171 | 0 | 2026-04-02 19:17:13+00:00 | 2026-04-02 19:18:07+00:00 |
-| inventario/guia | success | 38 | 1 | 0 | 2026-04-02 19:18:07+00:00 | 2026-04-02 19:18:08+00:00 |
-| banco/movimiento | success | 2762 | 1 | 0 | 2026-04-02 19:18:08+00:00 | 2026-04-02 19:18:24+00:00 |
-| documento/tickets | success | 89 | 89 | 0 | 2026-04-02 19:18:24+00:00 | 2026-04-02 19:18:27+00:00 |
-| contabilidad/asiento | success | 117 | 2 | 0 | 2026-04-02 19:18:28+00:00 | 2026-04-02 19:18:29+00:00 |
+| cuenta-contable | success | 572 | 1 | 0 | 2026-04-02 19:20:41+00:00 | 2026-04-02 19:20:42+00:00 |
+| bodega | success | 21 | 1 | 0 | 2026-04-02 19:20:42+00:00 | 2026-04-02 19:20:42+00:00 |
+| categoria | success | 22 | 1 | 0 | 2026-04-02 19:20:42+00:00 | 2026-04-02 19:20:42+00:00 |
+| marca | success | 16 | 1 | 0 | 2026-04-02 19:20:42+00:00 | 2026-04-02 19:20:42+00:00 |
+| banco/cuenta | success | 5 | 1 | 0 | 2026-04-02 19:20:43+00:00 | 2026-04-02 19:20:43+00:00 |
+| centro-costo | success | 2 | 1 | 0 | 2026-04-02 19:20:43+00:00 | 2026-04-02 19:20:43+00:00 |
+| contabilidad/periodo | success | 8 | 1 | 0 | 2026-04-02 19:20:43+00:00 | 2026-04-02 19:20:43+00:00 |
+| persona | success | 2063 | 21 | 0 | 2026-04-02 19:20:43+00:00 | 2026-04-02 19:20:46+00:00 |
+| unidad | success | 20 | 1 | 0 | 2026-04-02 19:20:43+00:00 | 2026-04-02 19:20:43+00:00 |
+| producto | success | 1 | 2 | 0 | 2026-04-02 19:20:46+00:00 | 2026-04-02 19:20:55+00:00 |
+| movimiento-inventario | success | 14 | 2 | 0 | 2026-04-02 19:20:55+00:00 | 2026-04-02 19:21:01+00:00 |
+| documento | success | 82 | 92 | 0 | 2026-04-02 19:21:01+00:00 | 2026-04-02 19:21:50+00:00 |
+| inventario/guia | success | 38 | 1 | 0 | 2026-04-02 19:21:50+00:00 | 2026-04-02 19:21:51+00:00 |
+| banco/movimiento | success | 2762 | 1 | 0 | 2026-04-02 19:21:51+00:00 | 2026-04-02 19:22:06+00:00 |
+| documento/tickets | success | 32 | 32 | 0 | 2026-04-02 19:22:06+00:00 | 2026-04-02 19:22:09+00:00 |
+| contabilidad/asiento | success | 117 | 2 | 0 | 2026-04-02 19:22:09+00:00 | 2026-04-02 19:22:10+00:00 |
 
 ## Filas cargadas por tabla
 
@@ -43,41 +43,41 @@
 | categoria | core | categorias | 22 |
 | centro-costo | core | centros_costo | 2 |
 | cuenta-contable | core | cuentas_contables | 572 |
-| documento | core | documento_cobros | 35 |
-| documento | core | documento_detalles | 313 |
-| documento | core | documentos | 89 |
+| documento | core | documento_cobros | 12 |
+| documento | core | documento_detalles | 81 |
+| documento | core | documentos | 32 |
 | inventario/guia | core | guia_destinatarios | 38 |
 | inventario/guia | core | guia_detalles | 72 |
 | inventario/guia | core | guias | 38 |
 | marca | core | marcas | 16 |
-| movimiento-inventario | core | movimiento_detalles | 137 |
-| movimiento-inventario | core | movimientos | 44 |
+| movimiento-inventario | core | movimiento_detalles | 29 |
+| movimiento-inventario | core | movimientos | 14 |
 | contabilidad/periodo | core | periodos | 8 |
-| persona | core | personas | 47 |
+| persona | core | personas | 14 |
 | producto | core | productos | 1 |
-| documento/tickets | core | tickets_detalles | 313 |
-| documento/tickets | core | tickets_documentos | 89 |
+| documento/tickets | core | tickets_detalles | 81 |
+| documento/tickets | core | tickets_documentos | 32 |
 | unidad | core | unidades | 20 |
 
 ## Fuente vs tabla principal
 
 | resource | source_count | core_primary_count | difference |
 | --- | --- | --- | --- |
-| categoria | 22 | 23 | -1 |
 | cuenta-contable | 572 | 572 | 0 |
 | bodega | 21 | 21 | 0 |
-| centro-costo | 2 | 2 | 0 |
+| categoria | 22 | 23 | -1 |
 | marca | 16 | 16 | 0 |
-| unidad | 20 | 20 | 0 |
 | banco/cuenta | 5 | 5 | 0 |
+| centro-costo | 2 | 2 | 0 |
 | contabilidad/periodo | 8 | 8 | 0 |
 | persona | 2063 | 2063 | 0 |
+| unidad | 20 | 20 | 0 |
 | producto | 1 | 1237 | -1236 |
-| movimiento-inventario | 44 | 9057 | -9013 |
-| documento | 161 | 23979 | -23818 |
+| movimiento-inventario | 14 | 9057 | -9043 |
+| documento | 82 | 23979 | -23897 |
 | inventario/guia | 38 | 38 | 0 |
 | banco/movimiento | 2762 | 2762 | 0 |
-| documento/tickets | 89 | 23979 | -23890 |
+| documento/tickets | 32 | 23979 | -23947 |
 | contabilidad/asiento | 117 | 67519 | -67402 |
 
 ## Cobertura temporal

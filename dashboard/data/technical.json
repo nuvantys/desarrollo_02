@@ -1,8 +1,8 @@
 {
-  "run_id": "20260402191655",
+  "run_id": "20260402192041",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-04-02T19:18:29+00:00",
+  "generated_at": "2026-04-02T19:22:11+00:00",
   "filters_available": {
     "document_types": [
       {
@@ -607,10 +607,10 @@
       }
     ]
   },
-  "last_refresh_started_at": "2026-04-02T19:16:55+00:00",
-  "last_refresh_finished_at": "2026-04-02T19:18:29+00:00",
-  "last_refresh_duration_seconds": 94,
-  "freshness_seconds": 20,
+  "last_refresh_started_at": "2026-04-02T19:20:41+00:00",
+  "last_refresh_finished_at": "2026-04-02T19:22:10+00:00",
+  "last_refresh_duration_seconds": 89,
+  "freshness_seconds": 23,
   "summary": {
     "status": "success",
     "run_mode": "refresh",
@@ -620,15 +620,15 @@
     "resources_success": 16,
     "resources_failed": 0,
     "tables_updated": 24,
-    "core_rows_updated": 8460,
-    "source_rows_processed": 5941,
+    "core_rows_updated": 7688,
+    "source_rows_processed": 5775,
     "raw_rows_processed": 0,
     "historical_core_rows_stored": 631204
   },
   "refresh_guidance": [
     {
       "title": "Filas leidas en esta corrida",
-      "body": "El valor 5941 mide lo que el pipeline leyo hoy desde la API. Puede bajar cuando el refresh deja de releer historico completo y pasa a leer solo cambios recientes."
+      "body": "El valor 5775 mide lo que el pipeline leyo hoy desde la API. Puede bajar cuando el refresh deja de releer historico completo y pasa a leer solo cambios recientes."
     },
     {
       "title": "Historico almacenado",
@@ -650,8 +650,8 @@
       "pages_fetched": 1,
       "source_count": 5,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:16:57+00:00",
-      "finished_at": "2026-04-02T19:16:57+00:00",
+      "started_at": "2026-04-02T19:20:43+00:00",
+      "finished_at": "2026-04-02T19:20:43+00:00",
       "duration_seconds": 0,
       "core_rows_loaded": 5,
       "table_counts_jsonb": {
@@ -664,9 +664,9 @@
       "pages_fetched": 1,
       "source_count": 2762,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:18:08+00:00",
-      "finished_at": "2026-04-02T19:18:24+00:00",
-      "duration_seconds": 16,
+      "started_at": "2026-04-02T19:21:51+00:00",
+      "finished_at": "2026-04-02T19:22:06+00:00",
+      "duration_seconds": 15,
       "core_rows_loaded": 5986,
       "table_counts_jsonb": {
         "banco_movimientos": 2762,
@@ -679,8 +679,8 @@
       "pages_fetched": 1,
       "source_count": 21,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:16:56+00:00",
-      "finished_at": "2026-04-02T19:16:56+00:00",
+      "started_at": "2026-04-02T19:20:42+00:00",
+      "finished_at": "2026-04-02T19:20:42+00:00",
       "duration_seconds": 0,
       "core_rows_loaded": 21,
       "table_counts_jsonb": {
@@ -693,8 +693,8 @@
       "pages_fetched": 1,
       "source_count": 22,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:16:55+00:00",
-      "finished_at": "2026-04-02T19:16:55+00:00",
+      "started_at": "2026-04-02T19:20:42+00:00",
+      "finished_at": "2026-04-02T19:20:42+00:00",
       "duration_seconds": 0,
       "core_rows_loaded": 22,
       "table_counts_jsonb": {
@@ -707,9 +707,9 @@
       "pages_fetched": 1,
       "source_count": 2,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:16:56+00:00",
-      "finished_at": "2026-04-02T19:16:57+00:00",
-      "duration_seconds": 1,
+      "started_at": "2026-04-02T19:20:43+00:00",
+      "finished_at": "2026-04-02T19:20:43+00:00",
+      "duration_seconds": 0,
       "core_rows_loaded": 2,
       "table_counts_jsonb": {
         "centros_costo": 2
@@ -721,8 +721,8 @@
       "pages_fetched": 2,
       "source_count": 117,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:18:28+00:00",
-      "finished_at": "2026-04-02T19:18:29+00:00",
+      "started_at": "2026-04-02T19:22:09+00:00",
+      "finished_at": "2026-04-02T19:22:10+00:00",
       "duration_seconds": 1,
       "core_rows_loaded": 592,
       "table_counts_jsonb": {
@@ -736,8 +736,8 @@
       "pages_fetched": 1,
       "source_count": 8,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:16:57+00:00",
-      "finished_at": "2026-04-02T19:16:57+00:00",
+      "started_at": "2026-04-02T19:20:43+00:00",
+      "finished_at": "2026-04-02T19:20:43+00:00",
       "duration_seconds": 0,
       "core_rows_loaded": 8,
       "table_counts_jsonb": {
@@ -750,9 +750,9 @@
       "pages_fetched": 1,
       "source_count": 572,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:16:55+00:00",
-      "finished_at": "2026-04-02T19:16:55+00:00",
-      "duration_seconds": 0,
+      "started_at": "2026-04-02T19:20:41+00:00",
+      "finished_at": "2026-04-02T19:20:42+00:00",
+      "duration_seconds": 1,
       "core_rows_loaded": 572,
       "table_counts_jsonb": {
         "cuentas_contables": 572
@@ -761,32 +761,32 @@
     {
       "resource": "documento",
       "status": "success",
-      "pages_fetched": 171,
-      "source_count": 161,
+      "pages_fetched": 92,
+      "source_count": 82,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:17:13+00:00",
-      "finished_at": "2026-04-02T19:18:07+00:00",
-      "duration_seconds": 54,
-      "core_rows_loaded": 437,
+      "started_at": "2026-04-02T19:21:01+00:00",
+      "finished_at": "2026-04-02T19:21:50+00:00",
+      "duration_seconds": 49,
+      "core_rows_loaded": 125,
       "table_counts_jsonb": {
-        "documentos": 89,
-        "documento_cobros": 35,
-        "documento_detalles": 313
+        "documentos": 32,
+        "documento_cobros": 12,
+        "documento_detalles": 81
       }
     },
     {
       "resource": "documento/tickets",
       "status": "success",
-      "pages_fetched": 89,
-      "source_count": 89,
+      "pages_fetched": 32,
+      "source_count": 32,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:18:24+00:00",
-      "finished_at": "2026-04-02T19:18:27+00:00",
+      "started_at": "2026-04-02T19:22:06+00:00",
+      "finished_at": "2026-04-02T19:22:09+00:00",
       "duration_seconds": 3,
-      "core_rows_loaded": 402,
+      "core_rows_loaded": 113,
       "table_counts_jsonb": {
-        "tickets_detalles": 313,
-        "tickets_documentos": 89
+        "tickets_detalles": 81,
+        "tickets_documentos": 32
       }
     },
     {
@@ -795,8 +795,8 @@
       "pages_fetched": 1,
       "source_count": 38,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:18:07+00:00",
-      "finished_at": "2026-04-02T19:18:08+00:00",
+      "started_at": "2026-04-02T19:21:50+00:00",
+      "finished_at": "2026-04-02T19:21:51+00:00",
       "duration_seconds": 1,
       "core_rows_loaded": 148,
       "table_counts_jsonb": {
@@ -811,8 +811,8 @@
       "pages_fetched": 1,
       "source_count": 16,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:16:56+00:00",
-      "finished_at": "2026-04-02T19:16:56+00:00",
+      "started_at": "2026-04-02T19:20:42+00:00",
+      "finished_at": "2026-04-02T19:20:42+00:00",
       "duration_seconds": 0,
       "core_rows_loaded": 16,
       "table_counts_jsonb": {
@@ -823,15 +823,15 @@
       "resource": "movimiento-inventario",
       "status": "success",
       "pages_fetched": 2,
-      "source_count": 44,
+      "source_count": 14,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:17:08+00:00",
-      "finished_at": "2026-04-02T19:17:13+00:00",
-      "duration_seconds": 5,
-      "core_rows_loaded": 181,
+      "started_at": "2026-04-02T19:20:55+00:00",
+      "finished_at": "2026-04-02T19:21:01+00:00",
+      "duration_seconds": 6,
+      "core_rows_loaded": 43,
       "table_counts_jsonb": {
-        "movimientos": 44,
-        "movimiento_detalles": 137
+        "movimientos": 14,
+        "movimiento_detalles": 29
       }
     },
     {
@@ -840,12 +840,12 @@
       "pages_fetched": 21,
       "source_count": 2063,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:16:57+00:00",
-      "finished_at": "2026-04-02T19:16:59+00:00",
-      "duration_seconds": 2,
-      "core_rows_loaded": 47,
+      "started_at": "2026-04-02T19:20:43+00:00",
+      "finished_at": "2026-04-02T19:20:46+00:00",
+      "duration_seconds": 3,
+      "core_rows_loaded": 14,
       "table_counts_jsonb": {
-        "personas": 47
+        "personas": 14
       }
     },
     {
@@ -854,8 +854,8 @@
       "pages_fetched": 2,
       "source_count": 1,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:16:59+00:00",
-      "finished_at": "2026-04-02T19:17:08+00:00",
+      "started_at": "2026-04-02T19:20:46+00:00",
+      "finished_at": "2026-04-02T19:20:55+00:00",
       "duration_seconds": 9,
       "core_rows_loaded": 1,
       "table_counts_jsonb": {
@@ -868,8 +868,8 @@
       "pages_fetched": 1,
       "source_count": 20,
       "raw_row_count": 0,
-      "started_at": "2026-04-02T19:16:56+00:00",
-      "finished_at": "2026-04-02T19:16:56+00:00",
+      "started_at": "2026-04-02T19:20:43+00:00",
+      "finished_at": "2026-04-02T19:20:43+00:00",
       "duration_seconds": 0,
       "core_rows_loaded": 20,
       "table_counts_jsonb": {
@@ -882,259 +882,259 @@
       "stage": "core",
       "table_name": "banco_movimiento_detalles",
       "row_count": 3224,
-      "measured_at": "2026-04-02T19:18:24+00:00"
+      "measured_at": "2026-04-02T19:22:06+00:00"
     },
     {
       "stage": "core",
       "table_name": "banco_movimientos",
       "row_count": 2762,
-      "measured_at": "2026-04-02T19:18:24+00:00"
+      "measured_at": "2026-04-02T19:22:06+00:00"
     },
     {
       "stage": "core",
       "table_name": "cuentas_contables",
       "row_count": 572,
-      "measured_at": "2026-04-02T19:16:55+00:00"
+      "measured_at": "2026-04-02T19:20:42+00:00"
     },
     {
       "stage": "core",
       "table_name": "asiento_detalles",
       "row_count": 475,
-      "measured_at": "2026-04-02T19:18:29+00:00"
-    },
-    {
-      "stage": "core",
-      "table_name": "documento_detalles",
-      "row_count": 313,
-      "measured_at": "2026-04-02T19:18:07+00:00"
-    },
-    {
-      "stage": "core",
-      "table_name": "tickets_detalles",
-      "row_count": 313,
-      "measured_at": "2026-04-02T19:18:27+00:00"
-    },
-    {
-      "stage": "core",
-      "table_name": "movimiento_detalles",
-      "row_count": 137,
-      "measured_at": "2026-04-02T19:17:13+00:00"
+      "measured_at": "2026-04-02T19:22:10+00:00"
     },
     {
       "stage": "core",
       "table_name": "asientos",
       "row_count": 117,
-      "measured_at": "2026-04-02T19:18:29+00:00"
+      "measured_at": "2026-04-02T19:22:10+00:00"
     },
     {
       "stage": "core",
-      "table_name": "documentos",
-      "row_count": 89,
-      "measured_at": "2026-04-02T19:18:07+00:00"
+      "table_name": "documento_detalles",
+      "row_count": 81,
+      "measured_at": "2026-04-02T19:21:50+00:00"
     },
     {
       "stage": "core",
-      "table_name": "tickets_documentos",
-      "row_count": 89,
-      "measured_at": "2026-04-02T19:18:27+00:00"
+      "table_name": "tickets_detalles",
+      "row_count": 81,
+      "measured_at": "2026-04-02T19:22:09+00:00"
     },
     {
       "stage": "core",
       "table_name": "guia_detalles",
       "row_count": 72,
-      "measured_at": "2026-04-02T19:18:08+00:00"
-    },
-    {
-      "stage": "core",
-      "table_name": "personas",
-      "row_count": 47,
-      "measured_at": "2026-04-02T19:16:59+00:00"
-    },
-    {
-      "stage": "core",
-      "table_name": "movimientos",
-      "row_count": 44,
-      "measured_at": "2026-04-02T19:17:13+00:00"
+      "measured_at": "2026-04-02T19:21:51+00:00"
     },
     {
       "stage": "core",
       "table_name": "guia_destinatarios",
       "row_count": 38,
-      "measured_at": "2026-04-02T19:18:08+00:00"
+      "measured_at": "2026-04-02T19:21:51+00:00"
     },
     {
       "stage": "core",
       "table_name": "guias",
       "row_count": 38,
-      "measured_at": "2026-04-02T19:18:08+00:00"
+      "measured_at": "2026-04-02T19:21:51+00:00"
     },
     {
       "stage": "core",
-      "table_name": "documento_cobros",
-      "row_count": 35,
-      "measured_at": "2026-04-02T19:18:07+00:00"
+      "table_name": "documentos",
+      "row_count": 32,
+      "measured_at": "2026-04-02T19:21:50+00:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "tickets_documentos",
+      "row_count": 32,
+      "measured_at": "2026-04-02T19:22:09+00:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "movimiento_detalles",
+      "row_count": 29,
+      "measured_at": "2026-04-02T19:21:01+00:00"
     },
     {
       "stage": "core",
       "table_name": "categorias",
       "row_count": 22,
-      "measured_at": "2026-04-02T19:16:55+00:00"
+      "measured_at": "2026-04-02T19:20:42+00:00"
     },
     {
       "stage": "core",
       "table_name": "bodegas",
       "row_count": 21,
-      "measured_at": "2026-04-02T19:16:56+00:00"
+      "measured_at": "2026-04-02T19:20:42+00:00"
     },
     {
       "stage": "core",
       "table_name": "unidades",
       "row_count": 20,
-      "measured_at": "2026-04-02T19:16:56+00:00"
+      "measured_at": "2026-04-02T19:20:43+00:00"
     },
     {
       "stage": "core",
       "table_name": "marcas",
       "row_count": 16,
-      "measured_at": "2026-04-02T19:16:56+00:00"
+      "measured_at": "2026-04-02T19:20:42+00:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "movimientos",
+      "row_count": 14,
+      "measured_at": "2026-04-02T19:21:01+00:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "personas",
+      "row_count": 14,
+      "measured_at": "2026-04-02T19:20:46+00:00"
+    },
+    {
+      "stage": "core",
+      "table_name": "documento_cobros",
+      "row_count": 12,
+      "measured_at": "2026-04-02T19:21:50+00:00"
     },
     {
       "stage": "core",
       "table_name": "periodos",
       "row_count": 8,
-      "measured_at": "2026-04-02T19:16:57+00:00"
+      "measured_at": "2026-04-02T19:20:43+00:00"
     },
     {
       "stage": "core",
       "table_name": "banco_cuentas",
       "row_count": 5,
-      "measured_at": "2026-04-02T19:16:57+00:00"
+      "measured_at": "2026-04-02T19:20:43+00:00"
     },
     {
       "stage": "core",
       "table_name": "centros_costo",
       "row_count": 2,
-      "measured_at": "2026-04-02T19:16:57+00:00"
+      "measured_at": "2026-04-02T19:20:43+00:00"
     },
     {
       "stage": "core",
       "table_name": "productos",
       "row_count": 1,
-      "measured_at": "2026-04-02T19:17:08+00:00"
+      "measured_at": "2026-04-02T19:20:55+00:00"
     }
   ],
   "watermarks": [
     {
       "resource": "banco/cuenta",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": "2021-02-17",
       "max_record_date": "2025-09-03",
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "banco/movimiento",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": "2019-12-20",
       "max_record_date": "2026-03-31",
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "bodega",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": null,
       "max_record_date": null,
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "categoria",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": null,
       "max_record_date": null,
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "centro-costo",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": null,
       "max_record_date": null,
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "contabilidad/asiento",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": "2019-03-12",
       "max_record_date": "2026-07-08",
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "contabilidad/periodo",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": "2019-01-01",
       "max_record_date": "2026-12-31",
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "cuenta-contable",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": null,
       "max_record_date": null,
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "documento",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": "2019-03-12",
       "max_record_date": "2026-04-02",
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "documento/tickets",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": "2019-03-12",
       "max_record_date": "2026-04-02",
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "inventario/guia",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": "2020-11-26",
       "max_record_date": "2026-02-13",
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "marca",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": null,
       "max_record_date": null,
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "movimiento-inventario",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": "2022-05-16",
       "max_record_date": "2026-04-02",
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "persona",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": "2019-11-20",
       "max_record_date": "2026-04-02",
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "producto",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": "2019-11-14",
       "max_record_date": "2026-03-25",
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     },
     {
       "resource": "unidad",
-      "last_run_id": "20260402191655",
+      "last_run_id": "20260402192041",
       "min_record_date": null,
       "max_record_date": null,
-      "updated_at": "2026-04-02T19:18:29+00:00"
+      "updated_at": "2026-04-02T19:22:11+00:00"
     }
   ],
   "temporal_coverage": [
@@ -1693,16 +1693,16 @@
             "bodega_id": "5xmbm8PZS18waoKM"
           },
           {
-            "id": "RBe31QyK1Dh7o1bL",
-            "fecha": "2026-04-02",
-            "tipo": "TRA",
-            "bodega_id": "5xmbm8PZS18waoKM"
-          },
-          {
             "id": "rRbDk1QwGjcjw2a6",
             "fecha": "2026-04-02",
             "tipo": "EGR",
             "bodega_id": "NO8bYrxZfkmRd7j4"
+          },
+          {
+            "id": "RBe31QyK1Dh7o1bL",
+            "fecha": "2026-04-02",
+            "tipo": "TRA",
+            "bodega_id": "5xmbm8PZS18waoKM"
           },
           {
             "id": "KBe1wWGQYgSnxybX",
@@ -2014,7 +2014,7 @@
     "senior_summary": [
       {
         "title": "Lectura senior del estado actual",
-        "body": "La base publicada al dashboard ya opera sobre Supabase como capa maestra en la nube, con Contifico API como fuente viva. Hoy el snapshot vigente parte del run 20260402191655 y refleja 16 recursos procesados con 24 tablas impactadas, incluyendo ya las capas de guias de remision y tesoreria bancaria."
+        "body": "La base publicada al dashboard ya opera sobre Supabase como capa maestra en la nube, con Contifico API como fuente viva. Hoy el snapshot vigente parte del run 20260402192041 y refleja 16 recursos procesados con 24 tablas impactadas, incluyendo ya las capas de guias de remision y tesoreria bancaria."
       },
       {
         "title": "Cadena de origen de los datos",
@@ -2026,7 +2026,7 @@
       },
       {
         "title": "Historial reciente del pipeline",
-        "body": "El historial acumulado registra 35 corridas, de las cuales 33 fueron exitosas y 2 cerraron con error. La ultima corrida exitosa es 20260402191655 y la ultima corrida con error es --."
+        "body": "El historial acumulado registra 36 corridas, de las cuales 34 fueron exitosas y 2 cerraron con error. La ultima corrida exitosa es 20260402192041 y la ultima corrida con error es --."
       }
     ],
     "source_chain": [
@@ -2073,11 +2073,11 @@
       }
     ],
     "history_summary": {
-      "total_runs": 35,
-      "successful_runs": 33,
+      "total_runs": 36,
+      "successful_runs": 34,
       "failed_runs": 2,
-      "latest_success_run": "20260402191655",
-      "latest_success_finished_at": "2026-04-02T19:18:29+00:00",
+      "latest_success_run": "20260402192041",
+      "latest_success_finished_at": "2026-04-02T19:22:10+00:00",
       "latest_error_run": null,
       "latest_error_finished_at": null
     }
@@ -2226,6 +2226,19 @@
   ],
   "recent_runs": [
     {
+      "run_id": "20260402192041",
+      "started_at": "2026-04-02T19:20:41+00:00",
+      "finished_at": "2026-04-02T19:22:10+00:00",
+      "duration_seconds": 89,
+      "resources_processed": 16,
+      "resources_success": 16,
+      "resources_failed": 0,
+      "source_rows": 5775,
+      "raw_rows": 0,
+      "run_mode": "refresh",
+      "status": "success"
+    },
+    {
       "run_id": "20260402191655",
       "started_at": "2026-04-02T19:16:55+00:00",
       "finished_at": "2026-04-02T19:18:29+00:00",
@@ -2367,25 +2380,12 @@
       "raw_rows": 7083,
       "run_mode": "refresh",
       "status": "success"
-    },
-    {
-      "run_id": "20260329190413",
-      "started_at": "2026-03-29T19:04:13+00:00",
-      "finished_at": "2026-03-29T19:05:33+00:00",
-      "duration_seconds": 80,
-      "resources_processed": 13,
-      "resources_success": 13,
-      "resources_failed": 0,
-      "source_rows": 2835,
-      "raw_rows": 0,
-      "run_mode": "refresh",
-      "status": "success"
     }
   ],
   "narrative": [
-    "El snapshot tecnico vigente corresponde al run_id 20260402191655 y cubre desde 2019-01-01 hasta 2026-12-31.",
-    "La ultima corrida fue refresh rapido, proceso 16 recursos, actualizo 24 tablas y materializo 8460 filas core.",
-    "Las filas leidas en esta corrida fueron 5941, mientras que la base mantiene 631204 filas historicas en tablas core.",
+    "El snapshot tecnico vigente corresponde al run_id 20260402192041 y cubre desde 2019-01-01 hasta 2026-12-31.",
+    "La ultima corrida fue refresh rapido, proceso 16 recursos, actualizo 24 tablas y materializo 7688 filas core.",
+    "Las filas leidas en esta corrida fueron 5775, mientras que la base mantiene 631204 filas historicas en tablas core.",
     "La diferencia fuente vs core mas visible sigue en movimiento-inventario con 5044 filas de brecha despues de deduplicacion.",
     "La salud referencial consolidada registra 0 huerfanos y 1 placeholders controlados."
   ]

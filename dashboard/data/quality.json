@@ -1,8 +1,8 @@
 {
-  "run_id": "20260402191655",
+  "run_id": "20260402192041",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-04-02T19:18:29+00:00",
+  "generated_at": "2026-04-02T19:22:11+00:00",
   "filters_available": {
     "document_types": [
       {
@@ -609,12 +609,6 @@
   },
   "source_vs_core": [
     {
-      "resource": "categoria",
-      "source_count": 22,
-      "core_primary_count": 23,
-      "difference": -1
-    },
-    {
       "resource": "cuenta-contable",
       "source_count": 572,
       "core_primary_count": 572,
@@ -627,10 +621,10 @@
       "difference": 0
     },
     {
-      "resource": "centro-costo",
-      "source_count": 2,
-      "core_primary_count": 2,
-      "difference": 0
+      "resource": "categoria",
+      "source_count": 22,
+      "core_primary_count": 23,
+      "difference": -1
     },
     {
       "resource": "marca",
@@ -639,15 +633,15 @@
       "difference": 0
     },
     {
-      "resource": "unidad",
-      "source_count": 20,
-      "core_primary_count": 20,
-      "difference": 0
-    },
-    {
       "resource": "banco/cuenta",
       "source_count": 5,
       "core_primary_count": 5,
+      "difference": 0
+    },
+    {
+      "resource": "centro-costo",
+      "source_count": 2,
+      "core_primary_count": 2,
       "difference": 0
     },
     {
@@ -663,6 +657,12 @@
       "difference": 0
     },
     {
+      "resource": "unidad",
+      "source_count": 20,
+      "core_primary_count": 20,
+      "difference": 0
+    },
+    {
       "resource": "producto",
       "source_count": 1,
       "core_primary_count": 1237,
@@ -670,15 +670,15 @@
     },
     {
       "resource": "movimiento-inventario",
-      "source_count": 44,
+      "source_count": 14,
       "core_primary_count": 9057,
-      "difference": -9013
+      "difference": -9043
     },
     {
       "resource": "documento",
-      "source_count": 161,
+      "source_count": 82,
       "core_primary_count": 23979,
-      "difference": -23818
+      "difference": -23897
     },
     {
       "resource": "inventario/guia",
@@ -694,9 +694,9 @@
     },
     {
       "resource": "documento/tickets",
-      "source_count": 89,
+      "source_count": 32,
       "core_primary_count": 23979,
-      "difference": -23890
+      "difference": -23947
     },
     {
       "resource": "contabilidad/asiento",
