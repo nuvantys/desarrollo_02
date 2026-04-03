@@ -1597,7 +1597,7 @@ def build_change_tracking(conn, meta: dict[str, Any]) -> dict[str, Any]:
         },
         {
             "title": "Comparativo contra la corrida previa",
-            "body": f"El snapshot publicado usa el run {published_run_id}. La referencia anterior para comparar cambios es {comparison_label}. Cuando no hay corrida previa comparable, los deltas quedan vacios.",
+            "body": f"El snapshot publicado usa el run {published_run_id}. La referencia anterior para comparar cambios es {comparison_label}. La columna de comparacion contra la previa mide variacion de cabeceras tocadas, no inserciones netas en la base. Cuando no hay corrida previa comparable, los deltas quedan vacios.",
         },
         {
             "title": "Lectura ejecutiva de la novedad",

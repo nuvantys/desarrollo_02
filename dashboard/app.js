@@ -579,7 +579,7 @@ function renderTechnicalChangeTracking(changeTracking = {}) {
     { key: "touched_rows_current", label: "Cabeceras tocadas", formatter: formatPreciseNumber },
     { key: "business_rows_today", label: "Del dia", formatter: (value) => value == null ? "No aplica" : formatPreciseNumber(value) },
     { key: "max_business_date", label: "Fecha max", formatter: formatDateOnly },
-    { key: "touched_rows_delta", label: "Delta vs previa", formatter: formatSignedDelta },
+    { key: "touched_rows_delta", label: "Cabeceras vs previa", formatter: formatSignedDelta },
     { key: "note", label: "Lectura" },
   ]);
 }
