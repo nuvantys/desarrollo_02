@@ -1,17 +1,17 @@
 {
-  "run_id": "20260402192041",
+  "run_id": "20260403013920",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-04-02T19:22:11+00:00",
+  "generated_at": "2026-04-03T01:40:40+00:00",
   "version": "1.0.0",
   "counts": [
     {
       "key": "documentos",
-      "value": 23979
+      "value": 23985
     },
     {
       "key": "personas",
-      "value": 2063
+      "value": 2064
     },
     {
       "key": "productos",
@@ -19,7 +19,7 @@
     },
     {
       "key": "movimientos",
-      "value": 9057
+      "value": 9060
     },
     {
       "key": "guias",
@@ -31,15 +31,15 @@
     },
     {
       "key": "asientos",
-      "value": 67519
+      "value": 67532
     },
     {
       "key": "documento_detalles",
-      "value": 77720
+      "value": 77789
     },
     {
       "key": "asiento_detalles",
-      "value": 279829
+      "value": 280095
     }
   ],
   "alerts": [
@@ -47,7 +47,7 @@
       "level": "warning",
       "title": "Anomalía en movimientos",
       "message": "El endpoint de movimiento-inventario reporta más filas origen que IDs únicos materializados.",
-      "metric": 5044
+      "metric": 5041
     },
     {
       "level": "info",
@@ -67,12 +67,12 @@
       {
         "value": "FAC",
         "label": "FAC",
-        "count": 19395
+        "count": 19400
       },
       {
         "value": "COT",
         "label": "COT",
-        "count": 1980
+        "count": 1981
       },
       {
         "value": "DAC",
@@ -149,17 +149,17 @@
       {
         "value": "C",
         "label": "C",
-        "count": 10664
+        "count": 10666
       },
       {
         "value": "P",
         "label": "P",
-        "count": 1290
+        "count": 1293
       },
       {
         "value": "E",
         "label": "E",
-        "count": 1126
+        "count": 1127
       },
       {
         "value": "A",
@@ -181,7 +181,7 @@
       {
         "value": "NO8bYrxZfkmRd7j4",
         "label": "BODEGA PRINCIPAL",
-        "count": 5287
+        "count": 5289
       },
       {
         "value": "5xmbm8PZS18waoKM",
@@ -201,7 +201,7 @@
       {
         "value": "3RBe311q3s7o1bLJ",
         "label": "JOSELYN MEJIA",
-        "count": 54
+        "count": 55
       },
       {
         "value": "1mBdJz3ziplGd0J6",
@@ -405,22 +405,22 @@
       {
         "value": "MEegJZVqvfPKXdQ5",
         "label": "INVENTARIO DE REPUESTOS",
-        "count": 46643
+        "count": 46702
       },
       {
         "value": "0yelYxVlQIOmJaER",
         "label": "COSTO DE REPUESTOS",
-        "count": 30619
+        "count": 30678
       },
       {
         "value": "loejRZVwGclDLeQM",
         "label": "VENTA DE REPUESTOS",
-        "count": 29388
+        "count": 29445
       },
       {
         "value": "RMdR6OwLktno9dl6",
         "label": "Clientes Comerciales",
-        "count": 24854
+        "count": 24864
       },
       {
         "value": "pZeVOAlJDU0mraGW",
@@ -430,12 +430,12 @@
       {
         "value": "EMaxkn98mtmD6e5G",
         "label": "Rebaja y/o Descuentos sobre Ventas",
-        "count": 16496
+        "count": 16555
       },
       {
         "value": "YWb4xQDrPsYENbZ1",
         "label": "BANCO PICHINCHA",
-        "count": 12039
+        "count": 12044
       },
       {
         "value": "5wboY3RwMhl5NexE",
@@ -450,12 +450,12 @@
       {
         "value": "5wbo2V9Bxil5NaxE",
         "label": "VENTA DE CONSUMIBLES",
-        "count": 5837
+        "count": 5841
       },
       {
         "value": "1qdG6vgQXsWExbN8",
         "label": "IVA sobre Ventas",
-        "count": 5435
+        "count": 5438
       },
       {
         "value": "MEegJZ6QvSPKXdQ5",
@@ -465,12 +465,12 @@
       {
         "value": "Yjbqx7XEKtLnAaLN",
         "label": "INVENTARIO DE CONSUMIBLES",
-        "count": 4537
+        "count": 4541
       },
       {
         "value": "Lmav2l7MWCOqma3N",
         "label": "COSTO DE CONSUMIBLES",
-        "count": 3702
+        "count": 3706
       },
       {
         "value": "wKe5yQEv4Fg3me31",
@@ -495,7 +495,7 @@
       {
         "value": "Lmav2lDR7tOqma3N",
         "label": "Prestación de Servicios",
-        "count": 2293
+        "count": 2295
       },
       {
         "value": "EMaxkn9LDtmD6e5G",
@@ -657,7 +657,7 @@
       {
         "value": "9pgenrglKFlg0eNQ",
         "label": "Bodega Principal",
-        "count": 57393
+        "count": 57409
       },
       {
         "value": "N5wboQjmxil5NexE",

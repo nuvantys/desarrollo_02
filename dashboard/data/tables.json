@@ -1,19 +1,19 @@
 {
-  "run_id": "20260402192041",
+  "run_id": "20260403013920",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-04-02T19:22:11+00:00",
+  "generated_at": "2026-04-03T01:40:40+00:00",
   "filters_available": {
     "document_types": [
       {
         "value": "FAC",
         "label": "FAC",
-        "count": 19395
+        "count": 19400
       },
       {
         "value": "COT",
         "label": "COT",
-        "count": 1980
+        "count": 1981
       },
       {
         "value": "DAC",
@@ -90,17 +90,17 @@
       {
         "value": "C",
         "label": "C",
-        "count": 10664
+        "count": 10666
       },
       {
         "value": "P",
         "label": "P",
-        "count": 1290
+        "count": 1293
       },
       {
         "value": "E",
         "label": "E",
-        "count": 1126
+        "count": 1127
       },
       {
         "value": "A",
@@ -122,7 +122,7 @@
       {
         "value": "NO8bYrxZfkmRd7j4",
         "label": "BODEGA PRINCIPAL",
-        "count": 5287
+        "count": 5289
       },
       {
         "value": "5xmbm8PZS18waoKM",
@@ -142,7 +142,7 @@
       {
         "value": "3RBe311q3s7o1bLJ",
         "label": "JOSELYN MEJIA",
-        "count": 54
+        "count": 55
       },
       {
         "value": "1mBdJz3ziplGd0J6",
@@ -346,22 +346,22 @@
       {
         "value": "MEegJZVqvfPKXdQ5",
         "label": "INVENTARIO DE REPUESTOS",
-        "count": 46643
+        "count": 46702
       },
       {
         "value": "0yelYxVlQIOmJaER",
         "label": "COSTO DE REPUESTOS",
-        "count": 30619
+        "count": 30678
       },
       {
         "value": "loejRZVwGclDLeQM",
         "label": "VENTA DE REPUESTOS",
-        "count": 29388
+        "count": 29445
       },
       {
         "value": "RMdR6OwLktno9dl6",
         "label": "Clientes Comerciales",
-        "count": 24854
+        "count": 24864
       },
       {
         "value": "pZeVOAlJDU0mraGW",
@@ -371,12 +371,12 @@
       {
         "value": "EMaxkn98mtmD6e5G",
         "label": "Rebaja y/o Descuentos sobre Ventas",
-        "count": 16496
+        "count": 16555
       },
       {
         "value": "YWb4xQDrPsYENbZ1",
         "label": "BANCO PICHINCHA",
-        "count": 12039
+        "count": 12044
       },
       {
         "value": "5wboY3RwMhl5NexE",
@@ -391,12 +391,12 @@
       {
         "value": "5wbo2V9Bxil5NaxE",
         "label": "VENTA DE CONSUMIBLES",
-        "count": 5837
+        "count": 5841
       },
       {
         "value": "1qdG6vgQXsWExbN8",
         "label": "IVA sobre Ventas",
-        "count": 5435
+        "count": 5438
       },
       {
         "value": "MEegJZ6QvSPKXdQ5",
@@ -406,12 +406,12 @@
       {
         "value": "Yjbqx7XEKtLnAaLN",
         "label": "INVENTARIO DE CONSUMIBLES",
-        "count": 4537
+        "count": 4541
       },
       {
         "value": "Lmav2l7MWCOqma3N",
         "label": "COSTO DE CONSUMIBLES",
-        "count": 3702
+        "count": 3706
       },
       {
         "value": "wKe5yQEv4Fg3me31",
@@ -436,7 +436,7 @@
       {
         "value": "Lmav2lDR7tOqma3N",
         "label": "Prestación de Servicios",
-        "count": 2293
+        "count": 2295
       },
       {
         "value": "EMaxkn9LDtmD6e5G",
@@ -598,7 +598,7 @@
       {
         "value": "9pgenrglKFlg0eNQ",
         "label": "Bodega Principal",
-        "count": 57393
+        "count": 57409
       },
       {
         "value": "N5wboQjmxil5NexE",
@@ -615,8 +615,8 @@
     },
     {
       "cliente_nombre": "JUAN JOSUE GALLARDO HERRERA",
-      "documentos": 347,
-      "monto_total": 355063.29
+      "documentos": 348,
+      "monto_total": 355599.14
     },
     {
       "cliente_nombre": "NOVAGRITECH S.A.",
@@ -744,6 +744,11 @@
       "monto_total": 78425.6
     },
     {
+      "cliente_nombre": "JOSELYN NICOLE MEJIA CHULDE",
+      "documentos": 25,
+      "monto_total": 77651.13
+    },
+    {
       "cliente_nombre": "CUASAPAZ HUERA LAURA ALICIA",
       "documentos": 29,
       "monto_total": 74780.86
@@ -757,11 +762,6 @@
       "cliente_nombre": "MARTIN EDUARDO CARDENAS PARRA",
       "documentos": 78,
       "monto_total": 72838.56
-    },
-    {
-      "cliente_nombre": "JOSELYN NICOLE MEJIA CHULDE",
-      "documentos": 24,
-      "monto_total": 72540.17
     },
     {
       "cliente_nombre": "ANGEL MESIAS IZA ALDAS",
@@ -855,8 +855,8 @@
     },
     {
       "cliente_nombre": "PREDIOS TANDAPUNGO S.A.",
-      "documentos": 57,
-      "monto_total": 46364.85
+      "documentos": 58,
+      "monto_total": 46474.1
     }
   ],
   "top_products": [
@@ -878,43 +878,43 @@
       "producto_nombre": "BOMBA DE VACIO CTA 1500 LITROS COMPLETA (INCLUYE SILENCIADOR Y ACEITERA)",
       "categoria_nombre": "BOMBAS DE VACIO",
       "marca_nombre": "Sin marca",
-      "cantidad_total": 154.0,
-      "importe_total": 336014.99
+      "cantidad_total": 155.0,
+      "importe_total": 337714.99
     },
     {
       "producto_nombre": "MANO DE OBRA",
       "categoria_nombre": "MANO DE OBRA",
       "marca_nombre": "Sin marca",
-      "cantidad_total": 2917.0,
-      "importe_total": 266761.73
+      "cantidad_total": 2919.0,
+      "importe_total": 266911.73
     },
     {
       "producto_nombre": "BVT 1 BOMBA DE VACIO AGROLATTEC ( EL TRIUNFO ) 460LTS",
       "categoria_nombre": "BOMBAS DE VACIO",
       "marca_nombre": "Sin marca",
-      "cantidad_total": 577.0,
-      "importe_total": 255878.3
+      "cantidad_total": 579.0,
+      "importe_total": 256908.3
     },
     {
       "producto_nombre": "COLECTOR CLASSIC 300 POLISULFONA",
       "categoria_nombre": "REPUESTOS",
       "marca_nombre": "Sin marca",
-      "cantidad_total": 2626.0,
-      "importe_total": 249985.14
+      "cantidad_total": 2631.0,
+      "importe_total": 250532.04
     },
     {
       "producto_nombre": "BOMBA CTA 750",
       "categoria_nombre": "BOMBAS DE VACIO",
       "marca_nombre": "MAYFRA",
-      "cantidad_total": 153.0,
-      "importe_total": 219251.36
+      "cantidad_total": 154.0,
+      "importe_total": 220807.45
     },
     {
       "producto_nombre": "PEZONERAS DL016U ( MILKRITE )",
       "categoria_nombre": "PEZONERAS",
       "marca_nombre": "MILKRITE",
-      "cantidad_total": 9993.0,
-      "importe_total": 212058.61
+      "cantidad_total": 10031.0,
+      "importe_total": 213065.61
     },
     {
       "producto_nombre": "BOMBA DE VACIO CTA 2200 LITROS COMPLETA (INCLUYE SILENCIADOR Y ACEITERA)",
@@ -955,8 +955,8 @@
       "producto_nombre": "PULSADOR NEUMATICO L80",
       "categoria_nombre": "REPUESTOS VARIOS",
       "marca_nombre": "Sin marca",
-      "cantidad_total": 1461.0,
-      "importe_total": 135327.04
+      "cantidad_total": 1467.0,
+      "importe_total": 135899.08
     },
     {
       "producto_nombre": "PRODUCTOS SIN IVA 2019",
@@ -976,8 +976,8 @@
       "producto_nombre": "MATERIALES VARIOS",
       "categoria_nombre": "REPUESTOS VARIOS",
       "marca_nombre": "Sin marca",
-      "cantidad_total": 4450.83,
-      "importe_total": 116047.15
+      "cantidad_total": 4451.83,
+      "importe_total": 116092.15
     },
     {
       "producto_nombre": "MANGUERA PULSADO DOBLE - INABOR",
@@ -990,8 +990,8 @@
       "producto_nombre": "SELLADOR DE UBRES - CANECA 20 LTS",
       "categoria_nombre": "DETERGENTES",
       "marca_nombre": "DISTRIBUIDORA S Y P",
-      "cantidad_total": 2707.2,
-      "importe_total": 103404.34
+      "cantidad_total": 2708.2,
+      "importe_total": 103448.09
     },
     {
       "producto_nombre": "REPUESTO PARA EQUIPO DE ORDEÑO",
@@ -1004,8 +1004,8 @@
       "producto_nombre": "MANGUERA DE LECHE 5/8 ( 16X25) MAYFRA",
       "categoria_nombre": "MANGUERAS",
       "marca_nombre": "Sin marca",
-      "cantidad_total": 12809.93,
-      "importe_total": 95832.31
+      "cantidad_total": 12818.13,
+      "importe_total": 95897.5
     },
     {
       "producto_nombre": "DETERGENTE ACIDO - CANECA 20 LTS",
@@ -1116,8 +1116,8 @@
       "producto_nombre": "PEZONERAS BOSIO IRLANDA ( MILKRITE )",
       "categoria_nombre": "PEZONERAS",
       "marca_nombre": "MILKRITE",
-      "cantidad_total": 2669.0,
-      "importe_total": 62067.37
+      "cantidad_total": 2678.0,
+      "importe_total": 62305.87
     },
     {
       "producto_nombre": "TANQUE DE ENFRIAMIENTO MILKPLAN - CAPACIDAD 1250 LTS",
@@ -1151,8 +1151,8 @@
       "producto_nombre": "GUARNICION TAPA TACHO GRANDE",
       "categoria_nombre": "REPUESTOS",
       "marca_nombre": "Sin marca",
-      "cantidad_total": 1647.0,
-      "importe_total": 56814.44
+      "cantidad_total": 1648.0,
+      "importe_total": 56861.32
     },
     {
       "producto_nombre": "MOTOR DE 7.5 HP DUCATI",
@@ -1179,15 +1179,15 @@
       "producto_nombre": "PEZONERA DL016U-10 ( MILKRITE )",
       "categoria_nombre": "PEZONERAS",
       "marca_nombre": "MILKRITE",
-      "cantidad_total": 1859.0,
-      "importe_total": 47855.22
+      "cantidad_total": 1862.0,
+      "importe_total": 47934.72
     },
     {
       "producto_nombre": "COPA DE ORDENO PLASTICA TRIANGULAR",
       "categoria_nombre": "REPUESTOS",
       "marca_nombre": "ZIBO",
-      "cantidad_total": 2653.0,
-      "importe_total": 47197.85
+      "cantidad_total": 2657.0,
+      "importe_total": 47279.57
     },
     {
       "producto_nombre": "Box Mini Plus GMZ",
@@ -1207,15 +1207,15 @@
       "producto_nombre": "MANGUERA PULSADO DOBLE - TERRAFLEX",
       "categoria_nombre": "MANGUERAS",
       "marca_nombre": "Sin marca",
-      "cantidad_total": 6365.65,
-      "importe_total": 43647.69
+      "cantidad_total": 6375.65,
+      "importe_total": 43712.69
     }
   ],
   "top_bodegas": [
     {
       "bodega_nombre": "BODEGA PRINCIPAL",
-      "movimientos": 5287,
-      "valor_total": 3858569.4
+      "movimientos": 5289,
+      "valor_total": 3859998.84
     },
     {
       "bodega_nombre": "ALMACEN MACHACHI",
@@ -1234,8 +1234,8 @@
     },
     {
       "bodega_nombre": "JOSELYN MEJIA",
-      "movimientos": 54,
-      "valor_total": 36441.82
+      "movimientos": 55,
+      "valor_total": 39253.12
     },
     {
       "bodega_nombre": "JUAN CARLOS INSUASTI",
@@ -1301,8 +1301,8 @@
   "top_accounts": [
     {
       "cuenta_nombre": "Clientes Comerciales",
-      "lineas": 24854,
-      "valor_total": 14803663.47
+      "lineas": 24864,
+      "valor_total": 14817465.09
     },
     {
       "cuenta_nombre": "Proveedores",
@@ -1311,23 +1311,23 @@
     },
     {
       "cuenta_nombre": "BANCO PICHINCHA",
-      "lineas": 12039,
-      "valor_total": 7940412.67
+      "lineas": 12044,
+      "valor_total": 7946767.35
     },
     {
       "cuenta_nombre": "VENTA DE REPUESTOS",
-      "lineas": 29388,
-      "valor_total": 7545927.02
+      "lineas": 29445,
+      "valor_total": 7555094.87
     },
     {
       "cuenta_nombre": "INVENTARIO DE REPUESTOS",
-      "lineas": 46643,
-      "valor_total": 5520208.98
+      "lineas": 46702,
+      "valor_total": 5524412.04
     },
     {
       "cuenta_nombre": "COSTO DE REPUESTOS",
-      "lineas": 30619,
-      "valor_total": 4635758.79
+      "lineas": 30678,
+      "valor_total": 4639961.85
     },
     {
       "cuenta_nombre": "Mercaderías en Transito",
@@ -1366,8 +1366,8 @@
     },
     {
       "cuenta_nombre": "Rebaja y/o Descuentos sobre Ventas",
-      "lineas": 16496,
-      "valor_total": 1489477.56
+      "lineas": 16555,
+      "valor_total": 1491507.49
     },
     {
       "cuenta_nombre": "Suministros, Materiales y Repuestos Costos",
@@ -1411,8 +1411,8 @@
     },
     {
       "cuenta_nombre": "VENTA DE CONSUMIBLES",
-      "lineas": 5837,
-      "valor_total": 638756.96
+      "lineas": 5841,
+      "valor_total": 638837.21
     },
     {
       "cuenta_nombre": "Sueldos Unificados Vtas.",
@@ -1436,8 +1436,8 @@
     },
     {
       "cuenta_nombre": "Prestación de Servicios",
-      "lineas": 2293,
-      "valor_total": 424148.06
+      "lineas": 2295,
+      "valor_total": 424298.06
     },
     {
       "cuenta_nombre": "Tarjeta de Crédito (Datafast)",
@@ -1471,8 +1471,8 @@
     },
     {
       "cuenta_nombre": "INVENTARIO DE CONSUMIBLES",
-      "lineas": 4537,
-      "valor_total": 291349.47
+      "lineas": 4541,
+      "valor_total": 291387.15
     },
     {
       "cuenta_nombre": "Resultados Acumulados",
@@ -1481,8 +1481,8 @@
     },
     {
       "cuenta_nombre": "COSTO DE CONSUMIBLES",
-      "lineas": 3702,
-      "valor_total": 224480.21
+      "lineas": 3706,
+      "valor_total": 224517.89
     },
     {
       "cuenta_nombre": "Gratificaciones Adm.",
@@ -1531,8 +1531,8 @@
     },
     {
       "cuenta_nombre": "IVA sobre Ventas",
-      "lineas": 5435,
-      "valor_total": 169504.02
+      "lineas": 5438,
+      "valor_total": 169582.79
     },
     {
       "cuenta_nombre": "BANCO BOLIVARIANO",

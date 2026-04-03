@@ -1,19 +1,19 @@
 {
-  "run_id": "20260402192041",
+  "run_id": "20260403013920",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-04-02T19:22:11+00:00",
+  "generated_at": "2026-04-03T01:40:40+00:00",
   "filters_available": {
     "document_types": [
       {
         "value": "FAC",
         "label": "FAC",
-        "count": 19395
+        "count": 19400
       },
       {
         "value": "COT",
         "label": "COT",
-        "count": 1980
+        "count": 1981
       },
       {
         "value": "DAC",
@@ -90,17 +90,17 @@
       {
         "value": "C",
         "label": "C",
-        "count": 10664
+        "count": 10666
       },
       {
         "value": "P",
         "label": "P",
-        "count": 1290
+        "count": 1293
       },
       {
         "value": "E",
         "label": "E",
-        "count": 1126
+        "count": 1127
       },
       {
         "value": "A",
@@ -122,7 +122,7 @@
       {
         "value": "NO8bYrxZfkmRd7j4",
         "label": "BODEGA PRINCIPAL",
-        "count": 5287
+        "count": 5289
       },
       {
         "value": "5xmbm8PZS18waoKM",
@@ -142,7 +142,7 @@
       {
         "value": "3RBe311q3s7o1bLJ",
         "label": "JOSELYN MEJIA",
-        "count": 54
+        "count": 55
       },
       {
         "value": "1mBdJz3ziplGd0J6",
@@ -346,22 +346,22 @@
       {
         "value": "MEegJZVqvfPKXdQ5",
         "label": "INVENTARIO DE REPUESTOS",
-        "count": 46643
+        "count": 46702
       },
       {
         "value": "0yelYxVlQIOmJaER",
         "label": "COSTO DE REPUESTOS",
-        "count": 30619
+        "count": 30678
       },
       {
         "value": "loejRZVwGclDLeQM",
         "label": "VENTA DE REPUESTOS",
-        "count": 29388
+        "count": 29445
       },
       {
         "value": "RMdR6OwLktno9dl6",
         "label": "Clientes Comerciales",
-        "count": 24854
+        "count": 24864
       },
       {
         "value": "pZeVOAlJDU0mraGW",
@@ -371,12 +371,12 @@
       {
         "value": "EMaxkn98mtmD6e5G",
         "label": "Rebaja y/o Descuentos sobre Ventas",
-        "count": 16496
+        "count": 16555
       },
       {
         "value": "YWb4xQDrPsYENbZ1",
         "label": "BANCO PICHINCHA",
-        "count": 12039
+        "count": 12044
       },
       {
         "value": "5wboY3RwMhl5NexE",
@@ -391,12 +391,12 @@
       {
         "value": "5wbo2V9Bxil5NaxE",
         "label": "VENTA DE CONSUMIBLES",
-        "count": 5837
+        "count": 5841
       },
       {
         "value": "1qdG6vgQXsWExbN8",
         "label": "IVA sobre Ventas",
-        "count": 5435
+        "count": 5438
       },
       {
         "value": "MEegJZ6QvSPKXdQ5",
@@ -406,12 +406,12 @@
       {
         "value": "Yjbqx7XEKtLnAaLN",
         "label": "INVENTARIO DE CONSUMIBLES",
-        "count": 4537
+        "count": 4541
       },
       {
         "value": "Lmav2l7MWCOqma3N",
         "label": "COSTO DE CONSUMIBLES",
-        "count": 3702
+        "count": 3706
       },
       {
         "value": "wKe5yQEv4Fg3me31",
@@ -436,7 +436,7 @@
       {
         "value": "Lmav2lDR7tOqma3N",
         "label": "Prestación de Servicios",
-        "count": 2293
+        "count": 2295
       },
       {
         "value": "EMaxkn9LDtmD6e5G",
@@ -598,7 +598,7 @@
       {
         "value": "9pgenrglKFlg0eNQ",
         "label": "Bodega Principal",
-        "count": 57393
+        "count": 57409
       },
       {
         "value": "N5wboQjmxil5NexE",
@@ -610,17 +610,17 @@
   "hero_metrics": [
     {
       "key": "documentos",
-      "value": 23979.0,
+      "value": 23985.0,
       "label": "Documentos históricos"
     },
     {
       "key": "ventas_total",
-      "value": 16601378.84,
+      "value": 16609361.63,
       "label": "Monto acumulado documentos"
     },
     {
       "key": "clientes_activos",
-      "value": 1264.0,
+      "value": 1265.0,
       "label": "Clientes con actividad"
     },
     {
@@ -630,12 +630,12 @@
     },
     {
       "key": "movimientos_unicos",
-      "value": 9057.0,
+      "value": 9060.0,
       "label": "Movimientos únicos"
     },
     {
       "key": "asientos",
-      "value": 67519.0,
+      "value": 67532.0,
       "label": "Asientos contables"
     }
   ],
@@ -677,8 +677,8 @@
     },
     {
       "period": "2026-01-01",
-      "documentos": 1420,
-      "monto_total": 1016612.43
+      "documentos": 1426,
+      "monto_total": 1024595.22
     }
   ],
   "monthly_story": [
@@ -1194,9 +1194,9 @@
     },
     {
       "period": "2026-04-01",
-      "documentos": 15,
-      "monto_total": 4484.49,
-      "asientos": 38
+      "documentos": 21,
+      "monto_total": 12467.28,
+      "asientos": 51
     }
   ],
   "narrative": [

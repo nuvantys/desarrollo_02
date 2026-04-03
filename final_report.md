@@ -2,40 +2,40 @@
 
 ## Infraestructura
 
-- Fecha de corrida: 2026-04-02
+- Fecha de corrida: 2026-04-03
 - Base PostgreSQL destino: `postgres` en `aws-1-us-east-1.pooler.supabase.com:5432`
 - Modo: `refresh`
 - API base: `https://api.contifico.com`
 - Raw auditado: `no`
-- Run ID: `20260402192041`
+- Run ID: `20260403013920`
 
 ## Recursos procesados
 
 | resource | status | source_count | pages_fetched | raw_row_count | started_at | finished_at |
 | --- | --- | --- | --- | --- | --- | --- |
-| cuenta-contable | success | 572 | 1 | 0 | 2026-04-02 19:20:41+00:00 | 2026-04-02 19:20:42+00:00 |
-| bodega | success | 21 | 1 | 0 | 2026-04-02 19:20:42+00:00 | 2026-04-02 19:20:42+00:00 |
-| categoria | success | 22 | 1 | 0 | 2026-04-02 19:20:42+00:00 | 2026-04-02 19:20:42+00:00 |
-| marca | success | 16 | 1 | 0 | 2026-04-02 19:20:42+00:00 | 2026-04-02 19:20:42+00:00 |
-| banco/cuenta | success | 5 | 1 | 0 | 2026-04-02 19:20:43+00:00 | 2026-04-02 19:20:43+00:00 |
-| centro-costo | success | 2 | 1 | 0 | 2026-04-02 19:20:43+00:00 | 2026-04-02 19:20:43+00:00 |
-| contabilidad/periodo | success | 8 | 1 | 0 | 2026-04-02 19:20:43+00:00 | 2026-04-02 19:20:43+00:00 |
-| persona | success | 2063 | 21 | 0 | 2026-04-02 19:20:43+00:00 | 2026-04-02 19:20:46+00:00 |
-| unidad | success | 20 | 1 | 0 | 2026-04-02 19:20:43+00:00 | 2026-04-02 19:20:43+00:00 |
-| producto | success | 1 | 2 | 0 | 2026-04-02 19:20:46+00:00 | 2026-04-02 19:20:55+00:00 |
-| movimiento-inventario | success | 14 | 2 | 0 | 2026-04-02 19:20:55+00:00 | 2026-04-02 19:21:01+00:00 |
-| documento | success | 82 | 92 | 0 | 2026-04-02 19:21:01+00:00 | 2026-04-02 19:21:50+00:00 |
-| inventario/guia | success | 38 | 1 | 0 | 2026-04-02 19:21:50+00:00 | 2026-04-02 19:21:51+00:00 |
-| banco/movimiento | success | 2762 | 1 | 0 | 2026-04-02 19:21:51+00:00 | 2026-04-02 19:22:06+00:00 |
-| documento/tickets | success | 32 | 32 | 0 | 2026-04-02 19:22:06+00:00 | 2026-04-02 19:22:09+00:00 |
-| contabilidad/asiento | success | 117 | 2 | 0 | 2026-04-02 19:22:09+00:00 | 2026-04-02 19:22:10+00:00 |
+| cuenta-contable | success | 572 | 1 | 0 | 2026-04-03 01:39:20+00:00 | 2026-04-03 01:39:20+00:00 |
+| bodega | success | 21 | 1 | 0 | 2026-04-03 01:39:21+00:00 | 2026-04-03 01:39:21+00:00 |
+| categoria | success | 22 | 1 | 0 | 2026-04-03 01:39:21+00:00 | 2026-04-03 01:39:21+00:00 |
+| marca | success | 16 | 1 | 0 | 2026-04-03 01:39:21+00:00 | 2026-04-03 01:39:21+00:00 |
+| unidad | success | 20 | 1 | 0 | 2026-04-03 01:39:21+00:00 | 2026-04-03 01:39:21+00:00 |
+| banco/cuenta | success | 5 | 1 | 0 | 2026-04-03 01:39:22+00:00 | 2026-04-03 01:39:22+00:00 |
+| centro-costo | success | 2 | 1 | 0 | 2026-04-03 01:39:22+00:00 | 2026-04-03 01:39:22+00:00 |
+| contabilidad/periodo | success | 8 | 1 | 0 | 2026-04-03 01:39:22+00:00 | 2026-04-03 01:39:22+00:00 |
+| persona | success | 2064 | 21 | 0 | 2026-04-03 01:39:22+00:00 | 2026-04-03 01:39:23+00:00 |
+| producto | success | 1 | 2 | 0 | 2026-04-03 01:39:23+00:00 | 2026-04-03 01:39:31+00:00 |
+| movimiento-inventario | success | 17 | 2 | 0 | 2026-04-03 01:39:31+00:00 | 2026-04-03 01:39:35+00:00 |
+| documento | success | 93 | 103 | 0 | 2026-04-03 01:39:35+00:00 | 2026-04-03 01:40:22+00:00 |
+| inventario/guia | success | 38 | 1 | 0 | 2026-04-03 01:40:22+00:00 | 2026-04-03 01:40:23+00:00 |
+| banco/movimiento | success | 2762 | 1 | 0 | 2026-04-03 01:40:23+00:00 | 2026-04-03 01:40:38+00:00 |
+| documento/tickets | success | 38 | 38 | 0 | 2026-04-03 01:40:38+00:00 | 2026-04-03 01:40:39+00:00 |
+| contabilidad/asiento | success | 40 | 1 | 0 | 2026-04-03 01:40:39+00:00 | 2026-04-03 01:40:40+00:00 |
 
 ## Filas cargadas por tabla
 
 | resource | stage | table_name | row_count |
 | --- | --- | --- | --- |
-| contabilidad/asiento | core | asiento_detalles | 475 |
-| contabilidad/asiento | core | asientos | 117 |
+| contabilidad/asiento | core | asiento_detalles | 358 |
+| contabilidad/asiento | core | asientos | 40 |
 | banco/cuenta | core | banco_cuentas | 5 |
 | banco/movimiento | core | banco_movimiento_detalles | 3224 |
 | banco/movimiento | core | banco_movimientos | 2762 |
@@ -43,20 +43,20 @@
 | categoria | core | categorias | 22 |
 | centro-costo | core | centros_costo | 2 |
 | cuenta-contable | core | cuentas_contables | 572 |
-| documento | core | documento_cobros | 12 |
-| documento | core | documento_detalles | 81 |
-| documento | core | documentos | 32 |
+| documento | core | documento_cobros | 16 |
+| documento | core | documento_detalles | 150 |
+| documento | core | documentos | 38 |
 | inventario/guia | core | guia_destinatarios | 38 |
 | inventario/guia | core | guia_detalles | 72 |
 | inventario/guia | core | guias | 38 |
 | marca | core | marcas | 16 |
-| movimiento-inventario | core | movimiento_detalles | 29 |
-| movimiento-inventario | core | movimientos | 14 |
+| movimiento-inventario | core | movimiento_detalles | 92 |
+| movimiento-inventario | core | movimientos | 17 |
 | contabilidad/periodo | core | periodos | 8 |
-| persona | core | personas | 14 |
+| persona | core | personas | 19 |
 | producto | core | productos | 1 |
-| documento/tickets | core | tickets_detalles | 81 |
-| documento/tickets | core | tickets_documentos | 32 |
+| documento/tickets | core | tickets_detalles | 150 |
+| documento/tickets | core | tickets_documentos | 38 |
 | unidad | core | unidades | 20 |
 
 ## Fuente vs tabla principal
@@ -67,33 +67,33 @@
 | bodega | 21 | 21 | 0 |
 | categoria | 22 | 23 | -1 |
 | marca | 16 | 16 | 0 |
+| unidad | 20 | 20 | 0 |
 | banco/cuenta | 5 | 5 | 0 |
 | centro-costo | 2 | 2 | 0 |
 | contabilidad/periodo | 8 | 8 | 0 |
-| persona | 2063 | 2063 | 0 |
-| unidad | 20 | 20 | 0 |
+| persona | 2064 | 2064 | 0 |
 | producto | 1 | 1237 | -1236 |
-| movimiento-inventario | 14 | 9057 | -9043 |
-| documento | 82 | 23979 | -23897 |
+| movimiento-inventario | 17 | 9060 | -9043 |
+| documento | 93 | 23985 | -23892 |
 | inventario/guia | 38 | 38 | 0 |
 | banco/movimiento | 2762 | 2762 | 0 |
-| documento/tickets | 32 | 23979 | -23947 |
-| contabilidad/asiento | 117 | 67519 | -67402 |
+| documento/tickets | 38 | 23985 | -23947 |
+| contabilidad/asiento | 40 | 67532 | -67492 |
 
 ## Cobertura temporal
 
 | resource | row_count | min_date | max_date |
 | --- | --- | --- | --- |
-| asientos | 67519 | 2019-03-12 | 2026-07-08 |
+| asientos | 67532 | 2019-03-12 | 2026-07-08 |
 | banco_cuentas | 5 | 2021-02-17 | 2025-09-03 |
 | banco_movimientos | 2762 | 2019-12-20 | 2026-03-31 |
-| documentos | 23979 | 2019-03-12 | 2026-04-02 |
+| documentos | 23985 | 2019-03-12 | 2026-04-02 |
 | guias | 38 | 2020-11-26 | 2026-02-13 |
-| movimientos | 9057 | 2022-05-16 | 2026-04-02 |
+| movimientos | 9060 | 2022-05-16 | 2026-04-02 |
 | periodos | 8 | 2019-01-01 | 2026-12-31 |
-| personas | 2063 | 2019-11-20 | 2026-04-02 |
+| personas | 2064 | 2019-11-20 | 2026-04-02 |
 | productos | 1237 | 2019-11-14 | 2026-03-25 |
-| tickets_documentos | 23979 | 2019-03-12 | 2026-04-02 |
+| tickets_documentos | 23985 | 2019-03-12 | 2026-04-02 |
 
 ## Salud relacional
 
@@ -186,7 +186,7 @@
 
 | rol | total |
 | --- | --- |
-| cliente | 1429 |
+| cliente | 1430 |
 | empleado | 14 |
 | proveedor | 710 |
 | vendedor | 11 |
@@ -215,7 +215,7 @@
 
 | tipo | bodega | total_movimientos | valor_total |
 | --- | --- | --- | --- |
-| EGR | BODEGA PRINCIPAL | 3481 | 1638929.750000 |
+| EGR | BODEGA PRINCIPAL | 3483 | 1640359.190000 |
 | EGR | ALMACEN MACHACHI | 2134 | 125643.720000 |
 | ING | BODEGA PRINCIPAL | 967 | 1914194.980000 |
 | TRA | BODEGA PRINCIPAL | 839 | 305444.670000 |
@@ -226,7 +226,7 @@
 | EGR | CESAR CUAMACAS | 58 | 34362.400000 |
 | ING | BODEGA LUIS CONDOR | 43 | 1630.850000 |
 | EGR | JUAN CARLOS INSUASTI | 35 | 4430.520000 |
-| EGR | JOSELYN MEJIA | 33 | 32916.950000 |
+| EGR | JOSELYN MEJIA | 34 | 35728.250000 |
 | EGR | MARGIT CEVALLOS | 32 | 961.720000 |
 | TRA | CESAR CUAMACAS | 22 | 7050.890000 |
 | TRA | MIGUEL MEJIA | 17 | 5359.950000 |
@@ -235,13 +235,13 @@
 
 | tipo_documento | estado | total_documentos | monto_total |
 | --- | --- | --- | --- |
-| FAC | C | 10132 | 5731434.740000 |
+| FAC | C | 10134 | 5733275.520000 |
 | FAC | G | 8793 | 2425813.150000 |
-| COT | E | 1126 | 1047517.360000 |
-| COT | P | 852 | 1961277.590000 |
+| COT | E | 1127 | 1047929.090000 |
+| COT | P | 852 | 1961401.710000 |
 | DAC | G | 480 | 1724818.990000 |
 | DAC | C | 478 | 845674.370000 |
-| FAC | P | 409 | 345771.060000 |
+| FAC | P | 412 | 351377.220000 |
 | NCT | G | 375 | 272477.370000 |
 | NAI | G | 349 | 228919.720000 |
 | DNA | G | 345 | 259188.070000 |

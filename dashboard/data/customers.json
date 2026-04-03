@@ -1,19 +1,19 @@
 {
-  "run_id": "20260402192041",
+  "run_id": "20260403013920",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-04-02T19:22:11+00:00",
+  "generated_at": "2026-04-03T01:40:40+00:00",
   "filters_available": {
     "document_types": [
       {
         "value": "FAC",
         "label": "FAC",
-        "count": 19395
+        "count": 19400
       },
       {
         "value": "COT",
         "label": "COT",
-        "count": 1980
+        "count": 1981
       },
       {
         "value": "DAC",
@@ -90,17 +90,17 @@
       {
         "value": "C",
         "label": "C",
-        "count": 10664
+        "count": 10666
       },
       {
         "value": "P",
         "label": "P",
-        "count": 1290
+        "count": 1293
       },
       {
         "value": "E",
         "label": "E",
-        "count": 1126
+        "count": 1127
       },
       {
         "value": "A",
@@ -122,7 +122,7 @@
   "role_mix": [
     {
       "rol": "cliente",
-      "total": 1429
+      "total": 1430
     },
     {
       "rol": "empleado",
@@ -150,11 +150,11 @@
     {
       "cliente_id": "nPeE9X0MJu1Orep1",
       "cliente_nombre": "JUAN JOSUE GALLARDO HERRERA",
-      "documentos": 347,
-      "monto_total": 355063.29,
+      "documentos": 348,
+      "monto_total": 355599.14,
       "primera_fecha": "2019-11-29",
-      "ultima_fecha": "2026-03-11",
-      "meses_activos": 73
+      "ultima_fecha": "2026-04-02",
+      "meses_activos": 74
     },
     {
       "cliente_id": "0yel5r3kmcOmJaER",
@@ -382,6 +382,15 @@
       "meses_activos": 31
     },
     {
+      "cliente_id": "XKdwRykLVT0kMbgW",
+      "cliente_nombre": "JOSELYN NICOLE MEJIA CHULDE",
+      "documentos": 25,
+      "monto_total": 77651.13,
+      "primera_fecha": "2024-05-07",
+      "ultima_fecha": "2026-04-02",
+      "meses_activos": 15
+    },
+    {
       "cliente_id": "MEegQxZgwsPKXbQ5",
       "cliente_nombre": "CUASAPAZ HUERA LAURA ALICIA",
       "documentos": 29,
@@ -407,15 +416,6 @@
       "primera_fecha": "2020-01-13",
       "ultima_fecha": "2026-03-26",
       "meses_activos": 37
-    },
-    {
-      "cliente_id": "XKdwRykLVT0kMbgW",
-      "cliente_nombre": "JOSELYN NICOLE MEJIA CHULDE",
-      "documentos": 24,
-      "monto_total": 72540.17,
-      "primera_fecha": "2024-05-07",
-      "ultima_fecha": "2026-03-30",
-      "meses_activos": 14
     },
     {
       "cliente_id": "YWb4RKvqXIYENeZ1",
@@ -582,11 +582,11 @@
     {
       "cliente_id": "Gge0VrzyYFJQObAD",
       "cliente_nombre": "PREDIOS TANDAPUNGO S.A.",
-      "documentos": 57,
-      "monto_total": 46364.85,
+      "documentos": 58,
+      "monto_total": 46474.1,
       "primera_fecha": "2020-03-30",
-      "ultima_fecha": "2026-02-23",
-      "meses_activos": 35
+      "ultima_fecha": "2026-04-02",
+      "meses_activos": 36
     },
     {
       "cliente_id": "Gge0XLGvYuJQOeAD",
@@ -1947,7 +1947,7 @@
     },
     {
       "cliente_nombre": "JUAN JOSUE GALLARDO HERRERA",
-      "monto_total": 355063.29,
+      "monto_total": 355599.14,
       "rn": 2
     },
     {
@@ -2409,7 +2409,7 @@
     },
     {
       "period": "2026-04-01",
-      "clientes_activos": 10
+      "clientes_activos": 15
     }
   ]
 }

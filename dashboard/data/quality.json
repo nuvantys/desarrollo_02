@@ -1,19 +1,19 @@
 {
-  "run_id": "20260402192041",
+  "run_id": "20260403013920",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-04-02T19:22:11+00:00",
+  "generated_at": "2026-04-03T01:40:40+00:00",
   "filters_available": {
     "document_types": [
       {
         "value": "FAC",
         "label": "FAC",
-        "count": 19395
+        "count": 19400
       },
       {
         "value": "COT",
         "label": "COT",
-        "count": 1980
+        "count": 1981
       },
       {
         "value": "DAC",
@@ -90,17 +90,17 @@
       {
         "value": "C",
         "label": "C",
-        "count": 10664
+        "count": 10666
       },
       {
         "value": "P",
         "label": "P",
-        "count": 1290
+        "count": 1293
       },
       {
         "value": "E",
         "label": "E",
-        "count": 1126
+        "count": 1127
       },
       {
         "value": "A",
@@ -122,7 +122,7 @@
       {
         "value": "NO8bYrxZfkmRd7j4",
         "label": "BODEGA PRINCIPAL",
-        "count": 5287
+        "count": 5289
       },
       {
         "value": "5xmbm8PZS18waoKM",
@@ -142,7 +142,7 @@
       {
         "value": "3RBe311q3s7o1bLJ",
         "label": "JOSELYN MEJIA",
-        "count": 54
+        "count": 55
       },
       {
         "value": "1mBdJz3ziplGd0J6",
@@ -346,22 +346,22 @@
       {
         "value": "MEegJZVqvfPKXdQ5",
         "label": "INVENTARIO DE REPUESTOS",
-        "count": 46643
+        "count": 46702
       },
       {
         "value": "0yelYxVlQIOmJaER",
         "label": "COSTO DE REPUESTOS",
-        "count": 30619
+        "count": 30678
       },
       {
         "value": "loejRZVwGclDLeQM",
         "label": "VENTA DE REPUESTOS",
-        "count": 29388
+        "count": 29445
       },
       {
         "value": "RMdR6OwLktno9dl6",
         "label": "Clientes Comerciales",
-        "count": 24854
+        "count": 24864
       },
       {
         "value": "pZeVOAlJDU0mraGW",
@@ -371,12 +371,12 @@
       {
         "value": "EMaxkn98mtmD6e5G",
         "label": "Rebaja y/o Descuentos sobre Ventas",
-        "count": 16496
+        "count": 16555
       },
       {
         "value": "YWb4xQDrPsYENbZ1",
         "label": "BANCO PICHINCHA",
-        "count": 12039
+        "count": 12044
       },
       {
         "value": "5wboY3RwMhl5NexE",
@@ -391,12 +391,12 @@
       {
         "value": "5wbo2V9Bxil5NaxE",
         "label": "VENTA DE CONSUMIBLES",
-        "count": 5837
+        "count": 5841
       },
       {
         "value": "1qdG6vgQXsWExbN8",
         "label": "IVA sobre Ventas",
-        "count": 5435
+        "count": 5438
       },
       {
         "value": "MEegJZ6QvSPKXdQ5",
@@ -406,12 +406,12 @@
       {
         "value": "Yjbqx7XEKtLnAaLN",
         "label": "INVENTARIO DE CONSUMIBLES",
-        "count": 4537
+        "count": 4541
       },
       {
         "value": "Lmav2l7MWCOqma3N",
         "label": "COSTO DE CONSUMIBLES",
-        "count": 3702
+        "count": 3706
       },
       {
         "value": "wKe5yQEv4Fg3me31",
@@ -436,7 +436,7 @@
       {
         "value": "Lmav2lDR7tOqma3N",
         "label": "Prestación de Servicios",
-        "count": 2293
+        "count": 2295
       },
       {
         "value": "EMaxkn9LDtmD6e5G",
@@ -598,7 +598,7 @@
       {
         "value": "9pgenrglKFlg0eNQ",
         "label": "Bodega Principal",
-        "count": 57393
+        "count": 57409
       },
       {
         "value": "N5wboQjmxil5NexE",
@@ -633,6 +633,12 @@
       "difference": 0
     },
     {
+      "resource": "unidad",
+      "source_count": 20,
+      "core_primary_count": 20,
+      "difference": 0
+    },
+    {
       "resource": "banco/cuenta",
       "source_count": 5,
       "core_primary_count": 5,
@@ -652,14 +658,8 @@
     },
     {
       "resource": "persona",
-      "source_count": 2063,
-      "core_primary_count": 2063,
-      "difference": 0
-    },
-    {
-      "resource": "unidad",
-      "source_count": 20,
-      "core_primary_count": 20,
+      "source_count": 2064,
+      "core_primary_count": 2064,
       "difference": 0
     },
     {
@@ -670,15 +670,15 @@
     },
     {
       "resource": "movimiento-inventario",
-      "source_count": 14,
-      "core_primary_count": 9057,
+      "source_count": 17,
+      "core_primary_count": 9060,
       "difference": -9043
     },
     {
       "resource": "documento",
-      "source_count": 82,
-      "core_primary_count": 23979,
-      "difference": -23897
+      "source_count": 93,
+      "core_primary_count": 23985,
+      "difference": -23892
     },
     {
       "resource": "inventario/guia",
@@ -694,15 +694,15 @@
     },
     {
       "resource": "documento/tickets",
-      "source_count": 32,
-      "core_primary_count": 23979,
+      "source_count": 38,
+      "core_primary_count": 23985,
       "difference": -23947
     },
     {
       "resource": "contabilidad/asiento",
-      "source_count": 117,
-      "core_primary_count": 67519,
-      "difference": -67402
+      "source_count": 40,
+      "core_primary_count": 67532,
+      "difference": -67492
     }
   ],
   "fk_health": [
@@ -926,7 +926,7 @@
   "temporal_coverage": [
     {
       "resource": "asientos",
-      "row_count": 67519,
+      "row_count": 67532,
       "min_date": "2019-03-12",
       "max_date": "2026-07-08"
     },
@@ -944,7 +944,7 @@
     },
     {
       "resource": "documentos",
-      "row_count": 23979,
+      "row_count": 23985,
       "min_date": "2019-03-12",
       "max_date": "2026-04-02"
     },
@@ -956,7 +956,7 @@
     },
     {
       "resource": "movimientos",
-      "row_count": 9057,
+      "row_count": 9060,
       "min_date": "2022-05-16",
       "max_date": "2026-04-02"
     },
@@ -968,7 +968,7 @@
     },
     {
       "resource": "personas",
-      "row_count": 2063,
+      "row_count": 2064,
       "min_date": "2019-11-20",
       "max_date": "2026-04-02"
     },
@@ -980,7 +980,7 @@
     },
     {
       "resource": "tickets_documentos",
-      "row_count": 23979,
+      "row_count": 23985,
       "min_date": "2019-03-12",
       "max_date": "2026-04-02"
     }
