@@ -398,8 +398,126 @@ function setControlEnabled(button, enabled) {
 
 function canDispatchRefresh() {
   if (!refreshApiUrl || !authState.session || dataState.logoutInFlight) return false;
-  if (authState.provider === "simple" && !technicalState.apiAvailable) return false;
   return true;
+}
+
+function buildRefreshStatusModel(activeJob, lastJob, runtimeStatus, summary) {
+  const scopeLabel = activeJob?.scope_label || lastJob?.scope_label || summary.run_mode_label || "refresh";
+  const lastStart = formatDateTime(lastJob?.started_at || technicalState.data?.last_refresh_started_at);
+  const lastFinish = formatDateTime(lastJob?.finished_at || technicalState.data?.last_refresh_finished_at);
+  const rowsRead = formatPreciseNumber(summary.source_rows_processed || 0);
+  const rowsCore = formatPreciseNumber(summary.core_rows_updated || 0);
+
+  if (!refreshApiUrl) {
+    return {
+      buttonsEnabled: false,
+      message: "El refresh cloud esta bloqueado porque este sitio no tiene configurado un endpoint para disparar la sincronizacion.",
+      detail: "La vista tecnica puede seguir leyendo el snapshot publicado, pero no puede lanzar una nueva corrida hasta definir contifico-refresh en la configuracion del dashboard.",
+      guideCards: [
+        {
+          title: "Estado del refresh",
+          body: "Sin endpoint de refresh no hay forma de disparar una corrida desde la web. La pantalla queda en modo lectura y solo muestra el ultimo snapshot publicado.",
+        },
+      ],
+    };
+  }
+
+  if (!authState.session) {
+    return {
+      buttonsEnabled: false,
+      message: "El refresh cloud esta bloqueado porque no hay una sesion web activa en esta pestana.",
+      detail: "Inicia sesion y vuelve a cargar el estado tecnico. Sin esa sesion el sitio puede mostrar el snapshot publicado, pero no debe iniciar una sincronizacion remota.",
+      guideCards: [
+        {
+          title: "Estado del refresh",
+          body: "La sesion web habilita el disparo del refresh cloud. Si la pestana perdio sesion o acabas de abrir el sitio, el dashboard deja los botones apagados hasta restaurarla.",
+        },
+      ],
+    };
+  }
+
+  if (dataState.logoutInFlight) {
+    return {
+      buttonsEnabled: false,
+      message: "El refresh cloud esta temporalmente bloqueado porque el dashboard esta cerrando la sesion actual.",
+      detail: "Espera a que termine la limpieza local del navegador. Cuando la sesion vuelva a estar estable, los botones se habilitan otra vez.",
+      guideCards: [
+        {
+          title: "Estado del refresh",
+          body: "Mientras la salida de sesion esta en curso, el dashboard evita disparar un refresh para no mezclar una operacion remota con una sesion local inestable.",
+        },
+      ],
+    };
+  }
+
+  if (activeJob?.status === "running") {
+    return {
+      buttonsEnabled: false,
+      message: `Hay una corrida activa de ${scopeLabel}. Los botones quedan bloqueados para evitar dos sincronizaciones simultaneas sobre la misma base.`,
+      detail:
+        activeJob.stage_detail ||
+        `La corrida actual comenzo ${formatDateTime(activeJob.started_at)}. Cuando termine, el dashboard volvera a habilitar Refresh rapido y Refresh completo automaticamente.`,
+      guideCards: [
+        {
+          title: "Por que esta bloqueado",
+          body: "El dashboard detecto una corrida viva en GitHub Actions y congela ambos botones hasta que el workflow cierre. Asi evitamos solapamientos, duplicados y lectura inconsistente del estado tecnico.",
+        },
+      ],
+    };
+  }
+
+  if (runtimeStatus === "error") {
+    return {
+      buttonsEnabled: true,
+      message: "La ultima corrida termino con error, pero el refresh ya esta libre para reintentar desde esta pantalla.",
+      detail:
+        lastJob?.error_text ||
+        `Ultimo intento: ${scopeLabel}. Inicio ${lastStart}. Fin ${lastFinish}. Si el problema fue transitorio, puedes reintentar un Refresh rapido; si sospechas desfase acumulado, usa Refresh completo.`,
+      guideCards: [
+        {
+          title: "Ultima corrida con error",
+          body: "El bloqueo no es permanente. El sitio deja los botones activos para que puedas relanzar la sincronizacion manualmente despues de revisar el mensaje de error o el workflow publicado.",
+        },
+      ],
+    };
+  }
+
+  const apiWarning = !technicalState.apiAvailable && technicalState.apiError
+    ? `La ultima verificacion del estado cloud devolvio una advertencia: ${normalizeCloudError(technicalState.apiError)}. Aun asi el disparo manual sigue habilitado para que puedas reintentar desde la web.`
+    : "La capa cloud esta lista para aceptar una nueva corrida manual desde esta vista.";
+
+  return {
+    buttonsEnabled: true,
+    message: "No hay una corrida activa. Refresh rapido y Refresh completo estan disponibles para lanzar una nueva sincronizacion.",
+    detail: `${apiWarning} Ultima corrida: ${scopeLabel}. Inicio ${lastStart}. Fin ${lastFinish}. En esa ejecucion se leyeron ${rowsRead} filas desde Contifico y se actualizaron ${rowsCore} filas core en Supabase.`,
+    guideCards: [
+      {
+        title: "Disponibilidad actual",
+        body: "La vista tecnica no detecta una corrida viva, asi que puedes disparar una nueva sincronizacion desde esta misma pantalla. El sitio seguira mostrando el ultimo snapshot hasta que el workflow publique la siguiente version.",
+      },
+    ],
+  };
+}
+
+function buildRefreshGuideCards(statusModel, lastJob) {
+  const cards = [...(statusModel.guideCards || [])];
+  cards.push(
+    {
+      title: "Refresh rapido",
+      body: "Usa este boton para traer cambios recientes e IDs impactados sin releer todo el historico. Es el modo recomendado para la operacion diaria y para confirmar lo nuevo que entro hoy.",
+    },
+    {
+      title: "Refresh completo",
+      body: "Usa este boton cuando necesites reconciliar masivamente el historico permitido por el pipeline o cuando sospeches que la base publicada quedo desfasada frente a Contifico.",
+    },
+  );
+  if (lastJob?.html_url) {
+    cards.push({
+      title: "Trazabilidad operativa",
+      body: `La ultima corrida publica un workflow en GitHub Actions. Si necesitas auditar el detalle tecnico, abre el run ${lastJob.job_id || ""} para revisar etapas, logs y tiempos del proceso.`,
+    });
+  }
+  return cards;
 }
 
 function updateSessionChrome() {
@@ -2164,31 +2282,28 @@ function renderTechnical() {
     return;
   }
   const technical = technicalState.data;
-  const runtime = technicalState.runtime.current_job || technicalState.runtime.last_job;
+  const activeJob = technicalState.runtime.current_job || technical.runtime?.current_job || null;
+  const lastJob = technicalState.runtime.last_job || technical.runtime?.last_job || null;
+  const runtime = activeJob || lastJob;
   const runtimeStatus = runtime?.status || technical.summary?.status || "success";
   const summary = technical.summary || {};
   const runtimeScopeLabel = runtime?.scope_label || summary.run_mode_label || "Modo no disponible";
+  const refreshStatus = buildRefreshStatusModel(activeJob, lastJob, runtimeStatus, summary);
 
-  const refreshEnabled = canDispatchRefresh();
   elements.technical.subtitle.textContent = `Cobertura ${technical.coverage_min || "--"} a ${technical.coverage_max || "--"} con run_id ${technical.run_id || "--"} y ultimo modo ${summary.run_mode_label || "--"}.`;
   elements.technical.runtimeBadge.className = runtimeBadgeClass(runtimeStatus);
-  elements.technical.runtimeBadge.textContent = runtimeStatus === "running" ? "Actualizando" : runtimeStatus === "error" ? "Con error" : "Estable";
-  elements.technical.runtimeMessage.textContent =
-    runtime?.message || "No hay procesos activos. El estado expuesto corresponde al ultimo snapshot tecnico disponible.";
+  elements.technical.runtimeBadge.textContent = activeJob ? "Actualizando" : runtimeStatus === "error" ? "Con error" : "Estable";
+  elements.technical.runtimeMessage.textContent = refreshStatus.message;
   const progressPercent = inferProgressPercent(runtime, runtimeStatus, technical.last_refresh_duration_seconds);
   const progressSteps = inferProgressSteps(runtime, runtimeStatus);
   elements.technical.progressBar.style.width = `${progressPercent}%`;
   elements.technical.progressStage.textContent = runtimeStageLabel(runtime, runtimeStatus);
   elements.technical.progressPercent.textContent = runtime?.progress_label || `${Math.round(progressPercent)}%`;
-  elements.technical.progressDetail.textContent =
-    runtime?.stage_detail ||
-    (runtimeStatus === "running"
-      ? "El workflow esta en curso; el porcentaje se calcula con etapas reales si estan disponibles y, como respaldo, con el tiempo transcurrido frente a la ultima corrida conocida."
-      : "No hay una corrida activa en este momento.");
+  elements.technical.progressDetail.textContent = refreshStatus.detail;
   renderProgressSteps(progressSteps);
   setControlEnabled(elements.technical.reloadButton, Boolean(authState.session && !dataState.logoutInFlight));
-  setControlEnabled(elements.technical.refreshQuickButton, refreshEnabled && runtimeStatus !== "running");
-  setControlEnabled(elements.technical.refreshFullButton, refreshEnabled && runtimeStatus !== "running");
+  setControlEnabled(elements.technical.refreshQuickButton, refreshStatus.buttonsEnabled);
+  setControlEnabled(elements.technical.refreshFullButton, refreshStatus.buttonsEnabled);
   renderMetricCards(elements.technical.summaryMetrics, [
     { label: "Ultima actualizacion", value: formatDateTime(technical.generated_at), caption: "Hora efectiva del snapshot tecnico publicado." },
     { label: "Duracion ultima corrida", value: formatDuration(technical.last_refresh_duration_seconds), caption: "Tiempo total de la ultima actualizacion tecnica mas snapshot." },
@@ -2214,7 +2329,10 @@ function renderTechnical() {
   ];
   elements.technical.runtimeMeta.innerHTML = metaPills.map((item) => `<span class="technical-meta-pill">${item}</span>`).join("");
   renderTechnicalAlerts(technical.alerts || [], runtime);
-  renderStoryCards(elements.technical.refreshGuide, technical.refresh_guidance || []);
+  renderStoryCards(
+    elements.technical.refreshGuide,
+    buildRefreshGuideCards(refreshStatus, lastJob).concat(technical.refresh_guidance || []),
+  );
 
   const resourceRows = sortByValueDescending(
     (technical.resource_metrics || []).map((row) => ({
@@ -2496,6 +2614,24 @@ function scheduleBootstrapRetry() {
 
 async function fetchBootstrapPayload(signal) {
   if (authState.provider === "simple") {
+    if (bootstrapApiUrl) {
+      try {
+        const payload = await fetchJson(
+          bootstrapApiUrl,
+          {
+            headers: authHeaders(),
+            signal,
+          },
+          12000,
+        );
+        technicalState.apiAvailable = true;
+        technicalState.apiError = "";
+        return payload;
+      } catch (error) {
+        technicalState.apiError = normalizeCloudError(error.message);
+      }
+    }
+
     const [technical, runtime] = await Promise.all([
       fetchSnapshotPayload("technical.json", { signal }, 8000),
       fetchRuntimeState(signal, true, 3000),
@@ -2691,19 +2827,38 @@ async function pollRefreshJob(jobId) {
   clearPolling();
   technicalState.pollHandle = window.setInterval(async () => {
     try {
-      const payload = await fetchJson(
-        `${refreshStatusUrl}?run_id=${encodeURIComponent(jobId)}`,
-        {
-          headers: authHeaders(),
-        },
-        12000,
-      );
-      technicalState.runtime.current_job = payload.job?.status === "running" ? payload.job : null;
-      technicalState.runtime.last_job = payload.job?.status === "running" ? technicalState.runtime.last_job : payload.job;
+      let currentJob = null;
+      let lastJob = null;
+
+      if (authState.provider === "simple" && bootstrapApiUrl) {
+        const payload = await fetchJson(
+          bootstrapApiUrl,
+          {
+            headers: authHeaders(),
+          },
+          12000,
+        );
+        currentJob = payload.runtime?.current_job || null;
+        lastJob = payload.runtime?.last_job || null;
+      } else {
+        const payload = await fetchJson(
+          `${refreshStatusUrl}?run_id=${encodeURIComponent(jobId)}`,
+          {
+            headers: authHeaders(),
+          },
+          12000,
+        );
+        currentJob = payload.job?.status === "running" ? payload.job : null;
+        lastJob = payload.job?.status === "running" ? technicalState.runtime.last_job : payload.job;
+      }
+
+      technicalState.runtime.current_job = currentJob;
+      technicalState.runtime.last_job = lastJob;
       renderTechnical();
-      if (payload.job && payload.job.status !== "running") {
+      const selectedJob = currentJob || lastJob;
+      if (selectedJob && selectedJob.status !== "running") {
         clearPolling();
-        await reloadTechnicalStatus(payload.job.status === "success");
+        await reloadTechnicalStatus(selectedJob.status === "success");
       }
     } catch (error) {
       clearPolling();
