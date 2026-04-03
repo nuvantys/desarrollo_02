@@ -1,8 +1,8 @@
 {
-  "run_id": "20260403024910",
+  "run_id": "20260403030729",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-04-03T02:50:30+00:00",
+  "generated_at": "2026-04-03T03:09:00+00:00",
   "filters_available": {
     "document_types": [
       {
@@ -609,6 +609,12 @@
   },
   "source_vs_core": [
     {
+      "resource": "categoria",
+      "source_count": 22,
+      "core_primary_count": 23,
+      "difference": -1
+    },
+    {
       "resource": "cuenta-contable",
       "source_count": 572,
       "core_primary_count": 572,
@@ -619,12 +625,6 @@
       "source_count": 21,
       "core_primary_count": 21,
       "difference": 0
-    },
-    {
-      "resource": "categoria",
-      "source_count": 22,
-      "core_primary_count": 23,
-      "difference": -1
     },
     {
       "resource": "marca",
