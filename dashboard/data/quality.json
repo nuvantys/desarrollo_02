@@ -1,8 +1,8 @@
 {
-  "run_id": "20260403030729",
+  "run_id": "20260403051029",
   "coverage_min": "2019-01-01",
   "coverage_max": "2026-12-31",
-  "generated_at": "2026-04-03T03:09:00+00:00",
+  "generated_at": "2026-04-03T05:11:44+00:00",
   "filters_available": {
     "document_types": [
       {
@@ -609,6 +609,12 @@
   },
   "source_vs_core": [
     {
+      "resource": "bodega",
+      "source_count": 21,
+      "core_primary_count": 21,
+      "difference": 0
+    },
+    {
       "resource": "categoria",
       "source_count": 22,
       "core_primary_count": 23,
@@ -621,21 +627,9 @@
       "difference": 0
     },
     {
-      "resource": "bodega",
-      "source_count": 21,
-      "core_primary_count": 21,
-      "difference": 0
-    },
-    {
       "resource": "marca",
       "source_count": 16,
       "core_primary_count": 16,
-      "difference": 0
-    },
-    {
-      "resource": "unidad",
-      "source_count": 20,
-      "core_primary_count": 20,
       "difference": 0
     },
     {
@@ -660,6 +654,12 @@
       "resource": "persona",
       "source_count": 2064,
       "core_primary_count": 2064,
+      "difference": 0
+    },
+    {
+      "resource": "unidad",
+      "source_count": 20,
+      "core_primary_count": 20,
       "difference": 0
     },
     {
