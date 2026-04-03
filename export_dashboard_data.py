@@ -1377,6 +1377,247 @@ def build_priority_matrix(consistency_review: dict[str, list[dict[str, Any]]]) -
     return matrix
 
 
+CHANGE_TRACKING_RESOURCE_DEFINITIONS = {
+    "categoria": {"label": "Categorias", "table_name": "core.categorias", "date_expression": None},
+    "bodega": {"label": "Bodegas", "table_name": "core.bodegas", "date_expression": None},
+    "marca": {"label": "Marcas", "table_name": "core.marcas", "date_expression": None},
+    "unidad": {"label": "Unidades", "table_name": "core.unidades", "date_expression": None},
+    "contabilidad/cuenta": {"label": "Cuentas contables", "table_name": "core.cuentas_contables", "date_expression": None},
+    "banco/cuenta": {"label": "Cuentas bancarias", "table_name": "core.banco_cuentas", "date_expression": "fecha_corte"},
+    "centro-costo": {"label": "Centros de costo", "table_name": "core.centros_costo", "date_expression": None},
+    "contabilidad/periodo": {"label": "Periodos", "table_name": "core.periodos", "date_expression": "fecha_fin"},
+    "persona": {"label": "Personas", "table_name": "core.personas", "date_expression": "fecha_modificacion::date"},
+    "producto": {"label": "Productos", "table_name": "core.productos", "date_expression": "fecha_creacion::date"},
+    "movimiento-inventario": {"label": "Movimientos", "table_name": "core.movimientos", "date_expression": "fecha"},
+    "documento": {"label": "Documentos", "table_name": "core.documentos", "date_expression": "fecha_emision"},
+    "inventario/guia": {"label": "Guias", "table_name": "core.guias", "date_expression": "fecha_emision"},
+    "banco/movimiento": {"label": "Movimientos bancarios", "table_name": "core.banco_movimientos", "date_expression": "fecha_emision"},
+    "documento/tickets": {"label": "Tickets", "table_name": "core.tickets_documentos", "date_expression": "fecha_emision"},
+    "contabilidad/asiento": {"label": "Asientos", "table_name": "core.asientos", "date_expression": "fecha"},
+}
+
+CHANGE_TRACKING_ENTITY_KEYS = {
+    "documentos": "documento",
+    "movimientos": "movimiento-inventario",
+    "guias": "inventario/guia",
+    "banco_movimientos": "banco/movimiento",
+    "asientos": "contabilidad/asiento",
+}
+
+
+def query_run_resource_metrics(conn, run_id: str | None) -> dict[str, dict[str, Any]]:
+    if not run_id:
+        return {}
+    rows = query_rows(
+        conn,
+        """
+        SELECT
+            er.resource,
+            er.status,
+            er.pages_fetched,
+            er.source_count,
+            COALESCE(cl.core_rows_loaded, 0)::bigint AS core_rows_loaded
+        FROM meta.extract_runs er
+        LEFT JOIN (
+            SELECT
+                run_id,
+                resource,
+                SUM(row_count)::bigint AS core_rows_loaded
+            FROM meta.load_metrics
+            WHERE stage = 'core'
+            GROUP BY run_id, resource
+        ) cl
+          ON cl.run_id = er.run_id
+         AND cl.resource = er.resource
+        WHERE er.run_id = %s
+        ORDER BY er.resource
+        """,
+        (run_id,),
+    )
+    return {row["resource"]: row for row in rows}
+
+
+def query_change_entity_snapshot(conn, definition: dict[str, Any], run_id: str | None) -> dict[str, Any]:
+    base = {
+        "touched_rows": 0,
+        "business_rows_today": None,
+        "min_business_date": None,
+        "max_business_date": None,
+    }
+    if not run_id:
+        return base
+    date_expression = definition.get("date_expression")
+    if date_expression:
+        statement = f"""
+        SELECT
+            COUNT(*)::bigint AS touched_rows,
+            COUNT(*) FILTER (WHERE {date_expression} = CURRENT_DATE)::bigint AS business_rows_today,
+            MIN({date_expression})::date AS min_business_date,
+            MAX({date_expression})::date AS max_business_date
+        FROM {definition["table_name"]}
+        WHERE run_id = %s
+        """
+    else:
+        statement = f"""
+        SELECT
+            COUNT(*)::bigint AS touched_rows,
+            NULL::bigint AS business_rows_today,
+            NULL::date AS min_business_date,
+            NULL::date AS max_business_date
+        FROM {definition["table_name"]}
+        WHERE run_id = %s
+        """
+    row = query_rows(conn, statement, (run_id,))
+    return row[0] if row else base
+
+
+def build_change_tracking(conn, meta: dict[str, Any]) -> dict[str, Any]:
+    successful_runs = query_rows(
+        conn,
+        """
+        SELECT
+            run_id,
+            MAX(finished_at) AS finished_at
+        FROM meta.extract_runs
+        GROUP BY run_id
+        HAVING SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) = 0
+           AND SUM(CASE WHEN status = 'success' THEN 1 ELSE 0 END) > 0
+        ORDER BY finished_at DESC
+        LIMIT 5
+        """
+    )
+    if not successful_runs:
+        return {
+            "published_run_id": None,
+            "previous_success_run_id": None,
+            "resources_with_touched_rows": 0,
+            "resources_with_business_rows_today": 0,
+            "overall_touched_rows": 0,
+            "overall_business_rows_today": 0,
+            "latest_business_date": None,
+            "entity_changes": [],
+            "resource_deltas": [],
+            "story_cards": [
+                {
+                    "title": "Cambios recuperados",
+                    "body": "Todavia no hay corridas exitosas publicadas para comparar que se recupero y que cambio frente a una corrida previa.",
+                }
+            ],
+        }
+
+    published_run_id = str(meta.get("run_id") or successful_runs[0]["run_id"])
+    previous_success = next((row for row in successful_runs if row["run_id"] != published_run_id), None)
+    previous_success_run_id = previous_success["run_id"] if previous_success else None
+    current_resource_map = query_run_resource_metrics(conn, published_run_id)
+    previous_resource_map = query_run_resource_metrics(conn, previous_success_run_id)
+
+    entity_changes: list[dict[str, Any]] = []
+    for entity_key, resource in CHANGE_TRACKING_ENTITY_KEYS.items():
+        definition = CHANGE_TRACKING_RESOURCE_DEFINITIONS[resource]
+        current_entity = query_change_entity_snapshot(conn, definition, published_run_id)
+        previous_entity = query_change_entity_snapshot(conn, definition, previous_success_run_id)
+        touched_rows = int(current_entity.get("touched_rows") or 0)
+        business_rows_today = current_entity.get("business_rows_today")
+        previous_touched_rows = int(previous_entity.get("touched_rows") or 0)
+        delta_touched_rows = touched_rows - previous_touched_rows if previous_success_run_id else None
+        max_business_date = current_entity.get("max_business_date")
+        if business_rows_today not in (None, 0):
+            note = f"La corrida publicada absorbio {int(business_rows_today)} registros con fecha de negocio de hoy."
+        elif touched_rows and max_business_date:
+            note = f"La corrida toco {touched_rows} registros y su fecha de negocio mas reciente fue {max_business_date}."
+        elif touched_rows:
+            note = f"La corrida toco {touched_rows} registros de este recurso."
+        else:
+            note = "No hubo registros tocados por la corrida publicada en este recurso."
+        entity_changes.append(
+            {
+                "entity_key": entity_key,
+                "resource": resource,
+                "label": definition["label"],
+                "touched_rows": touched_rows,
+                "previous_touched_rows": previous_touched_rows if previous_success_run_id else None,
+                "delta_touched_rows": delta_touched_rows,
+                "business_rows_today": int(business_rows_today or 0) if business_rows_today is not None else None,
+                "min_business_date": current_entity.get("min_business_date"),
+                "max_business_date": max_business_date,
+                "note": note,
+            }
+        )
+
+    entity_map = {row["resource"]: row for row in entity_changes}
+    resource_deltas: list[dict[str, Any]] = []
+    for resource, current_metrics in current_resource_map.items():
+        previous_metrics = previous_resource_map.get(resource, {})
+        definition = CHANGE_TRACKING_RESOURCE_DEFINITIONS.get(resource, {"label": resource, "table_name": None, "date_expression": None})
+        entity_metrics = entity_map.get(resource, {})
+        touched_rows = int(entity_metrics.get("touched_rows") or 0)
+        business_rows_today = entity_metrics.get("business_rows_today")
+        source_rows_current = int(current_metrics.get("source_count") or 0)
+        source_rows_previous = int(previous_metrics.get("source_count") or 0) if previous_metrics else None
+        core_rows_current = int(current_metrics.get("core_rows_loaded") or 0)
+        core_rows_previous = int(previous_metrics.get("core_rows_loaded") or 0) if previous_metrics else None
+        if touched_rows and business_rows_today not in (None, 0):
+            note = f"Incluye {int(business_rows_today)} registros con fecha de hoy ya reflejados en el snapshot."
+        elif touched_rows and entity_metrics.get("max_business_date"):
+            note = f"Se movio este recurso hasta la fecha {entity_metrics.get('max_business_date')}."
+        elif touched_rows:
+            note = "Se tocaron registros de este recurso en la corrida publicada."
+        else:
+            note = "No hubo cabeceras tocadas en la tabla base de este recurso durante la corrida publicada."
+        resource_deltas.append(
+            {
+                "resource": resource,
+                "resource_label": definition["label"],
+                "source_rows_current": source_rows_current,
+                "source_rows_previous": source_rows_previous,
+                "source_rows_delta": source_rows_current - source_rows_previous if source_rows_previous is not None else None,
+                "core_rows_current": core_rows_current,
+                "core_rows_previous": core_rows_previous,
+                "core_rows_delta": core_rows_current - core_rows_previous if core_rows_previous is not None else None,
+                "touched_rows_current": touched_rows,
+                "touched_rows_previous": entity_metrics.get("previous_touched_rows"),
+                "touched_rows_delta": entity_metrics.get("delta_touched_rows"),
+                "business_rows_today": business_rows_today,
+                "max_business_date": entity_metrics.get("max_business_date"),
+                "note": note,
+            }
+        )
+    resource_deltas.sort(key=lambda row: (int(row.get("touched_rows_current") or 0), int(row.get("core_rows_current") or 0)), reverse=True)
+
+    resources_with_touched_rows = sum(1 for row in resource_deltas if int(row.get("touched_rows_current") or 0) > 0)
+    resources_with_business_rows_today = sum(1 for row in resource_deltas if int(row.get("business_rows_today") or 0) > 0)
+    overall_touched_rows = sum(int(row.get("touched_rows") or 0) for row in entity_changes)
+    overall_business_rows_today = sum(int(row.get("business_rows_today") or 0) for row in entity_changes if row.get("business_rows_today") is not None)
+    latest_business_date = max((row.get("max_business_date") for row in entity_changes if row.get("max_business_date")), default=None)
+    comparison_label = previous_success_run_id or "sin corrida previa comparable"
+    story_cards = [
+        {
+            "title": "Como leer esta seccion",
+            "body": "Registros tocados significa cabeceras core marcadas con el run publicado. Registros del dia significa cuantas de esas cabeceras tienen fecha de negocio de hoy. Asi puedes distinguir releido tecnico contra novedad operativa real.",
+        },
+        {
+            "title": "Comparativo contra la corrida previa",
+            "body": f"El snapshot publicado usa el run {published_run_id}. La referencia anterior para comparar cambios es {comparison_label}. Cuando no hay corrida previa comparable, los deltas quedan vacios.",
+        },
+        {
+            "title": "Lectura ejecutiva de la novedad",
+            "body": f"La corrida publicada toco {overall_touched_rows} cabeceras de negocio repartidas en {resources_with_touched_rows} recursos. De ese bloque, {overall_business_rows_today} registros traen fecha de negocio de hoy y la fecha mas reciente absorbida es {latest_business_date or '--'}.",
+        },
+    ]
+    return {
+        "published_run_id": published_run_id,
+        "previous_success_run_id": previous_success_run_id,
+        "resources_with_touched_rows": resources_with_touched_rows,
+        "resources_with_business_rows_today": resources_with_business_rows_today,
+        "overall_touched_rows": overall_touched_rows,
+        "overall_business_rows_today": overall_business_rows_today,
+        "latest_business_date": latest_business_date,
+        "entity_changes": entity_changes,
+        "resource_deltas": resource_deltas,
+        "story_cards": story_cards,
+    }
+
+
 def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict[str, Any]:
     source_vs_core = query_rows(
         conn,
@@ -1635,6 +1876,7 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         "historical_core_rows_stored": int(historical_core_rows_stored or 0),
     }
     source_overview = build_source_overview(conn, meta, recent_runs, summary)
+    change_tracking = build_change_tracking(conn, meta)
     priority_matrix = build_priority_matrix(consistency_review)
     return {
         **meta,
@@ -1660,6 +1902,7 @@ def build_technical(conn, meta: dict[str, Any], filters: dict[str, Any]) -> dict
         "nulls_allowed": nulls_allowed,
         "consistency_review": consistency_review,
         "source_overview": source_overview,
+        "change_tracking": change_tracking,
         "priority_matrix": priority_matrix,
         "recent_runs": recent_runs,
         "narrative": narrative,

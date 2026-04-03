@@ -150,6 +150,9 @@ const elements = {
     runtimeMeta: document.getElementById("technical-runtime-meta"),
     refreshGuide: document.getElementById("technical-refresh-guide"),
     alerts: document.getElementById("technical-alerts"),
+    changeSummary: document.getElementById("technical-change-summary"),
+    changeStory: document.getElementById("technical-change-story"),
+    changeTable: document.getElementById("technical-change-table"),
     runsTable: document.getElementById("technical-runs-table"),
     loadTable: document.getElementById("technical-load-table"),
     fkTable: document.getElementById("technical-fk-table"),
@@ -518,6 +521,67 @@ function buildRefreshGuideCards(statusModel, lastJob) {
     });
   }
   return cards;
+}
+
+function renderTechnicalChangeTracking(changeTracking = {}) {
+  if (!(changeTracking.resource_deltas || []).length) {
+    elements.technical.changeSummary.innerHTML = `<div class="table-empty">El snapshot tecnico actual todavia no trae el detalle fino de cambios recuperados por corrida. En cuanto se publique una nueva corrida, aqui veras que entro, cuanto fue del dia y el comparativo contra la corrida previa.</div>`;
+    elements.technical.changeStory.innerHTML = `<div class="table-empty">La estructura nueva ya esta lista en el frontend; falta que el proximo snapshot regenerado publique el bloque de cambios recuperados.</div>`;
+    elements.technical.changeTable.innerHTML = `<div class="table-empty">Sin detalle de cambios por recurso en el snapshot vigente.</div>`;
+    return;
+  }
+  const entityMap = new Map((changeTracking.entity_changes || []).map((row) => [row.entity_key, row]));
+  renderMetricCards(elements.technical.changeSummary, [
+    {
+      label: "Cabeceras tocadas",
+      value: formatPreciseNumber(changeTracking.overall_touched_rows || 0),
+      caption: "Registros de cabecera marcados con el run publicado en core. Sirve para saber que cambio realmente en la base maestra.",
+    },
+    {
+      label: "Recursos con novedad",
+      value: formatPreciseNumber(changeTracking.resources_with_touched_rows || 0),
+      caption: "Cantidad de recursos que si dejaron cabeceras tocadas en la corrida publicada.",
+    },
+    {
+      label: "Documentos del dia",
+      value: formatPreciseNumber(entityMap.get("documentos")?.business_rows_today || 0),
+      caption: "Documentos con fecha_emision de hoy ya absorbidos por el snapshot publicado.",
+    },
+    {
+      label: "Movimientos del dia",
+      value: formatPreciseNumber(entityMap.get("movimientos")?.business_rows_today || 0),
+      caption: "Movimientos de inventario con fecha de hoy que ya quedaron reflejados en core.",
+    },
+    {
+      label: "Guias del dia",
+      value: formatPreciseNumber(entityMap.get("guias")?.business_rows_today || 0),
+      caption: "Guias con fecha de hoy recuperadas en la corrida publicada.",
+    },
+    {
+      label: "Banco del dia",
+      value: formatPreciseNumber(entityMap.get("banco_movimientos")?.business_rows_today || 0),
+      caption: "Movimientos bancarios del dia ya absorbidos por el snapshot.",
+    },
+  ]);
+  renderStoryCards(
+    elements.technical.changeStory,
+    changeTracking.story_cards || [
+      {
+        title: "Cambios recuperados",
+        body: "Todavia no hay suficiente detalle para comparar esta corrida contra una corrida previa publicada.",
+      },
+    ],
+  );
+  renderTable("technical-change-table", changeTracking.resource_deltas || [], [
+    { key: "resource_label", label: "Recurso" },
+    { key: "source_rows_current", label: "Filas API", formatter: formatPreciseNumber },
+    { key: "core_rows_current", label: "Filas core", formatter: formatPreciseNumber },
+    { key: "touched_rows_current", label: "Cabeceras tocadas", formatter: formatPreciseNumber },
+    { key: "business_rows_today", label: "Del dia", formatter: (value) => value == null ? "No aplica" : formatPreciseNumber(value) },
+    { key: "max_business_date", label: "Fecha max", formatter: formatDateOnly },
+    { key: "touched_rows_delta", label: "Delta vs previa", formatter: formatSignedDelta },
+    { key: "note", label: "Lectura" },
+  ]);
 }
 
 function updateSessionChrome() {
@@ -1544,6 +1608,26 @@ function formatBytes(value) {
   return `${scaled.toFixed(power === 0 ? 0 : 2)} ${units[power]}`;
 }
 
+function formatDateOnly(value) {
+  if (!value) return "--";
+  try {
+    return new Intl.DateTimeFormat("es-EC", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date(value));
+  } catch {
+    return String(value);
+  }
+}
+
+function formatSignedDelta(value) {
+  if (value == null) return "--";
+  const amount = Number(value || 0);
+  const sign = amount > 0 ? "+" : "";
+  return `${sign}${formatPreciseNumber(amount)}`;
+}
+
 function freshnessLabel(seconds) {
   const total = Number(seconds || 0);
   if (!Number.isFinite(total)) return "--";
@@ -2262,6 +2346,9 @@ function renderTechnicalLoadingState() {
   elements.technical.runtimeMeta.innerHTML = meta.map((item) => `<span class="technical-meta-pill">${item}</span>`).join("");
   renderTechnicalAlerts(phaseState.alerts, null);
   elements.technical.refreshGuide.innerHTML = `<div class="table-empty">El shell tecnico se esta preparando. Cuando el bootstrap termine, aqui se mostraran recomendaciones y narrativa tecnica.</div>`;
+  elements.technical.changeSummary.innerHTML = `<div class="table-empty">Esperando el snapshot tecnico para medir que registros fueron absorbidos por la corrida publicada.</div>`;
+  elements.technical.changeStory.innerHTML = `<div class="table-empty">Sin lectura de cambios todavia.</div>`;
+  elements.technical.changeTable.innerHTML = `<div class="table-empty">Sin detalle de cambios por recurso todavia.</div>`;
   elements.technical.healthMetrics.innerHTML = `<div class="table-empty">Esperando el snapshot tecnico para calcular salud de datos.</div>`;
   elements.technical.storyCards.innerHTML = `<div class="table-empty">Sin narrativa tecnica todavia.</div>`;
   elements.technical.inventoryReview.innerHTML = `<div class="table-empty">Sin hallazgos de inventario todavia.</div>`;
@@ -2333,6 +2420,7 @@ function renderTechnical() {
     elements.technical.refreshGuide,
     buildRefreshGuideCards(refreshStatus, lastJob).concat(technical.refresh_guidance || []),
   );
+  renderTechnicalChangeTracking(technical.change_tracking || {});
 
   const resourceRows = sortByValueDescending(
     (technical.resource_metrics || []).map((row) => ({
